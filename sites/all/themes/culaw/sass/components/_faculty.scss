@@ -1,0 +1,585 @@
+.page-faculty {
+
+  .main__master {
+    float: none;
+    margin-left: 0;
+    margin-right: 0;
+    overflow: auto;
+
+    @include breakpoint ($screen-md-min) {
+      margin: auto;
+      margin-top: 50px;
+      width: 80%;
+    }
+
+    .page-header {
+      font-size: $font-lsm; 
+      margin: 25px 30px;
+
+      @include breakpoint ($screen-sm-min) {
+        font-size: $font-lls;
+        margin: 30px;
+
+        &.desktop__title {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+
+      &.desktop__title {
+        display: none;
+      }
+
+      @include breakpoint ($screen-md-min) {
+        font-size: $font-xl;
+        margin-bottom: 50px;
+        margin-top: 0;
+
+        &.mobile__title {
+          display: none;
+        }
+
+        &.desktop__title {
+          display: block;
+        }
+      }
+    }
+
+    .content__region {
+
+      @include breakpoint ($screen-sm-min) {
+        margin-left: 30px;
+        margin-right: 30px;
+      }
+
+      @include breakpoint ($screen-md-min) {
+        float: right;
+        margin: 0;
+        padding-left: 25px;
+        width: 75%;
+      }
+    }
+  }
+
+  .region-help,
+  .jumbotron {
+    display: none;
+  }
+
+  .view-display-id-listing_page .view-header {
+    margin-left: 30px;
+    margin-right: 30px;
+    position: relative;
+
+    @include breakpoint ($screen-sm-min) {
+      margin: 0;
+    }
+  }
+}
+
+.alpha-pagination {
+  border-bottom: 3px solid $color-gray-lightest;
+}
+
+.alpha-pagination .alpha-pagination-list {
+  margin: 0 auto;
+  overflow-x: auto;
+  padding: 20px 0;
+  width: 95%;
+
+  @include breakpoint ($screen-md-min) {
+    display: flex;
+    justify-content: space-around;
+    overflow: visible;
+    padding: 30px 0;
+    width: 100%
+  }
+
+  li {
+    border: none;
+    color: $color-gray-text;
+    display: table-cell;
+    font-size: $font-sxl;
+    font-weight: bold;
+    line-height: 1;
+    padding: 0 12px;
+
+    @include breakpoint ($screen-md-min) {
+      display: inline-block;
+      padding: 0 5px;
+    }
+
+    &.all {
+      display: none;
+    }
+
+    &:first-child,
+    &:last-child {
+      border: none;
+    }
+
+    a {
+      color: $color-blue-darker-links;
+    }
+  }
+}
+
+.view-display-id-listing_page {
+
+  .arrow-left,
+  .arrow-right {
+    cursor: pointer;
+    display: block;
+    font-size: 0;
+    height: 23px;
+    position: absolute;
+    top: 17px;
+    width: 12px;
+    z-index: 2;
+
+    @include breakpoint($screen-md-min) {
+      display: none;
+    }
+  }
+
+  .arrow-left {
+    background: url("../images/left-slider-arrow-gray.svg") no-repeat;
+    left: 0;
+  }
+
+  .arrow-right {
+    background: url("../images/right-slider-arrow-gray.svg") no-repeat;
+    right: 0;
+  }
+
+  .view-content h3 {
+    border-bottom: 1px solid $color-gray-border;
+    font-size: $font-lms;
+    line-height: 1;
+    margin: 0;
+    margin-left: 30px;
+    margin-right: 30px;
+    padding: 20px;
+    padding-left: 0;
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-lml;
+      margin: 0;
+      padding: 25px;
+      padding-left: 30px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-ll;
+      padding: 30px 35px;
+    }
+  }
+
+  .views-field.views-field-nothing a {
+    color: $color-skyblue-link-darker;
+    font-size: $font-mxl;
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-lms;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-lm;
+    }
+  }
+
+  .views-row {
+    border-top: 1px solid $color-gray-border;
+    padding: 30px;
+
+    &.views-row-first {
+      border-top: 0;
+    }
+
+    @include breakpoint ($screen-sm-min) {
+      display: table;
+      padding: 40px 35px;
+      width: 100%;
+    }
+  }
+
+  .views-row-even {
+    background: $color-grayish-blue-dark;
+  }
+
+
+  .faculty-name-bio {
+    @include breakpoint ($screen-sm-min) {
+      padding-left: 35px;
+    }
+    @include breakpoint ($screen-md-min) {
+      float: left;
+      padding-right: 40px;
+      vertical-align: top;
+    }
+  }
+
+  .faculty-phone-email {
+    margin-top: 20px;
+
+    &.ajax-loading-icon{
+      height:38px;
+      background: url('/sites/all/modules/custom/cls_curriculum_guide/images/lazy-loader.gif') no-repeat center;
+    }
+
+    @include breakpoint ($screen-sm-min) {
+      padding-left: 35px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      display: table-cell;
+      margin-top: 0;
+      padding-left: 0;
+      vertical-align: middle;
+      width: 32%;
+    }
+  }
+
+  .views-field-field-faculty-bio-summary {
+    font-size: $font-sxl;
+    line-height: 1.5;
+    margin-top: 10px;
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-m;
+    }
+  }
+
+  .views-field.views-field-field-faculty-profile-image {
+    margin-bottom: 20px;
+
+    @include breakpoint ($screen-sm-min) {
+      display: table-cell;
+      margin-bottom: 0;
+      min-width: 90px;
+      vertical-align: top;
+      width: 90px;
+    }
+
+    img {
+      height: 110px;
+      width: 90px;
+    }
+  }
+
+  .views-field.views-field-nothing {
+    line-height: 1;
+  }
+
+  .views-field-field-faculty-office-phone {
+
+    .views-label-field-faculty-office-phone {
+      display: inline-block;
+      font-weight: bold;
+      padding-right: 5px;
+    }
+
+    .field-content {
+      display: inline-block;
+    }
+  }
+
+  .views-field-field-faculty-office-phone,
+  .views-field-field-faculty-office-email {
+    display: none;
+    color: $color-gray-text;
+    font-size: $font-sm;
+    padding-left: 30px;
+    padding-top: 5px;
+    position: relative;
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-s;
+      word-break: break-all;
+    }
+
+    .field-content {
+      display: inline-block;
+    }
+
+    &::before {
+      @extend %svg-image;
+      background: url("../images/phone-icon.svg") no-repeat left;
+      height: 15px;
+      left: 0;
+      position: absolute;
+      top: 6px;
+      width: 20px;
+    }
+
+    a {
+      color: $color-gray-text;
+    }
+  }
+
+  .views-field-field-faculty-office-email::before {
+    background: url("../images/email-icon.svg") no-repeat 100% 100%;
+    height: 18px;
+    top: 4px;
+  }
+}
+
+#block-cls-core-faculty-name-filter-block {
+
+  form {
+    margin-bottom: 0;
+    margin-left: 30px;
+    margin-right: 30px;
+    position: relative;
+
+    @include breakpoint ($screen-sm-min) {
+      margin: 0;
+    }
+
+    .views-widget-filter-field_faculty_role_value,
+    .views-widget-filter-combine {
+      padding: 0;
+      width: 100%;
+    }
+
+    .views-exposed-widgets {
+      margin-bottom: 0;
+    }
+
+    .input-group-addon {
+      display: none;
+    }
+
+    .input-group {
+      width: 100%;
+
+      input {
+        border-radius: 0;
+        box-shadow: none;
+        font-size: $font-s;
+        height: 40px;
+
+        @include breakpoint ($screen-md-min) {
+          font-size: $font-sl;
+        }
+
+        @include breakpoint ($screen-md-min) {
+          font-size: $font-sxl;
+          height: 45px;
+        }
+      }
+    }
+
+    .views-submit-button {
+      padding: 0;
+      position: absolute;
+      right: 0;
+      z-index: 100;
+
+      button {
+        background: transparent url("../images/search-icon.svg") no-repeat center;
+        background-size: 20px;
+        border: none;
+        font-size: 0;
+        height: 40px;
+        margin-top: 0;
+        width: 50px;
+
+        @include breakpoint ($screen-md-min) {
+          height: 45px;
+        }
+      }
+    }
+  }
+}
+
+.sidebar__first {
+
+  .col-sm-3 {
+    padding-left: 0;
+  }
+}
+
+.sidebar__first {
+  padding-bottom: 5px;
+  @include breakpoint($screen-sm-min) {
+    padding-bottom: 0;
+  }
+
+  @include breakpoint($screen-md-max) {
+    margin-left: 30px;
+    margin-right: 30px;
+
+    .col-sm-3 {
+      float: none;
+      padding: 0;
+      width: 100%;
+    }
+  }
+}
+
+#block-cls-core-faculty-role-filter-block {
+
+  .block-title {
+    background-color: $color-blue-button-nav;
+    color: $color-white;
+    cursor: pointer;
+    display: block;
+    font-size: $font-sxl;
+    height: 40px;
+    margin-bottom: 0;
+    padding: 12px;
+    position: relative;
+
+    &::after {
+      border-left: 1px solid $color-blue-border-dark;
+      content: "\e804";
+      font-family: "fontello";
+      height: 40px;
+      line-height: 40px;
+      position: absolute;
+      right: 0;
+      text-align: center;
+      top: 0;
+      width: 40px;
+
+    }
+  }
+
+  &.visible  .block-title::after {
+    background: $color-skyblue-link-hover;
+    border-left: none;
+    content: "\e805";
+  }
+
+
+  @include breakpoint($screen-md-min) {
+
+    .title__wrap {
+      display: none;
+    }
+  }
+
+  .views-submit-button {
+    display: none;
+  }
+
+  form {
+
+    .bef-select-as-links {
+
+      @include breakpoint ($screen-md-min) {
+        border: 1px solid $color-gray-border;
+      }
+
+      .form-item {
+        border-top: 1px solid $color-blue-border-darker;
+
+        @include breakpoint ($screen-md-min) {
+          border-top: 1px solid $color-gray-border;
+        }
+
+        a {
+          background-color: $color-skyblue-link-hover;
+          color: $color-white;
+          display: block;
+          font-size: $font-s;
+          padding: 10px;
+          padding-left: 14px;
+
+          &:hover {
+            text-decoration: none;
+          }
+
+          @include breakpoint ($screen-md-min) {
+            font-size: $font-sl;
+          }
+
+          @include breakpoint ($screen-md-min) {
+            background-color: transparent;
+            color: $color-black-gray-light;
+            font-size: $font-sxl;
+            padding: 14px;
+
+
+            &:hover {
+              color: $color-skyblue-link-hover;
+            }
+
+            &.active {
+              background-color: $color-skyblue-link-hover;
+              color: $color-white;
+
+              &:hover {
+                color: $color-white;
+              }
+            }
+          }
+        }
+
+        &:first-child {
+          @include breakpoint ($screen-md-min) {
+            border-top: none;
+          }
+        }
+      }
+    }
+
+    .views-exposed-widgets {
+      margin: 0;
+    }
+
+    .views-widget-filter-field_faculty_role_value {
+      display: block;
+      float: none;
+      padding: 0;
+      width: 100%;
+    }
+  }
+}
+
+#block-cls-core-faculty-role-filter-block form {
+  @include breakpoint($screen-md-max) {
+    display: none;
+  }
+}
+
+#block-cls-core-faculty-role-filter-block.visible form {
+  @include breakpoint($screen-md-max) {
+    display: block;
+  }
+}
+
+.view-faculty-listing .back-to-full-list {
+  border-top: 1px solid $color-gray-border;
+  font-size: $font-sxl;
+  padding: 12px 0;
+
+  @include breakpoint($screen-md-min) {
+    font-size: $font-ml;
+    padding: 18px 0;
+  }
+
+  a {
+    color: $color-blue-background-dark;
+
+    &::before {
+      @extend %svg-image;
+      background: url("../images/arrow-knockout-blue.svg") no-repeat;
+      display: inline-block;
+      height: 25px;
+      margin-right: 20px;
+      position: relative;
+      top: -1px;
+      transform: rotate(180deg);
+      vertical-align: middle;
+      width: 25px;
+
+      @include breakpoint($screen-md-min) {
+        height: 32px;
+        top: -2px;
+        width: 32px;
+      }
+    }
+  }
+}

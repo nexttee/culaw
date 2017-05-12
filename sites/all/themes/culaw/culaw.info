@@ -1,0 +1,30 @@
+name = Columbia Law 2.0 Theme
+description = The new look and feel of the Columbia Law School website.
+base theme = bootstrap
+core = 7.x
+
+; Stylesheets
+stylesheets[all][] = build/main.css
+
+; Scripts
+scripts[] = build/jquery.touchSwipe.min.js
+scripts[] = build/script.js
+
+; Regions
+
+regions[header_top]     = 'Header Top'
+regions[navigation]     = 'Navigation'
+regions[header]         = 'Top Bar'
+regions[highlighted]    = 'Highlighted'
+regions[help]           = 'Help'
+regions[featured]       = 'Featured Content'
+regions[sub_featured]   = 'Sub Featured Content'
+regions[content_top]    = 'Content Top'
+regions[content]        = 'Content'
+regions[sub_content]    = 'Sub Content'
+regions[sidebar_first]  = 'Primary'
+regions[sidebar_second] = 'Secondary'
+regions[footer]         = 'Footer'
+regions[footer_bottom]  = 'Footer Bottom'
+regions[page_top]       = 'Page top'
+regions[page_bottom]    = 'Page bottom'

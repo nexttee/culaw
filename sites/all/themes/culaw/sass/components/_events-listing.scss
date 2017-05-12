@@ -1,0 +1,767 @@
+.main__container {
+  margin: auto;
+  margin-top: 20px;
+  width: 80%;
+
+  @include breakpoint ($screen-sm-min) {
+    margin-bottom: 35px;
+  }
+}
+
+.page-header {
+  border-bottom: 0;
+  display: block;
+  font-size: $font-lsm;
+  margin-bottom: 20px;
+  padding-bottom: 0;
+  padding-left: 15px;
+
+  @include breakpoint ($screen-sm-min) {
+    font-size: $font-lxl;
+    margin-bottom: 35px;
+  }
+}
+
+.page-events .right__sidebar {
+  float: right;
+}
+
+.page-events .breadcrumb {
+  display: none;
+}
+
+#block-cls-core-calendar-navigation ul {
+  @extend %lists;
+
+  li {
+    border: 1px solid $color-gray-lightest;
+    float: left;
+    font-size: $font-sxl;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    width: 33.3333%;
+
+    a {
+      color: $color-black;
+      display: block;
+      padding: 9px;
+
+      &.activelink {
+        background-color: $color-skyblue-background;
+        border: none;
+        color: $color-white;
+      }
+    }
+  }
+}
+
+.view-display-id-events_listing_page {
+
+  ul {
+    @extend %lists;
+  }
+
+  .date-nav.item-list {
+    color: $color-white;
+    display: block;
+    margin-bottom: 0;
+    padding: 10px;
+    position: relative;
+
+    @include breakpoint ($screen-sm-min) {
+      padding: 25px;
+    }
+
+    .date-heading h3 {
+      font-size: $font-sxl;
+
+      @include breakpoint($screen-sm-min) {
+        font-size: $font-ml;
+      }
+    }
+  }
+
+  .date-nav-wrapper {
+    background-color: $color-skyblue-background;
+    margin-bottom: 0;
+    margin-top: 1px;
+
+    .date-prev {
+      left: 0;
+      right: auto;
+    }
+
+    .date-prev a,
+    .date-next a {
+      height: 30px;
+      margin: 5px 25px;
+      width: 30px;
+
+      @include breakpoint ($screen-sm-min) {
+        margin: 20px 25px;
+      }
+    }
+
+    .date-prev,
+    .date-next,
+    .pager li > a,
+    .pager li > span {
+      background-color: transparent;
+      border: none;
+      font-size: 0;
+    }
+
+    .date-prev a {
+      background: url("../images/arrow-knockout-white.svg") no-repeat;
+      transform: rotate(180deg);
+    }
+
+    .date-next a {
+      background: url("../images/arrow-knockout-white.svg") no-repeat;
+    }
+  }
+
+  .views-row {
+    border-bottom: 1px solid rgba(0, 87, 134, 0.07);
+    display: table;
+    padding: 40px 15px;
+    width: 100%;
+
+    @include breakpoint ($screen-sm-min) {
+      padding: 60px 30px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      padding: 60px;
+    }
+
+
+    &.views-row-even {
+      background-color: $color-gray-background-light;
+    }
+  }
+
+  .views-field-field-event-date-1 {
+    margin-bottom: 15px;
+
+    .date-repeat-rule {
+      display: none;
+    }
+
+    @include breakpoint ($screen-sm-min) {
+      display: table-cell;
+      margin-bottom: 0;
+      padding-right: 40px;
+      position: relative;
+      top: 5px;
+      width: 70px;
+    }
+
+    .field-content {
+      width: 67px;
+    }
+
+    .field-content .date-display-single {
+      background: url("../images/calendar-date-outline.svg") no-repeat;
+      background-size: cover;
+      display: block;
+      height: 70px;
+      margin-bottom: 10px;
+      padding: 17px;
+      text-align: center;
+      text-transform: uppercase;
+      width: 67px;
+    }
+  }
+
+  .views-field-title a {
+    color: $color-blue-background-dark;
+    font-size: $font-mxl;
+    font-weight: 400;
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-lms;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-lm;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .views-field-field-event-promotion-text {
+    font-family: $secondary-font;
+    font-size: $font-sxl;
+    line-height: 22px;
+    margin-bottom: 25px;
+    margin-top: 15px;
+  }
+
+  .views-field-field-event-date,
+  .views-field-field-location-name {
+    color: $color-grayish-blue;
+    font-size: $font-s;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    padding-left: 40px;
+
+    .field-content {
+
+      &::before {
+        @extend %svg-image;
+        display: inline-block;
+        height: 18px;
+        left: -14px;
+        margin-left: -28px;
+        margin-right: 10px;
+        position: relative;
+        vertical-align: middle;
+        width: 18px;
+      }
+    }
+  }
+
+  .views-field-field-event-date {
+    @include breakpoint($screen-sm-max) {
+      margin-bottom: 10px;
+    }
+  }
+
+  .views-field-field-event-date .field-content::before {
+    background: url("../images/time-icon.svg") no-repeat center;
+  }
+
+  .views-field-field-location-name .field-content::before {
+    background: url("../images/location-icon.svg") no-repeat center;
+  }
+
+  .views-field-field-location-name,
+  .views-field-field-location-name-1 {
+    display: inline-block;
+  }
+
+  .views-field-field-location-name-1 {
+    border-left: 2px solid $color-gray-lightest;
+    line-height: 1;
+    margin-left: 15px;
+    padding-left: 15px;
+
+    @include breakpoint ($large-mobile-max) {
+      display: block;
+      margin-left: 40px;
+    }
+  }
+
+  .views-field-field-location-name-1 a {
+    color: $color-blue-background-darker;
+    font-size: $font-s;
+    font-weight: bold;
+  }
+
+  .views-field.views-field-field-location-name .field-content {
+    line-height: 1;
+  }
+}
+
+aside .view-id-law_school_events {
+  border-bottom: 3px solid $color-gray-lightest;
+  margin-bottom: 20px;
+  padding: 30px 0;
+
+  @include breakpoint($screen-md-max) {
+    display: none;
+  }
+}
+
+#block-cls-core-event-category-search-block,
+#block-cls-core-event-title-search-block,
+.block-mefibs {
+
+  input {
+    border: 1px solid rgba(0, 87, 134, 0.15);
+    border-radius: 0;
+    box-shadow: none;
+    font-size: $font-sxl;
+    height: 45px;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 50px;
+  }
+
+  .views-exposed-widgets {
+    margin-bottom: 0;
+  }
+
+  .views-submit-button {
+    position: absolute;
+    right: 10px;
+    top: 9px;
+  }
+
+  .views-exposed-form {
+    position: relative;
+
+    .views-exposed-widget {
+      float: none;
+      padding: 0;
+
+      .btn {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .form-submit {
+    background: transparent url("../images/search-icon.svg") no-repeat center;
+    border: 0;
+    font-size: 0;
+    height: 22px;
+    padding: 0;
+    width: 40px;
+  }
+
+  .views-widget-filter-field_lawcal_categories_tid {
+
+    & > label {
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    label {
+      font-size: $font-sxl;
+      margin-bottom: 5px;
+      vertical-align: bottom;
+    }
+
+    .form-type-bef-checkbox {
+      margin-bottom: 5px;
+    }
+
+    .form-control {
+      border: none;
+      box-shadow: none;
+      height: auto;
+      padding-left: 0;
+    }
+
+    .bef-checkboxes input,
+    .bef-checkboxes label {
+      display: inline-block;
+      font-weight: 400;
+    }
+
+    .bef-checkboxes input {
+
+      &::before{
+        background: $color-white;
+        border: 1px solid $color-gray-lightest;
+        content: "";
+        display: block;
+        height: 25px;
+        position: relative;
+        width: 25px;
+        z-index: 1;
+      }
+
+      &:checked::before,
+      &:hover::before {
+        background-color: $color-skyblue-background-light;
+        border: none;
+      }
+    }
+
+    .bef-checkboxes input {
+      height: 25px;
+      margin-right: 18px;
+      width: 25px;
+    }
+  }
+}
+
+#block-cls-core-event-title-search-block {
+
+  label {
+    display: none;
+  }
+
+  form {
+    margin-bottom: 0;
+  }
+}
+
+aside .view-id-law_school_events {
+
+  .date-nav-wrapper .date-nav {
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    .date-prev a,
+    .date-next a {
+      height: 25px;
+      margin: 20px;
+      width: 25px;
+    }
+
+    .date-prev,
+    .date-next,
+    .pager li > a,
+    .pager li > span {
+      background-color: transparent;
+      border: none;
+      font-size: 0;
+      padding: 0;
+    }
+
+    .date-prev a {
+      background: url("../images/arrow-knockout-blue.svg") no-repeat;
+      transform: rotate(180deg);
+    }
+
+    .date-next a {
+      background: url("../images/arrow-knockout-blue.svg") no-repeat;
+    }
+
+    .date-heading {
+      border: 1px solid $color-gray-lightest;
+      border-bottom: none;
+
+      h3 {
+        line-height: 1;
+      }
+    }
+  }
+
+  .pager {
+    margin: 0;
+  }
+
+  .date-heading {
+    padding: 15px;
+
+    a {
+      color: $color-black;
+      font-size: $font-ml;
+      text-transform: uppercase;
+    }
+  }
+
+  .calendar-calendar {
+
+    thead {
+      border: 1px solid $color-gray-lightest;
+      border-top: none;
+    }
+
+    tbody::before {
+      color: transparent;
+      content: "_";
+      display: block;
+      line-height: 1em;
+    }
+
+    .days {
+      background-color: transparent;
+      border: none;
+      color: $color-black;
+      font-size: $font-sms;
+      padding-bottom: 10px;
+    }
+
+    td {
+      color: $color-blue-background-dark;
+      font-size: $font-sxl;
+      text-align: center;
+
+      a {
+        color: $color-blue-background-dark;
+      }
+
+      .month {
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+
+      .mini-day-on a {
+        text-decoration: none;
+      }
+
+      &.has-no-events {
+        color: $color-gray-text;
+      }
+    }
+
+    .today {
+      background-color: $color-skyblue-background-light;
+      color: $color-white;
+
+      a {
+        color: $color-white;
+      }
+    }
+  }
+}
+
+.main__content,
+.right__sidebar,
+.main__container {
+  @include breakpoint($screen-md-max) {
+    padding: 0;
+    width: 100%;
+  }
+}
+
+@include breakpoint($screen-md-max) {
+
+  .main__content {
+    margin-top: 15px;
+  }
+
+  .right__sidebar {
+    display: none;
+
+    .form-item-mefibs-form-event-title-title {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+}
+
+.main__content .region-sidebar-second {
+
+  @include breakpoint($screen-md-min) {
+    display: none;
+  }
+
+  #block-cls-core-event-title-search-block .form-item-title,
+  .form-item-mefibs-form-event-title-title {
+    margin: 15px 20px;
+  }
+
+  .view-id-law_school_events {
+    display: none;
+  }
+
+  #block-cls-core-event-title-search-block .views-exposed-widget .btn,
+  .block-mefibs .views-exposed-form .views-exposed-widget .btn {
+    margin: 17px 14px;
+  }
+
+  .block-mefibs .close-category {
+    display: none;
+  }
+
+  @include breakpoint($screen-md-max) {
+
+    #block-cls-core-event-category-search-block .views-widget-filter-field_lawcal_categories_tid,
+    .block-mefibs .views-widget-filter-field_lawcal_categories_tid {
+
+      & > label {
+        background-color: $color-grayish-blue-light;
+        border: 1px solid rgba(0, 87, 134, 0.15);
+        display: block;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .views-widget {
+        display: none;
+        margin-bottom: 15px;
+        padding-left: 15px;
+      }
+
+      .close-category {
+        display: none;
+      }
+
+      &.show__category {
+        background-color: $color-white;
+        height: 100%;
+        left: 0;
+        opacity: 1;
+        overflow: scroll;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 9999;
+
+        .form-type-select {
+          margin-left: 25px;
+          margin-right: 25px;
+        }
+
+        .close-category {
+          color: $color-gray-darker;
+          display: block;
+          font-size: $font-lxl;
+          font-weight: 300;
+          margin-left: 25px;
+          margin-right: 25px;
+          margin-top: 10px;
+          text-align: right;
+        }
+
+        & > label {
+          background-color: transparent;
+          border: none;
+          margin-left: 25px;
+          padding: 10px;
+          text-align: left;
+        }
+
+        .views-widget {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+#block-cls-core-event-category-search-block .views-submit-button {
+  display: none;
+  position: static;
+
+  .form-submit {
+    background-color: $color-skyblue-background-light;
+    background-image: none;
+    border: 1px;
+    font-size: $font-s;
+    height: auto;
+    padding: 6px 12px;
+    width: auto;
+  }
+}
+
+.views-field-add-to-calendar {
+  border-top: 1px solid $color-gray-border-dark;
+  margin-top: 25px;
+  padding-top: 15px;
+
+  .field-content {
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+
+    @include breakpoint($screen-sm-min) {
+      margin-left: 25px;
+    }
+  }
+
+  ul {
+    @extend %lists;
+  }
+
+  .views-label {
+    color: $color-gray-darker;
+    display: inline-block;
+    font-size: $font-s;
+    font-weight: bold;
+    text-transform: uppercase;
+    @include breakpoint($screen-sm-min) {
+      position: relative;
+      top: 2px;
+    }
+  }
+
+  li {
+    @extend %list-add-to-calendar;
+    margin-right: 0;
+    vertical-align: top;
+
+    @include breakpoint($screen-sm-min) {
+      margin-right: 8px;
+    }
+  }
+}
+
+.deadline {
+  background-color: $color-orange;
+  color: $color-white;
+  display: inline-block;
+  font-size: $font-sm;
+  margin-bottom: 10px;
+  padding: 5px 20px;
+  text-transform: uppercase;
+
+  &::before {
+    @extend %svg-image;
+    background: url("../images/alert-icon-white.svg") no-repeat 100% 100%;
+    height: 16px;
+    margin-right: 9px;
+    vertical-align: top;
+    width: 16px;
+  }
+}
+
+.page-events .page-header {
+  margin-bottom: 5px;
+
+  @include breakpoint($screen-sm-min) {
+    margin-bottom: 25px;
+    margin-top: 15px;
+  }
+
+  @include breakpoint($screen-md-min) {
+    margin-bottom: 50px;
+    margin-top: 30px;
+  }
+}
+
+.filter__results {
+  display: block;
+  font-size: $font-sxl;
+  padding-top: 25px;
+
+  @include breakpoint($screen-md-max) {
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+
+  .search-term {
+    font-weight: bold;
+
+    &::before {
+      content: open-quote;
+    }
+
+    &::after {
+      content: close-quote;
+    }
+  }
+
+  .reset-all-events {
+    border-bottom: 1px solid $color-gray-lightest;
+    border-top: 1px solid $color-gray-lightest;
+    display: block;
+    margin-top: 25px;
+    padding-bottom: 25px;
+    padding-top: 25px;
+
+    a {
+      color: $color-blue-background-dark;
+
+      &::before {
+        @extend %svg-image;
+        background: url("../images/arrow-knockout-blue.svg") no-repeat;
+        display: inline-block;
+        height: 25px;
+        margin-right: 20px;
+        position: relative;
+        top: -1px;
+        transform: rotate(180deg);
+        vertical-align: middle;
+        width: 25px;
+
+        @include breakpoint($screen-md-min) {
+          height: 32px;
+          top: -2px;
+          width: 32px;
+        }
+      }
+    }
+  }
+}
+

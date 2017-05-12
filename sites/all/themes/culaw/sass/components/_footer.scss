@@ -1,0 +1,511 @@
+.footer__bottom {
+
+  background-color: $color-blue-darker;
+  color: $color-white;
+  font-size: $font-ss;
+  font-weight: 300;
+  overflow: hidden;
+  padding: 20px;
+
+  a {
+    color: $color-white;
+  }
+
+  .region-footer-bottom {
+    @include breakpoint($screen-md-min) {
+      margin: 0 auto;
+      width: 80%;
+    }
+  }
+
+  .block-cls-core {
+    @include breakpoint($screen-sm-max) {
+      text-align: center;
+    }
+
+    @include breakpoint($screen-md-max) {
+      padding-bottom: 10px;
+      padding-top: 10px;
+    }
+
+    @include breakpoint($screen-md-min) {
+      float: left;
+      width: 35%;
+    }
+  }
+
+  .block-menu-block {
+    @include breakpoint($screen-md-max) {
+      padding-bottom: 10px;
+      padding-top: 10px;
+    }
+
+    @include breakpoint($screen-md-min) {
+      float: left;
+      width: 65%;
+    }
+
+    .nav .open > a,
+    .nav .open > a:hover,
+    .nav .open > a:focus {
+      background-color: transparent;
+      border-color: $color-white;
+    }
+
+    ul {
+      font-size: $font-s;
+      list-style: none;
+      margin: 0;
+      padding-left: 0;
+
+      @include breakpoint($screen-md-min $screen-hdv-max) {
+        font-size: $font-sm;
+      }
+
+      @include breakpoint($screen-sm-max) {
+        text-align: center;
+      }
+
+      @include breakpoint($screen-md-min) {
+        text-align: right;
+      }
+    }
+
+    li {
+      display: inline-block;
+
+      a {
+        border-right: 1px solid $color-white;
+        line-height: 1;
+        padding: 0 6px;
+
+        @include breakpoint($screen-md-min $screen-hdv-max) {
+          padding: 0 4px;
+        }
+
+        &:hover {
+          background: none;
+          color: $color-blue-link-hover;
+          text-decoration: none;
+        }
+      }
+
+      &:last-child a {
+        border-right: none;
+      }
+    }
+
+  }
+}
+
+.block__menu-admissions-block,
+.block__menu-academics-cources,
+.block__menu-our-faculty,
+.block__menu-research-scholarships,
+.block__menu-careers,
+.block__menu-about-us {
+  @include breakpoint($screen-md-min) {
+    float: left;
+    padding-bottom: 35px;
+    vertical-align: top;
+    width: 16.66%;
+  }
+}
+
+.footer {
+  color: $color-white;
+  font-size: $font-s;
+  overflow: hidden;
+  padding: 0;
+
+  @include breakpoint($screen-sm-max) {
+    margin-top: 25px;
+  }
+
+  .menu-block-wrapper,
+  .menu-name-menu-main-mega-menu {
+    @include breakpoint($screen-md-max) {
+      display: none;
+    }
+  }
+
+  .block__social-menu .menu-block-wrapper,
+  .menu-name-menu-social-menu {
+    @include breakpoint($screen-md-max) {
+      display: block;
+    }
+  }
+
+  .visible .menu-block-wrapper,
+  .visible .menu-name-menu-main-mega-menu {
+    @include breakpoint($screen-md-max) {
+      display: block;
+    }
+  }
+
+  .block-menu-block {
+
+    .nav .open > a,
+    .nav .open > a:hover,
+    .nav .open > a:focus {
+      background-color: transparent;
+    }
+
+    .block-title {
+      background-color: $color-blue-background-darker;
+      border-bottom: 1px solid $color-blue-lines-dark;
+      font-size: $font-ms;
+      font-weight: 300;
+      margin: 0;
+      padding: 15px;
+      padding-left: 30px;
+      position: relative;
+
+      &::after {
+        content: "\e804";
+        font-family: "fontello";
+        position: absolute;
+        right: 24px;
+      }
+
+      @include breakpoint($screen-md-min) {
+        background-color: $color-blue-background-dark;
+        border-bottom: none;
+        font-size: 20px;
+
+        &::after {
+          content: none;
+        }
+      }
+    }
+
+    a {
+      color: $color-white;
+      font-weight: 300;
+      padding: 9px;
+      padding-left: 30px;
+
+      &:hover {
+        background-color: transparent;
+        color: $color-blue-link-hover;
+      }
+    }
+  }
+}
+
+.footer .block__menu-admissions-block .title__wrap::before {
+  @include breakpoint($screen-md-min) {
+    @extend %title-color-extender;
+    border-right: 1px solid $color-blue-lines-dark;
+    left: -400px;
+  }
+}
+
+.footer .block__menu-about-us .title__wrap::before {
+  @include breakpoint($screen-md-min) {
+    @extend %title-color-extender;
+    right: -401px;
+  }
+}
+
+.footer .title__wrap .block-title a {
+  font-weight: 400;
+  padding: 0;
+  @include breakpoint($screen-md-max) {
+    pointer-events: none;
+  }
+
+  &:hover {
+    color: $color-white;
+    text-decoration: underline;
+  }
+}
+
+.footer .block-title .menu-attach-block-drop-link,
+.footer .block-title a.external {
+  display: none;
+}
+
+.footer .block__social-menu {
+  background-color: $color-gray-darker;
+  clear: both;
+  color: $color-white;
+  text-align: center;
+
+  .block-title a {
+    color: $color-blue-background-darker;
+  }
+
+  @include breakpoint($screen-sm-min) {
+
+    .block-title,
+    .menu-name-menu-social-menu {
+      border: none;
+      float: left;
+      width: 50%;
+    }
+
+    .block-title {
+      padding-left: 10%;
+      text-align: left;
+    }
+
+    .menu-name-menu-social-menu {
+      padding-right: 10%;
+      text-align: right;
+    }
+  }
+
+  .block-title {
+    background-color: $color-gray-darker;
+    border-bottom: none;
+    border-right: none;
+    font-size: $font-lm;
+    height: auto;
+    line-height: 1;
+    padding-bottom: 27px;
+    padding-top: 27px;
+
+    @include breakpoint($screen-md-max) {
+      font-size: $font-mxxl;
+      padding-bottom: 30px;
+      padding-left: 3%;
+      padding-top: 30px;
+    }
+
+    @include breakpoint($screen-sm-max) {
+      padding-bottom: 15px;
+    }
+
+    &.open__accordion::after,
+    &::after {
+      content: none;
+    }
+  }
+
+  .menu-name-menu-social-menu {
+    @include breakpoint($screen-md-max) {
+      padding-right: 3%;
+    }
+
+    @include breakpoint($screen-sm-max) {
+      padding-bottom: 20px;
+    }
+
+    .nav .open > a,
+    .nav .open > a:hover,
+    .nav .open > a:focus {
+      background-color: transparent;
+    }
+
+    .nav .open > a:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .nav {
+
+    li {
+      display: inline-block;
+      padding: 12px;
+      padding-left: 0;
+      padding-right: 10px;
+      text-align: right;
+
+      &:last-child {
+        padding-right: 0;
+      }
+
+      a {
+        font-size: 0;
+        padding: 0;
+        padding-bottom: 0;
+        padding-top: 0;
+        text-align: center;
+
+        &:hover {
+          background-color: transparent;
+          color: $color-white;
+        }
+
+        &::after {
+          background: $color-twitter;
+          display: block;
+          font-family: "fontello";
+          font-size: $font-ll;
+          -webkit-font-smoothing: antialiased;
+          font-smoothing: antialiased;
+          height: 60px;
+          line-height: 60px;
+          width: 60px;
+        }
+
+        &.social-media-twitter::after {
+          content: "\e800";
+        }
+
+        &.social-media-linkedin::after {
+          background-color: $color-linkedin;
+          content: "\e801";
+        }
+
+        &.social-media-facebook::after {
+          background-color: $color-facebook;
+          content: "\e802";
+        }
+
+        &.social-media-rss::after {
+          background-color: $color-rss;
+          content: "\e803";
+        }
+      }
+    }
+  }
+}
+
+.region-footer > .footer__menu-wrap {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  background-color: $color-brand-dark;
+  @include breakpoint($screen-md-min) {
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-bottom: -5px;
+  }
+
+  .block-title {
+    @include breakpoint($screen-md-max) {
+      cursor: pointer;
+    }
+  }
+
+  .title__wrap {
+    @include breakpoint($screen-md-min) {
+      background-color: $color-blue-background-dark;
+      border-bottom: none;
+      border-right: 1px solid $color-blue-lines-dark;
+      font-size: $font-ml;
+      height: 80px;
+      margin-bottom: 20px;
+      position: relative;
+
+      .block-title {
+        background-color: $color-blue-background-dark;
+        display: block;
+        font-size: $font-ms;
+        font-weight: 300;
+        margin: 0;
+        padding: 15px;
+        padding-left: 30px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+
+        a:hover {
+          text-decoration: none;
+        }
+      }
+    }
+
+    &:hover {
+      background-color: $color-skyblue-rollover;
+
+      .block-title {
+        background-color: $color-skyblue-rollover;
+      }
+    }
+  }
+
+  li {
+    line-height: 18px;
+  }
+}
+
+#block-cls-core-address {
+  color: $color-black;
+  display: block;
+  height: 300px;
+  line-height: 1.7;
+  overflow: hidden;
+  padding: 38px 30px;
+  position: relative;
+  text-align: center;
+
+  @include breakpoint($screen-sm-max) {
+    background-color: $color-gray;
+  }
+
+  @include breakpoint($screen-sm-min) {
+    line-height: 1;
+    padding: 50px 60px;
+
+    &::before {
+      background: linear-gradient(rgba(231, 241, 247, 0.94), rgba(231, 241, 247, 0.95)), url("../images/map.png") no-repeat center;
+      background-size: cover;
+      bottom: 0;
+      content: "";
+      height: 215%;
+      left: -5%;
+      position: absolute;
+      right: 0;
+      top: -20%;
+      transform: rotate(5deg);
+      width: 124%;
+      z-index: -1;
+    }
+  }
+
+  .title__wrap::before {
+    background: url("../images/pin.png") no-repeat;
+    content: " ";
+    display: inline-block;
+    height: 75px;
+    left: 0;
+    margin-top: 10px;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    right: 0;
+    text-align: center;
+    width: 60px;
+  }
+
+  .block-title {
+    background: url("../images/cls-logo.png") no-repeat;
+    background-size: contain;
+    font-size: 0;
+    height: 27px;
+    margin: auto;
+    margin-bottom: 20px;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .address,
+  .city {
+    font-size: $font-m;
+    font-weight: 700;
+    padding-right: 6px;
+
+    @include breakpoint($screen-sm-max) {
+      display: block;
+      font-size: $font-sxl;
+    }
+  }
+
+  .contact {
+    display: block;
+    font-size: $font-sl;
+
+    @include breakpoint($screen-sm-min) {
+      margin-top: 20px;
+    }
+
+    @include breakpoint($screen-sm-max) {
+      font-size: $font-s;
+    }
+  }
+}

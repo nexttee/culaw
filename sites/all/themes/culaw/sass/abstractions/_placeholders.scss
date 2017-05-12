@@ -1,0 +1,107 @@
+.hide {
+  display: none;
+}
+
+@include breakpoint($screen-sm-max) {
+
+  .show {
+    display: block;
+  }
+}
+
+@include breakpoint($screen-md-max) {
+
+  .footer .visible.block-menu-block .block-title::after {
+    content: "\e805";
+  }
+}
+
+%title-color-extender {
+  @include breakpoint($screen-md-min) {
+    background-color: $color-blue-background-dark;
+    bottom: 0;
+    content: "";
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 400px;
+  }
+}
+
+%svg-image {
+  background-size: cover;
+  content: " ";
+  display: inline-block;
+  position: relative;
+}
+
+.show__more {
+  border-radius: 0;
+  color: $color-blue-links;
+  font-size: $font-sl;
+  padding-bottom: 14px;
+  @include breakpoint($screen-sm-min) {
+    display: none;
+  }
+
+  &::before {
+    content: "+";
+    font-size: $font-mxl;
+    margin-right: 6px;
+    position: relative;
+    top: 2px;
+  }
+
+  &.visible::before {
+    content: "";
+  }
+}
+
+%lists {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+%list-add-to-calendar {
+  display: inline-block;
+  overflow: hidden;
+
+  @include breakpoint ($screen-sm-min) {
+    margin-right: 8px;
+  }
+
+  a {
+    display: block;
+    font-size: 0;
+
+    &::after {
+      background: url("../images/apple.png") no-repeat;
+      background-size: contain;
+      content: " ";
+      display: block;
+      height: 15px;
+      width: 25px;
+      @include breakpoint ($screen-sm-min) {
+        height: 18px;
+        width: 31px;
+      }
+    }
+
+    &.google::after {
+      background: url("../images/google.png") no-repeat;
+      background-size: contain;
+    }
+
+    &.outlook::after {
+      background: url("../images/outlook.png") no-repeat;
+      background-size: contain;
+    }
+
+    &.yahoo::after {
+      background: url("../images/yahoo.png") no-repeat;
+      background-size: contain;
+    }
+  }
+}
+

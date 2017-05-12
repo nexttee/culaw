@@ -1,0 +1,484 @@
+.community--block.block h2.block-title {
+  display: none;
+  margin-bottom: 55px;
+  margin-top: 72px;
+  text-align: center;
+
+  @include breakpoint($screen-sm-min) {
+    display: block;
+    font-size: $font-lms;
+  }
+
+  @include breakpoint($screen-md-min) {
+    font-size: $font-ll;
+  }
+}
+
+.view-community-content-section {
+  margin: 0 20px;
+  margin-top: 20px;
+
+  @include breakpoint($screen-md-min) {
+    margin: 0 auto;
+    max-width: 1165px;
+    width: 80%;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+
+    li {
+      background-color: $color-skyblue-darker;
+      float: left;
+      height: 280px;
+      margin-bottom: 25px;
+      overflow: hidden;
+      text-align: center;
+      transition: 0.5s box-shadow;
+      width: 100%;
+
+      @include breakpoint($screen-sm-min) {
+        height: 235px;
+        margin-bottom: 4px;
+      }
+
+      @include breakpoint($screen-md-min) {
+        height: 384px;
+        margin-bottom: 4px;
+      }
+
+      a {
+        color: $color-white;
+        font-size: $font-lsm;
+        font-weight: 300;
+        line-height: 1;
+
+        &:hover {
+          text-decoration: none;
+        }
+
+        @include breakpoint($screen-md-min) {
+          font-size: $font-mxl;
+        }
+
+        @include breakpoint($screen-md-min) {
+          font-size: $font-lm;
+        }
+      }
+
+      &:first-child {
+        @include breakpoint($screen-sm-min) {
+          margin-right: 0.33%;
+        }
+      }
+
+      &:nth-child(2) {
+        @include breakpoint($screen-sm-min) {
+          max-width: 384px;
+          width: 33%;
+        }
+      }
+
+      &.community-content-cls-capi-event {
+        background-color: $color-skyblue-light;
+      }
+
+      &:first-child,
+      &:nth-child(4) {
+        @include breakpoint($screen-sm-min) {
+          max-width: 774px;
+          width: 66.66%;
+        }
+      }
+
+      &:nth-child(3),
+      &:nth-child(5),
+      &:nth-child(6) {
+        @include breakpoint($screen-sm-min) {
+          margin-right: 0.33%;
+          max-width: 384px;
+          width: 33%;
+        }
+      }
+
+      &:nth-child(7) {
+        @include breakpoint($screen-sm-min) {
+          max-width: 384px;
+          width: 33.33%;
+        }
+      }
+
+      &:nth-child(4),
+      &:nth-child(5),
+      &:nth-child(6),
+      &:nth-child(7) {
+        display: none;
+        @include breakpoint($screen-sm-min) {
+          display: block;
+        }
+      }
+    }
+
+    .views-field-field-featured-content-image {
+      background-color: $color-black;
+
+      img {
+        height: 100%;
+        min-height: 280px;
+        object-fit: cover;
+        width: 100%;
+
+        @include breakpoint($screen-sm-min) {
+          min-height: 235px;
+        }
+
+        @include breakpoint($screen-md-min) {
+          min-height: 384px;
+        }
+      }
+    }
+  }
+}
+
+.community-content-featured-content {
+  position: relative;
+}
+
+.community__text {
+  bottom: 30px;
+  left: 0;
+  padding-left: 30px;
+  padding-right: 30px;
+  position: absolute;
+  text-align: left;
+  transition: all 0.4s ease-in-out;
+
+  @include breakpoint($screen-md-min) {
+    bottom: 50px;
+    padding-left: 50px;
+    padding-right: 40px;
+  }
+}
+
+.view-community-content-section .views-field.views-field-sub-headline {
+  display: inline-block;
+  font-size: $font-sms;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  position: relative;
+  text-transform: uppercase;
+
+  @include breakpoint($screen-md-min) {
+    font-size: $font-s;
+  }
+}
+
+.view-community-content-section .views-field.views-field-sub-headline::after {
+  background-color: $color-white;
+  bottom: 0;
+  content: " ";
+  height: 1px;
+  left: 0;
+  position: absolute;
+  width: 36px;
+}
+
+.community-content-calendar,
+.community-content-cls-capi-event,
+.community-content-cls-mcl-event {
+  padding: 35px;
+
+  @include breakpoint($screen-sm-min) {
+    padding: 20px 40px;
+  }
+
+  &:hover {
+    box-shadow: inset 0 0 175px rgba(0, 0, 0, 0.3);
+  }
+
+  .views-field-views-conditional {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &::before {
+      @extend %svg-image;
+      background: url("../images/calendar-icon.svg") no-repeat 100% 100%;
+      height: 35px;
+      margin-bottom: 8px;
+      width: 35px;
+
+      @include breakpoint($screen-md-min) {
+        height: 50px;
+        width: 50px;
+      }
+    }
+  }
+
+  .views-field-event-title {
+    color: $color-white;
+    font-size: $font-mxxl;
+    font-weight: 300;
+    line-height: 1;
+
+    @include breakpoint($screen-sm-min) {
+      font-size: $font-mxl;
+    }
+
+    @include breakpoint($screen-md-min) {
+      font-size: $font-lm;
+      line-height: 1.4;
+    }
+  }
+
+  .views-field-event-read-more a {
+    @extend %svg-image;
+    background: url("../images/arrow-filled-blue-light.svg") no-repeat 100% 100%;
+    border-radius: 100%;
+    display: block;
+    font-size: 0;
+    height: 28px;
+    margin: 0 auto;
+    margin-top: 15px;
+    text-align: right;
+    width: 28px;
+  }
+
+  .views-field-event-body,
+  .views-field-event-body h1 {
+    color: $color-white;
+    font-family: $secondary-font;
+    font-size: $font-s;
+    margin-top: 10px;
+
+    @include breakpoint($screen-sm-min) {
+      font-size: $font-sm;
+    }
+
+    @include breakpoint($screen-md-min) {
+      font-size: $font-sl;
+    }
+  }
+}
+
+.community-content-cls-mcl-event {
+  position: relative;
+
+  .views-field-cls-mcl-event-url a {
+    bottom: 0;
+    display: block;
+    font-size: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+  }
+}
+
+@include breakpoint($screen-md-min) {
+
+  .community-content-featured-content {
+
+    .views-field.views-field-views-conditional img {
+      transition: all 0.4s ease-in-out;
+    }
+
+    &:hover {
+
+      .views-field.views-field-views-conditional img {
+        opacity: 0.5;
+      }
+
+      .community__text {
+        bottom: auto;
+        left: 0;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 40px;
+        right: 0;
+        text-align: center;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .views-field.views-field-sub-headline::after {
+        left: 0;
+        margin-left: auto;
+        margin-right: auto;
+        right: 0;
+        text-align: center;
+      }
+    }
+  }
+
+  .community-content-cls-capi-event:hover,
+  .community-content-cls-mcl-event:hover {
+
+    .views-field-event-read-more a {
+      background: url("../images/arrow-filled-white.svg") no-repeat 100% 100%;
+    }
+  }
+}
+
+.community-content-featured-content {
+
+  .views-field-views-conditional {
+
+    &::before {
+      background: linear-gradient(to bottom, rgba(153, 153, 153, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
+      bottom: 0;
+      content: " ";
+      height: 220px;
+      left: 0;
+      position: absolute;
+      width: 100%;
+    }
+  }
+
+  img {
+    transition: all 0.2s linear;
+  }
+
+  &:hover img {
+    transform: scale(1.1, 1.1);
+  }
+}
+
+#block-cls-core-experience-columbia-law {
+  border-bottom: 1px solid $color-green-lighter;
+  border-top: 1px solid $color-green-lighter;
+  margin-top: 1px;
+
+  @include breakpoint ($screen-md-min) {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+
+  .title__wrap {
+    @include breakpoint ($screen-md-min) {
+      float: left;
+      height: 177px;
+      padding-right: 25px;
+      width: 35%;
+    }
+
+    .block-title {
+      border-bottom: 1px solid $color-green-lighter;
+      margin-bottom: 0;
+      padding: 25px 30px;
+
+      @include breakpoint ($screen-sm-min) {
+        padding: 35px;
+      }
+
+      @include breakpoint ($screen-md-min) {
+        border: none;
+        padding-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  .experience-block-title {
+    color: $color-black-gray;
+    font-size: $font-mxxl;
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-lm;
+    }
+  }
+
+  .description {
+    display: block;
+    font-family: $secondary-font;
+    font-size: $font-sm;
+    margin-top: 10px;
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-s;
+    }
+  }
+}
+
+#experience_columbia_law_links {
+  display: block;
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  padding-left: 0;
+
+  @include breakpoint ($screen-md-min) {
+    float: right;
+    width: 65%;
+  }
+}
+
+#experience_columbia_law_links li {
+  border-bottom: 3px solid $color-green;
+  border-left: 1px solid $color-green-lighter;
+  float: left;
+  height: 140px;
+  overflow: hidden;
+  text-align: center;
+  width: 50%;
+
+  @include breakpoint ($screen-sm-min) {
+    width: 25%;
+  }
+
+  @include breakpoint ($screen-md-min) {
+    height: 177px;
+  }
+
+  &:last-child {
+    @include breakpoint ($screen-md-min) {
+      border-right: 1px solid $color-green-lighter;
+    }
+  }
+
+  a {
+    color: $color-black-gray;
+    display: block;
+    font-size: $font-mxl;
+    line-height: 26px;
+    padding: 50px 35px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-mxxl;
+      padding: 60px 20px;
+    }
+
+    &:hover {
+      color: $color-green;
+      text-decoration: none;
+    }
+  }
+
+  &:hover a {
+    color: $color-green;
+    @include breakpoint ($screen-md-min) {
+
+      &::after {
+        @include svg-image();
+        background: url("../images/arrow-filled-green.svg") no-repeat 100% 100%;
+        display: block;
+        height: 27px;
+        margin: 0 auto;
+        margin-top: 15px;
+        width: 25px;
+      }
+    }
+  }
+}

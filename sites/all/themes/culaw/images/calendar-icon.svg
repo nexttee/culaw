@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+    <!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+    <!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+    <!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+    <!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+    <!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+    <!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+    <!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+    <!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 72.2 75.9"
+     enable-background="new 0 0 72.2 75.9" xml:space="preserve">
+<switch>
+    <foreignObject requiredExtensions="&ns_ai;" x="0" y="0" width="1" height="1">
+        <i:pgfRef  xlink:href="#adobe_illustrator_pgf">
+        </i:pgfRef>
+    </foreignObject>
+    <g i:extraneous="self">
+        <g>
+            <path d="M62.7,6.2V0H50.7v6.2H22.2V0H10.2v6.2H0v69.7h72.2V6.2H62.7z M52.7,2h7.9v3.8h-7.9V2z M12.2,2h7.9v3.8h-7.9V2z
+                 M70.2,73.9H2V8.2h68.3V73.9z" fill="#FFFFFF"/>
+            <path d="M65,12.4H6.7v16.3H65V12.4z M63,26.8H8.7V14.4H63V26.8z" fill="#FFFFFF"/>
+            <path d="M23.3,32.6h-17v16.3h17V32.6z M21.3,46.9h-13V34.6h13V46.9z" fill="#FFFFFF"/>
+            <path d="M27.3,48.9h17V32.6h-17V48.9z M29.3,34.6h13v12.3h-13V34.6z" fill="#FFFFFF"/>
+            <path d="M48.2,48.9h17V32.6h-17V48.9z M50.2,34.6h13v12.3h-13V34.6z" fill="#FFFFFF"/>
+            <path d="M23.2,52.3h-17v16.3h17V52.3z M21.2,66.6h-13V54.3h13V66.6z" fill="#FFFFFF"/>
+            <path d="M27.1,68.6h17V52.3h-17V68.6z M29.1,54.3h13v12.3h-13V54.3z" fill="#FFFFFF"/>
+            <path d="M48,68.6h17V52.3H48V68.6z M50,54.3h13v12.3H50V54.3z" fill="#FFFFFF"/>
+        </g>
+    </g>
+</switch>
+</svg>

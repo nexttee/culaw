@@ -1,0 +1,52 @@
+.maintenance-page {
+  background-color: $color-brand-dark;
+  color: $color-white;
+  font-weight: 300;
+  height: 100%;
+  text-align: center;
+
+  #site-name,
+  .title {
+    display: none;
+  }
+
+  #logo {
+    display: block;
+    margin-bottom: 12px;
+
+    img {
+      max-width: 450px;
+      width: 100%;
+    }
+  }
+
+  #page {
+    color: $color-white;
+    line-height: 1.4;
+    margin: auto;
+    position: relative;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 70%;
+
+    a {
+      color: $color-white;
+      text-decoration: underline;
+    }
+  }
+
+  h1 {
+    font-size: $font-xl;
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    margin-top: 0;
+  }
+
+  p {
+    font-size: $font-ls;
+    margin: 0 auto;
+    width: 90%;
+  }
+}

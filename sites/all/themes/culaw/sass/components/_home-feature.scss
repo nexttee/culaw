@@ -1,0 +1,247 @@
+.navbar.container,
+.container {
+  max-width: inherit;
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+  @include breakpoint($mobile) {
+    max-width: inherit;
+    width: 100%;
+  }
+}
+
+.carousel {
+  overflow: hidden; 
+
+  &-inner {
+    left: 0;
+    width: 100%;
+
+    .slider {
+      display: block;
+      max-height: 710px;
+      background-size: 100%;
+      background-position: center center;
+      overflow: hidden;
+
+      img { opacity: 0; }
+    }
+
+    .item {
+      .views-field-title {
+        position: absolute;
+        right: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#000000", GradientType=1);
+        font-size: $font-l;
+        font-weight: 300;
+
+        &.text_top {
+          top: 123px;
+          background: linear-gradient(rgba(0,0,0,0.8) 20%, transparent 100%);
+
+          a { padding: 35px 10% 95px; }
+        }
+
+        &.text_bottom {
+          bottom: 0;
+          background: linear-gradient(to top, rgba(0,0,0,0.8) 20%, transparent 100%);
+
+          a { padding: 95px 10% 35px; }
+        }
+
+        a {
+          display: block;
+          color: $color-white;
+          font-weight: bold;
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+
+  &-indicators {
+    bottom: 21px;
+    left: auto;
+    right: 3%;
+    width: auto;
+
+    @include breakpoint($screen-md-max) {
+      right: 50px;
+      width: auto;
+    }
+
+    li {
+      background-color: $color-white;
+      height: 12px;
+      left: auto;
+      margin: 6px;
+      opacity: 0.5;
+      padding: 5px;
+      right: 15px;
+      width: 12px;
+
+      &.active {
+        margin: 6px;
+        opacity: 1;
+      }
+    }
+  }
+
+  .carousel-control {
+    opacity: 0.1;
+    width: 14%;
+
+    &.right, &.left {
+      margin: 0;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      margin: 0;
+
+      .icon-next {
+        right: 15%;
+      }
+
+      .icon-prev {
+        left: 15%;
+      }
+    }
+
+    .icon-next::before,
+    .icon-prev::before {
+      @extend %svg-image;
+      height: 100px;
+      width: 20px;
+    }
+
+    .icon-prev::before {
+      background: url("../images/left-slider-arrow.svg") no-repeat 100% 100%;
+    }
+
+    .icon-next::before {
+      background: url("../images/right-slider-arrow.svg") no-repeat 100% 100%;
+    }
+
+    span {
+      visibility: hidden;
+    }
+
+    &:hover {
+      @include breakpoint ($screen-md-min) {
+        opacity: 1;
+
+        span {
+          visibility: visible;
+        }
+      }
+    }
+  }
+
+  .views-field-field-featured-content-image img {
+    width: 100%;
+  }
+}
+
+.view-display-id-featured_homepage_slider {
+  margin-top: 70px;
+  @include breakpoint($screen-md-min) {
+    margin-top: 0;
+  }
+}
+
+@include breakpoint($screen-md-max) {
+
+  .carousel .carousel-inner {
+    left: 0;
+    width: 100%;
+  }
+
+  .carousel-inner .item .views-field-title {
+    a {
+      padding-left: 30px;
+    }
+
+    &.text_top, &.text_bottom {
+      a { 
+        padding-left: 30px;
+        padding-right: 190px; 
+      }
+    }
+  } 
+
+  .carousel .carousel-control {
+    background-image: none;
+    opacity: 0.1;
+  }
+}
+
+@include breakpoint($screen-sm-min) {
+  .carousel {
+    &-inner {
+      .item .views-field-title {
+        line-height: 40px;
+
+        &.text_top {
+          top: 53px;
+        }
+
+        a { padding-right: 190px; }
+      }
+    }
+  }
+}
+
+@include breakpoint($screen-md-min) {
+  .carousel {
+    &-inner {
+      .item .views-field-title {
+        &.text_top {
+          top: 123px;
+        }
+
+        a { padding-top: 65px; }
+      }
+    }
+  }
+}
+
+@include breakpoint($screen-sm-max) {
+
+  .carousel-inner .item .views-field-title,
+  .carousel-inner .item .views-field-title.text_top,
+  .carousel-inner .item .views-field-title.text_bottom {
+    background: transparent;
+    font-size: $font-mxl;
+    margin: auto;
+    min-height: 130px;
+    position: relative;
+    text-align: center;
+    width: 90%;
+    top: auto;
+
+    a { 
+      display: block;
+      padding: 12px 0; 
+    }
+  }
+
+  .carousel .carousel-inner {
+    background-color: $color-gray-dark;
+    padding-bottom: 35px;
+  }
+
+  .carousel-indicators {
+    bottom: 5px;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    right: 0;
+  }
+}

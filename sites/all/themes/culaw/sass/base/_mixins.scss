@@ -1,0 +1,6 @@
+@mixin svg-image() {
+	background-size: cover;
+        content: " ";
+        display: inline-block;
+        position: relative;
+}

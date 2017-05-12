@@ -1,0 +1,249 @@
+.sub__feature {
+  padding: 0;
+}
+
+.front .region-sub-featured {
+  background-color: $color-blue-feature;
+  display: table;
+  width: 100%;
+
+  @include breakpoint($screen-md-min) {
+    margin: auto;
+    width: 80%;
+  }
+
+  .block-views:first-child {
+    background: $color-white;
+    line-height: 1;
+    margin: 0;
+    padding: 20px;
+    padding-bottom: 30px;
+    @include breakpoint($screen-sm-min) {
+      padding: 40px;
+      padding-bottom: 20px;
+      padding-left: 0;
+      width: 52%;
+    }
+
+    @include breakpoint($screen-sm-min $screen-md-min) {
+      padding-left: 30px;
+      padding-right: 30px;
+      padding-top: 30px;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .block-views {
+    @include breakpoint($screen-sm-min) {
+      display: table-cell;
+      vertical-align: top;
+      width: 50%;
+    }
+  }
+}
+
+// In the News title
+#block-views-009342aafbd1c5ec68d33853b45ae045 h2.block-title
+{
+  margin-top: 50px;
+  padding-left: 30px;
+  padding-right: 20px;
+
+  &.show {
+    display: block;
+  }
+
+  @include breakpoint($screen-sm-max) {
+    display: none;
+  }
+}
+
+// In the News section
+.view-display-id-sub_featured_content_list {
+  @extend .hide;
+  padding: 20px 0;
+  @include breakpoint($screen-sm-min) {
+    display: block;
+  }
+
+  @include breakpoint($screen-sm-min $screen-md-min) {
+    padding: 30px 0;
+  }
+
+  // News Item
+  .views-row {
+    position: relative;
+
+    &:hover {
+      background-color: $color-skyblue-highlight;
+
+      @include breakpoint($screen-sm-min) {
+        .views-field-view-node a::after {
+          background: url("../images/arrow-filled-blue-dark.svg") no-repeat 100% 100%;
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+
+  // News Item Date
+  .views-field-created {
+    border-top: 1px solid $color-blue-lines;
+    padding: 25px 30px 0;
+    color: #464646;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;  
+  }
+
+  // News Item Blurb
+  .views-field-field-featured-content-link a {
+    border-top: 1px solid $color-blue-lines;
+    display: block;
+    font-size: $font-m;
+    margin-top: -1px;
+    padding: 30px 60px 30px 30px;
+
+    @include breakpoint($screen-md-min) {
+      font-size: $font-ml;
+    }
+
+    &:hover {
+      background-color: $color-skyblue-highlight;
+      text-decoration: none;
+    }
+  }
+
+  // Arrow Icon link
+  .views-field-view-node a {
+    @include breakpoint($screen-sm-max) {
+      bottom: 30px;
+      right: 20px;
+      position: absolute;
+    }
+
+    @include breakpoint($screen-sm-min) {
+      bottom: 30px;
+      position: absolute;
+      right: 20px;
+    }
+
+    // @include breakpoint($screen-md-min) {
+    //   bottom: 30px;
+    //   right: 20px;
+    // }
+  }
+}
+
+.load__more {
+  border-radius: 0;
+  color: $color-blue-links;
+  font-size: $font-sl;
+  padding: 6px;
+  padding-bottom: 10px;
+
+  &:hover {
+    color: $color-blue-links;
+  }
+
+  @include breakpoint($screen-sm-min) {
+    display: none;
+  }
+
+  &::before {
+    content: "+";
+    font-size: $font-mxl;
+    margin-right: 6px;
+    position: relative;
+    top: 2px;
+  }
+
+  &.visible::before {
+    content: "";
+  }
+}
+
+.view-display-id-sub_featured_homepage_block .views-field {
+  margin-bottom: 15px;
+
+  &.views-field-title a {
+    font-size: $font-m;
+
+    @include breakpoint($screen-md-min) {
+      font-size: $font-ml;
+    }
+  }
+
+  &.views-field-body p {
+    font-family: $secondary-font;
+    font-size: $font-s;
+    line-height: 1.5;
+
+    @include breakpoint($screen-md-min) {
+      font-size: $font-sl;
+    }
+  }
+}
+
+.view-sub-featured-homepage-content {
+
+  .views-field-view-node  {
+
+    a {
+      font-size: $font-sm;
+    }
+
+    @include breakpoint($screen-sm-min) {
+      float: right;
+
+      a {
+        display: block;
+        font-size: 0;
+        margin-top: -15px;
+        text-align: right;
+
+        &::after {
+          @include svg-image();
+          background: $color-white url("../images/arrow-filled-gray.svg") no-repeat 100% 100%;
+          border-radius: 100%;
+          height: 28px;
+          width: 28px;
+        }
+      }
+    }
+
+    @include breakpoint($screen-sm-max) {
+      float: right;
+
+      a {
+        display: block;
+        font-size: 0;
+        margin-top: -15px;
+        text-align: right;
+
+        &::after {
+          @include svg-image();
+          background: $color-white url("../images/arrow-filled-gray.svg") no-repeat 100% 100%;
+          border-radius: 100%;
+          height: 28px;
+          width: 28px;
+        }
+      }
+    }
+  }
+
+  .view-display-id-sub_featured_content_list {
+
+    .views-field-view-node a {
+      margin-top: 0;
+    }
+
+    a:hover {
+      color: $color-gray-links;
+      text-decoration: none;
+    }
+  }
+}

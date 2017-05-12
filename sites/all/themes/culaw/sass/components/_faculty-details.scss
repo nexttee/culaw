@@ -1,0 +1,478 @@
+.profile {
+
+  .field-name-field-faculty-profile-bio {
+    background-color: $color-grayish-blue-dark;
+    padding: 35px 20px;
+    position: relative;
+
+    @include breakpoint($screen-sm-min) {
+      margin-bottom: 35px;
+      padding: 30px;
+    }
+
+    @include breakpoint($screen-md-min) {
+      padding: 40px 50px;
+    }
+
+    .field-label {
+      font-size: $font-mxl;
+      font-weight: normal;
+      margin-bottom: 15px;
+
+      @include breakpoint($screen-sm-min) {
+        font-size: $font-mxxl;
+      }
+
+      @include breakpoint($screen-md-min) {
+        font-size: $font-lm;
+      }
+    }
+
+    .field-items {
+      color: $color-grayish-blue;
+      font-family: $secondary-font;
+      font-size: $font-sm;
+      line-height: 1.5;
+
+      @include breakpoint($screen-sm-min) {
+        font-family: $primary-font;
+        font-size: $font-m;
+      }
+
+      @include breakpoint($screen-md-min) {
+        font-size: $font-ml;
+      }
+    }
+
+    .read__button {
+      display: block;
+      font-family: $primary-font;
+      font-size: $font-sm;
+      font-weight: bold;
+      margin-top: 20px;
+      text-transform: uppercase;
+
+      @include breakpoint ($screen-sm-min) {
+        font-size: $font-s;
+      }
+
+      @include breakpoint ($screen-md-min) {
+        margin-top: 35px;
+      }
+
+      a {
+        color: $color-skyblue-link-darker;
+        display: block;
+      }
+    }
+
+    .read__button.not__visible {
+      display: none;
+    }
+  }
+
+  .field-name-field-faculty-profile-bio::before,
+  .field-name-field-faculty-profile-bio::after {
+    background-color: $color-grayish-blue-dark;
+    content: " ";
+    height: 100%;
+    position: absolute;
+    right: 100%;
+    top: 0;
+    width: 100%;
+    z-index: 9;
+  }
+
+  .field-name-field-faculty-profile-bio::after {
+    left: 100%;
+  }
+}
+
+.user__profile {
+
+  .user__page-header,
+  .sidebar__first {
+    @include breakpoint ($screen-sm-max) {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  .main__master {
+    clear: both;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 25px;
+
+    @include breakpoint ($screen-sm-min) {
+      padding-left: 25px;
+      padding-right: 25px;
+      padding-top: 30px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      margin: 0 auto;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .full__name {
+    font-size: $font-lsm;
+    margin-top: 0;
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-lls;
+      margin-bottom: 15px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-xl;
+    }
+  }
+
+  .user__title {
+    font-size: $font-m;
+    margin-bottom: 25px;
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-lsm;
+      margin-bottom: 30px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-ll;
+    }
+  }
+
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .content__main {
+    margin-top: 25px;
+    padding-left: 0;
+    padding-right: 0;
+
+    @include breakpoint ($screen-sm-min) {
+      float: left;
+      margin-top: 0;
+      width: 65%;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      width: 72%;
+    }
+  }
+
+  .field-name-cls-user-first-name,
+  .field-name-cls-user-middle-name,
+  .field-name-cls-user-last-name,
+  .field-name-cls-user-suffix,
+  .field-name-cls-user-title,
+  .highlighted.jumbotron,
+  .alert-info,
+  .page-header {
+    display: none;
+  }
+
+  .field.field-name-field-faculty-profile-elements {
+    @include breakpoint ($screen-sm-min) {
+      padding-left: 30px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      padding-left: 50px;
+    }
+  }
+
+  .group-element-description {
+    display: none;
+    font-family: $secondary-font;
+    font-size: $font-sl;
+    line-height: 2.5;
+    margin-bottom: 26px;
+
+    @include breakpoint ($screen-sm-max) {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  .field.field-name-field-element-name .field-item {
+    border-top: 1px solid $color-gray-border;
+    cursor: pointer;
+    font-size: $font-mxl;
+    padding-bottom: 14px;
+    padding-top: 18px;
+    position: relative;
+
+    @include breakpoint ($screen-sm-max) {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    @include breakpoint($screen-sm-min) {
+      font-size: $font-mxxl;
+      padding-bottom: 11px;
+      padding-top: 14px;
+    }
+
+    @include breakpoint($screen-md-min) {
+      font-size: $font-lm;
+      padding-bottom: 26px;
+      padding-top: 26px;
+    }
+
+    &::after {
+      @extend %svg-image;
+      background: url("../images/plus-icon.svg") no-repeat 100% 100%;
+      height: 20px;
+      position: absolute;
+      right: 25px;
+      width: 20px;
+
+      @include breakpoint($screen-sm-min) {
+        right: 0;
+      }
+    }
+  }
+
+  .visible {
+
+    .field-name-field-element-name .field-item::after {
+      background: url("../images/minus-icon.svg") no-repeat 100% 100%;
+    }
+
+    .group-element-description {
+      display: block;
+    }
+  }
+
+  .show__content {
+
+    @include breakpoint ($screen-md-min) {
+
+      .field-name-field-element-name .field-item::after {
+        background: url("../images/minus-icon.svg") no-repeat 100% 100%;
+      }
+
+      .group-element-description {
+        display: block;
+      }
+    }
+  }
+
+  .field-name-field-faculty-profile-elements > .field-items > .field-item {
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    li::before {
+      color: $color-blue-dark;
+      content: "• ";
+      font-size: $font-sxl;
+      margin-left: -20px;
+      padding-right: 10px;
+      position: relative;
+    }
+  }
+
+  .sidebar__first {
+    color: $color-white;
+    margin-left: 0;
+    margin-right: 0;
+    padding-bottom: 0;
+
+    @include breakpoint ($screen-sm-min) {
+      float: left;
+      max-width: 300px;
+      padding: 0;
+      position: relative;
+      width: 35%;
+      z-index: 10;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      width: 28%;
+    }
+
+    a {
+      color: $color-white;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+
+    .views-field-field-faculty-profile-image img {
+      width: 100%;
+    }
+
+    .office-location-title,
+    .contact-info-title,
+    .assistant-info-title {
+      font-size: $font-mxl;
+      margin-bottom: 15px;
+
+      @include breakpoint ($screen-md-min) {
+        font-size: $font-mxxl;
+      }
+    }
+
+    .office__addess {
+      position: relative;
+
+      &::before {
+        @extend %svg-image;
+        background: url("../images/location-icon.svg") no-repeat 100% 100%;
+        height: 20px;
+        left: -4px;
+        margin-bottom: 8px;
+        position: absolute;
+        width: 20px;
+      }
+
+      .views-field-field-faculty-office-city,
+      .views-field-field-faculty-office-state,
+      .views-field-field-faculty-office-zip-code {
+        display: inline-block;
+      }
+
+      .views-field-field-faculty-office-city {
+
+        .field-content::after {
+          content: ",";
+        }
+      }
+    }
+
+    .field__content {
+      padding-left: 30px;
+
+      .views-field {
+        font-size: $font-s;
+      }
+    }
+
+    .views-field-field-faculty-office-phone,
+    .views-field-field-faculty-office-fax {
+
+      .views-label-field-faculty-office-phone,
+      .views-label-field-faculty-office-fax,
+      .field-content {
+        display: inline-block;
+        padding-right: 3px;
+        position: relative;
+      }
+    }
+
+    .views-field-field-faculty-assistant-name::before,
+    .views-field-field-faculty-assistant-phone::before,
+    .views-field-field-faculty-office-email::before,
+    .views-label-field-faculty-office-phone::before,
+    .views-field-field-faculty-assistant-email::before {
+      @extend %svg-image;
+      background: url("../images/phone-icon.svg") no-repeat 100% 100%;
+      height: 20px;
+      margin-bottom: 8px;
+      margin-left: -30px;
+      position: absolute;
+      width: 20px;
+    }
+
+    .views-field-field-faculty-assistant-email,
+    .views-field-field-faculty-office-email {
+      margin-top: 10px;
+      position: relative;
+
+      &::before {
+        background: url("../images/email-icon.svg") no-repeat 100% 100%;
+        margin-top: -3px;
+      }
+    }
+
+    .views-field-field-faculty-twitter {
+      margin-top: 10px;
+      position: relative;
+
+      &::before {
+        @extend %svg-image;
+        margin-top: 10px;
+        background: url("../images/twitter-icon.svg") no-repeat 100% 100%;
+        margin-top: -3px;
+        margin-left: -30px;
+        position: absolute;
+        height: 20px;
+        width: 20px;
+      }
+    }
+
+    .views-field-field-faculty-assistant-name {
+      margin-bottom: 10px;
+      position: relative;
+
+      &::before {
+        background: url("../images/person-icon.svg") no-repeat 100% 100%;
+        margin-top: -3px;
+      }
+    }
+
+    .faculty-office-location {
+      background-color: $color-blue-link-hover;
+    }
+
+    .faculty-contact-info {
+      background-color: $color-blue-background-dark;
+    }
+
+    .assistant-information {
+      background-color: $color-brand-dark;
+    }
+
+    .faculty-office-location,
+    .faculty-contact-info,
+    .assistant-information {
+      padding: 30px;
+    }
+  }
+}
+
+.userpage__footer .footer {
+  margin-top: 0;
+}
+
+.userpage__sub-content {
+  margin-top: 45px;
+}
+
+.field-name-field-faculty-profile-bio {
+
+  p {
+    margin: 0 0 15px;
+    display: block;
+  }
+
+  .trimmed__text p {
+    display: block;
+  }
+}
+
+.no__body,
+.not__visible,
+.trimmed__text {
+  display: none;
+}
+
+.visible__area {
+  display: block;
+  font-style: normal;
+}
+
+.more + .trimmed__text.visible__area {
+  display: inline;
+}

@@ -1,0 +1,393 @@
+.front .region-content {
+  overflow: hidden;
+  position: relative;
+
+  @include breakpoint($screen-sm-min) {
+
+    &::after {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
+      content: " ";
+      height: 300px;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+  }
+}
+
+.front aside.col-sm-3 {
+  float: none;
+}
+
+.admission--block {
+  color: $color-white;
+  height: 100%;
+  position: absolute;
+  right: 10%;
+  top: 0;
+  width: 26%;
+  z-index: 8;
+
+  @include breakpoint($screen-md-max) {
+    right: 0;
+    width: 48%;
+  }
+
+  @include breakpoint($screen-sm-max) {
+    height: auto;
+    position: static;
+    width: 100%;
+  }
+}
+
+.marketing-content-intro {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.marketing-content-title {
+  color: $color-white;
+  font-size: $font-ll;
+  font-weight: 400;
+  position: absolute;
+  text-shadow: 0 1px 1px $color-black-light;
+  z-index: 1;
+
+  .field-content {
+    display: block;
+    margin-left: 10%;
+    margin-top: 46px;
+    width: 45%;
+  }
+
+  @include breakpoint($screen-md-max) {
+    font-size: $font-lms;
+
+    .field-content {
+      margin-left: 3%;
+      width: 46%;
+    }
+  }
+
+  @include breakpoint($screen-sm-max) {
+    background-color: $color-gray-light;
+    font-size: $font-mxl;
+    position: initial;
+    text-align: center;
+
+    .field-content {
+      margin: 0;
+      padding: 20px;
+      width: 100%;
+    }
+  }
+}
+
+.front .region-content {
+
+  .view.view-marketing-featured-content-nodequeue ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+
+    .views-field.views-field-title {
+      font-size: $font-lm;
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 20px;
+
+      @include breakpoint($screen-md-max) {
+        font-size: $font-mxxl;
+        margin-bottom: 10px;
+      }
+
+      @include breakpoint($screen-sm-max) {
+        font-size: $font-mxl;
+      }
+
+      a:hover {
+        text-decoration: none;
+      }
+    }
+
+    .views-field-body {
+      font-family: $secondary-font;
+      font-size: $font-sl;
+
+      p {
+        margin-bottom: 0;
+      }
+
+      @include breakpoint($screen-md-max) {
+        font-size: $font-s;
+      }
+
+      @include breakpoint($screen-sm-max) {
+        font-size: $font-sm;
+      }
+    }
+
+    .views-field-field-featured-content-link {
+      font-size: $font-ml;
+      font-weight: 300;
+      margin-top: 10px;
+      text-align: right;
+
+      @include breakpoint($screen-md-max) {
+        font-size: $font-m;
+        margin-top: 10px;
+      }
+
+      @include breakpoint($screen-sm-max) {
+        font-size: $font-ml;
+      }
+
+      a::after {
+        @extend %svg-image;
+        background: url("../images/arrow-filled-blue.svg") no-repeat 100% 100%;
+        height: 26px;
+        margin-left: 10px;
+        vertical-align: middle;
+        width: 26px;
+      }
+
+
+      a:hover::after {
+        background: url("../images/arrow-filled-blue-darker.svg") no-repeat 100% 100%;
+      }
+    }
+  }
+
+  .view-marketing-featured-content-nodequeue ul li {
+    background-color: $color-brand-dark;
+    padding: 22px;
+
+    @include breakpoint($screen-md-max) {
+      padding: 25px;
+      padding-right: 25px;
+      width: 100%;
+    }
+
+    @include breakpoint($screen-md-min) {
+      padding: 28px 30px;
+    }
+
+    @include breakpoint($screen-md-min $screen-hdv-max) {
+      padding: 20px;
+    }
+
+    @include breakpoint($screen-sm-max) {
+      padding: 24px 30px;
+    }
+
+    &:first-child {
+      background-color: $color-blue-background-lighter-transparent;
+
+      @include breakpoint($screen-sm-max) {
+        background-color: $color-blue-background-lighter;
+      }
+    }
+
+    &:nth-child(2) {
+      background-color: $color-blue-background-transparent;
+
+      @include breakpoint($screen-sm-max) {
+        background-color: $color-blue-background;
+      }
+    }
+
+    &:last-child {
+      @include breakpoint($screen-sm-min) {
+        min-height: 1200px;
+      }
+
+      .views-field-field-featured-content-link {
+        margin-top: 30px;
+        @include breakpoint($screen-md-min $screen-hdv-max) {
+          margin-top: 10px;
+        }
+      }
+
+      @include breakpoint($screen-sm-max) {
+        display: inline-block;
+        min-height: auto;
+
+        .views-field-field-featured-content-link {
+          margin-top: 25px;
+        }
+      }
+    }
+
+    a {
+      color: $color-white;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .quotes--slideshow {
+    bottom: 0;
+    position: absolute;
+    right: 36%;
+    width: 75%;
+
+    @include breakpoint($screen-md-min) {
+      bottom: -1px;
+    }
+
+    @include breakpoint($screen-md-max) {
+      background: $color-white;
+      left: 0;
+      position: relative;
+      width: 100%;
+      z-index: 10;
+    }
+
+    @include breakpoint($screen-sm-max) {
+      height: 0;
+      visibility: hidden;
+    }
+
+    &::before {
+      position: relative;
+    }
+  }
+
+  .jcarousel-skin-default .jcarousel-container-horizontal {
+    padding: 0;
+  }
+
+  .jcarousel-skin-default .jcarousel-next,
+  .jcarousel-skin-default .jcarousel-prev {
+    display: none;
+  }
+
+  .jcarousel-skin-default .jcarousel-clip-horizontal {
+    height: 300px;
+    width: 100%;
+  }
+
+  .jcarousel-skin-default .jcarousel-container-horizontal {
+    background-color: $color-white;
+    float: right;
+    margin-right: 0;
+    min-height: 300px;
+    width: 72%;
+    @include breakpoint($screen-md-max) {
+      float: none;
+      width: 100%;
+    }
+  }
+
+  .jcarousel-skin-default {
+
+    .jcarousel-item-undefined,
+    .jcarousel-item-NaN {
+      display: none;
+    }
+  }
+
+  .jcarousel-skin-default .jcarousel-item {
+    border: 0;
+    height: 300px;
+    margin: 0;
+    padding: 45px;
+    padding-left: 75px;
+    text-align: left;
+
+    &::before {
+      color: $color-blue-background-darker;
+      content: "\201C";
+      font-family: $secondary-font;
+      font-size: $font-xxl;
+      font-weight: 600;
+      line-height: 1;
+      margin-left: -33px;
+      margin-right: 5px;
+      margin-top: -3px;
+      position: absolute;
+    }
+  }
+
+  .views-field.views-field-field-quote-text {
+    font-size: $font-ml;
+    line-height: 1.3;
+    margin-left: 17px;
+  }
+
+  .views-field-field-quote-call-to-action {
+    font-size: $font-sxl;
+    text-align: right;
+
+    a {
+      color: $color-blue-background-dark;
+      text-decoration: none;
+
+      &::after {
+        @extend %svg-image;
+        background: url("../images/arrow-knockout-blue.svg") no-repeat 100% 100%;
+        height: 26px;
+        margin-left: 10px;
+        vertical-align: middle;
+        width: 26px;
+      }
+
+      &:hover::after {
+        background: url("../images/arrow-filled-blue-dark.svg") no-repeat 100% 100%;
+      }
+    }
+  }
+
+  .jcarousel-skin-default .jcarousel-navigation {
+    bottom: 40px;
+    left: 70px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+  }
+
+  .jcarousel-navigation a {
+    border-radius: 100%;
+    font-size: 0;
+    margin: 10px;
+    position: relative;
+  }
+
+  .jcarousel-navigation a::after {
+    background-color: $color-gray-lighter;
+    border-radius: 100%;
+    bottom: 0;
+    content: " ";
+    height: 10px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 10px;
+  }
+
+  .jcarousel-navigation .active a::after {
+    background-color: $color-gray-lighter-active;
+  }
+
+  .views-field-field-marketing-background-image {
+
+    .field-content {
+      overflow: hidden;
+    }
+
+    img {
+      transform: scale(1.4) translate(-14%, -8%);
+      @include breakpoint($screen-sm-min $screen-md-min) {
+        min-height: 600px;
+      }
+    }
+  }
+}
+
+.front .region-content #block-system-main {
+  display: none;
+}

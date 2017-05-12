@@ -1,0 +1,646 @@
+.group-main-content {
+  display: table;
+  margin: 0 auto;
+  padding-right: 50px;
+  width: 80%;
+
+  @include breakpoint ($screen-sm-min) {
+    padding-right: 35%;
+  }
+
+  @include breakpoint ($screen-md-min) {
+    padding-right: 25%;
+  }
+
+  @include breakpoint ($screen-md-max) {
+    margin-left: 25px;
+    width: 100%;
+  }
+
+  .field-name-field-event-description {
+    font-family: $secondary-font;
+    font-size: $font-sm;
+    margin-top: 0;
+
+    .field-items a {
+      color: $color-blue-background-dark;
+    }
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-s;
+      min-height: 210px;
+      padding-top: 40px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-sl;
+    }
+
+    img {
+      height: auto;
+    }
+
+    strong {
+      font-family: $primary-font;
+      font-size: $font-sxl;
+      font-weight: normal;
+
+      @include breakpoint ($screen-sm-min) {
+        font-size: $font-m;
+      }
+
+      @include breakpoint ($screen-md-min) {
+        font-size: $font-ml;
+      }
+    }
+  }
+
+  .group-main--content-left {
+    display: none;
+    margin-bottom: 25px;
+
+    @include breakpoint ($screen-md-min) {
+      display: table-cell;
+      visibility: hidden;
+      width: 130px;
+    }
+  }
+
+  .field-name-field-event-date,
+  .field-name-field-location-name,
+  .field-name-field-location-name + div {
+    display: none;
+  }
+}
+
+.node-type-calendar .left__sidebar {
+  margin-bottom: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
+  padding-left: 0;
+
+
+  @include breakpoint($screen-sm-min) {
+    position: absolute;
+    right: 0;
+    width: 30%;
+  }
+
+  @include breakpoint($screen-md-min) {
+    margin-right: 10%;
+    width: 25%;
+  }
+
+  .well {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid $color-gray-lightest;
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 0;
+    min-height: 20px;
+    padding: 0;
+    padding-bottom: 25px;
+    padding-top: 25px;
+
+    @include breakpoint($screen-sm-min) {
+      margin-left: 40px;
+    }
+  }
+
+  .block-cls-events-calendar {
+    margin-top: 10px;
+
+    .title__wrap {
+      display: inline-block;
+
+      .block-title {
+        color: $color-blue-background-dark;
+        font-size: $font-sl;
+        margin: 0;
+      }
+    }
+
+    .addthis_toolbox {
+      float: left;
+      margin-right: 15px;
+    }
+
+    .at-icon-wrapper {
+      display: none;
+    }
+
+    .addthis_button_print,
+    .addthis_button_compact {
+      margin-bottom: 0;
+      position: relative;
+      top: 2px;
+
+      &::before {
+        content: " ";
+        display: inline-block;
+        height: 20px;
+        margin-right: 15px;
+        vertical-align: middle;
+        width: 20px;
+      }
+    }
+
+    .addthis_button_print::before {
+      background: url("../images/print.png") no-repeat;
+      background-size: contain;
+    }
+
+    .addthis_button_compact::before {
+      background: url("../images/share.png") no-repeat;
+      background-size: contain;
+    }
+  }
+}
+
+article header {
+  min-height: 0;
+}
+
+article p {
+  margin-bottom: 25px;
+}
+
+.field-name-field-event-contact-info {
+
+  .field-items a {
+    color: $color-blue-background-dark;
+  }
+
+  @include breakpoint ($screen-md-min) {
+    margin-left: 130px;
+  }
+}
+
+.node-type-calendar {
+
+  .main__content {
+    margin-top: 0;
+  }
+
+  .field-name-field-event-image {
+    margin-top: 25px;
+  }
+
+  .elipsis::after {
+    @include breakpoint ($screen-sm-max) {
+      content: "..";
+      display: inline-block;
+    }
+  }
+
+  .read__more {
+    color: $color-skyblue-link;
+    font-family: $primary-font;
+    font-size: $font-sm;
+
+    p {
+      font-weight: bold;
+    }
+
+    @include breakpoint ($screen-sm-min) {
+      display: none;
+    }
+  }
+
+  .hide__content {
+    display: none;
+    @include breakpoint ($screen-sm-min) {
+      display: block;
+    }
+  }
+
+  .main__content {
+    padding-left: 0;
+    padding-right: 0;
+
+    @include breakpoint($screen-sm-max) {
+      margin-top: 0;
+    }
+  }
+
+  .field-name-field-event-promotion-text {
+    display: none;
+  }
+
+  .page-header {
+    font-size: $font-lsm;
+    line-height: 1.2;
+    margin-bottom: 25px;
+    margin-top: 14px;
+    padding-left: 0;
+
+    @include breakpoint($screen-sm-min) {
+      font-size: $font-lls;
+      margin-bottom: 20px;
+      margin-top: 0;
+    }
+
+    @include breakpoint($screen-md-min) {
+      font-size: $font-xl;
+      margin-bottom: 40px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}
+
+.group-sub-content {
+  background-color: $color-gray-background-light;
+  border: 1px solid $color-gray-lightest;
+  border-left: none;
+  border-right: none;
+  margin-top: 25px;
+  padding: 25px;
+
+  @include breakpoint($screen-sm-min) {
+    margin-top: 60px;
+    padding-bottom: 40px;
+    padding-top: 40px;
+  }
+
+  @include breakpoint($screen-md-min) {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+
+  .field-name-field-event-rsvp {
+    @include breakpoint($screen-sm-max) {
+      margin-top: 40px;
+    }
+  }
+}
+
+.group-sub-content .field-label {
+  font-size: $font-sxl;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.main-container {
+  color: $color-gray-darker;
+}
+
+.group-sub-content .field-items {
+  font-size: $font-sl;
+}
+
+.group-sub-content .field {
+
+  @include breakpoint($screen-sm-min) {
+    display: inline-block;
+    padding-right: 40px;
+    vertical-align: top;
+    width: 49%;
+  }
+
+  @include breakpoint($screen-md-min) {
+    width: 40%;
+  }
+}
+
+.field-group-div .field a {
+  color: $color-skyblue-link-dark;
+}
+
+.node-type-calendar .region-sub-content {
+
+  .block-title {
+    font-size: $font-mxxl;
+    margin-bottom: 25px;
+    padding-top: 25px;
+    text-align: center;
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-lml;
+      margin-bottom: 50px;
+      padding-top: 60px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-ll;
+    }
+  }
+
+  .view-display-id-upcoming_events ul {
+    list-style: none;
+    margin-left: 25px;
+    padding-left: 0;
+
+    @include breakpoint ($screen-md-min) {
+      margin: 0 auto;
+      width: 80%;
+    }
+  }
+
+  .view-display-id-upcoming_events ul li {
+    display: table;
+    padding-right: 25px;
+
+    @include breakpoint ($screen-sm-min) {
+      float: left;
+      padding-right: 40px;
+      width: 33.33%;
+    }
+
+    .views-field-field-event-date {
+      display: table-cell;
+      height: 100px;
+      position: relative;
+      top: 10px;
+      width: 94px;
+
+      .date-repeat-rule {
+        display: none;
+      }
+
+      .field-content {
+        background: url("../images/calendar-date-outline.svg") no-repeat;
+        background-size: cover;
+        height: 74px;
+        padding: 17px;
+        text-align: center;
+        text-transform: uppercase;
+        width: 71px;
+      }
+    }
+
+    .views-field-title a {
+      color: $color-blue-background-dark;
+      font-size: $font-m;
+      line-height: 1.3;
+
+      @include breakpoint ($screen-md-min) {
+        font-size: $font-mxxl;
+      }
+    }
+  }
+}
+
+.is__bold {
+  margin-bottom: 0;
+}
+
+#block-cls-events-calendar-events-addthis-print-block {
+  @include breakpoint($screen-md-max) {
+    display: none;
+  }
+}
+
+.node-type-calendar .footer {
+  margin-top: 0;
+}
+
+.events__header {
+  clear: both;
+  margin-left: 25px;
+  margin-right: 25px;
+  padding-top: 25px;
+
+  @include breakpoint($screen-md-min) {
+    padding-top: 10px;
+  }
+
+  @include breakpoint($screen-md-min) {
+    display: table;
+    margin: 0 auto;
+    padding-top: 60px;
+    width: 80%;
+  }
+
+  .featured__content {
+    height: 85px;
+    @include breakpoint ($screen-sm-min) {
+      display: table-cell;
+      height: 100px;
+      margin-bottom: 0;
+      padding-left: 0;
+      padding-right: 40px;
+      position: relative;
+      top: 10px;
+      width: 120px;
+    }
+
+    @include breakpoint ($screen-sm-min) {
+      padding-right: 60px;
+      width: 130px;
+    }
+  }
+
+  .page__title {
+    @include breakpoint ($screen-md-min) {
+      display: table-cell;
+      vertical-align: top;
+    }
+  }
+
+  .block-cls-events-calendar {
+    background: url("../images/calendar-date-outline.svg") no-repeat;
+    background-size: cover;
+    height: 74px;
+    line-height: 1;
+    padding: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 71px;
+  }
+}
+
+.content__top {
+  float: none;
+  margin-left: 25px;
+  margin-right: 25px;
+  padding: 0;
+
+  @include breakpoint ($screen-md-min) {
+    margin: 0 auto;
+    width: 80%;
+  }
+
+  .region-content-top {
+    border-bottom: 3px solid $color-gray-lightest;
+    padding-bottom: 40px;
+    @include breakpoint ($screen-md-min) {
+      margin-left: 130px;
+      padding-bottom: 60px;
+    }
+  }
+
+  .field-name-field-event-date,
+  .field-name-field-location-name {
+    color: $color-grayish-blue;
+    font-size: $font-sxl;
+    line-height: 1.4;
+    margin-bottom: 15px;
+    padding-left: 40px;
+
+    @include breakpoint ($screen-sm-min) {
+      font-size: $font-ms;
+      margin-bottom: 5px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-ml;
+    }
+
+    .field-item {
+
+      &::before {
+        @extend %svg-image;
+        display: inline-block;
+        height: 20px;
+        left: -14px;
+        margin-left: -28px;
+        margin-right: 10px;
+        position: relative;
+        vertical-align: middle;
+        width: 20px;
+      }
+    }
+  }
+
+  .field-name-field-event-date .field-item::before {
+    background: url("../images/time-icon.svg") no-repeat center;
+  }
+
+  .field-name-field-location-name .field-item::before {
+    background: url("../images/location-icon.svg") no-repeat center;
+  }
+
+  .field-name-field-location-name,
+  .directions-link {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+
+  .directions-link {
+    border-left: 2px solid $color-gray-lightest;
+    color: $color-blue-background-darker;
+    font-size: $font-sxl;
+    font-weight: bold;
+    margin-left: 15px;
+    padding-left: 15px;
+
+    @include breakpoint ($large-mobile-max) {
+      display: block;
+      margin-left: 40px;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-ms;
+    }
+
+    @include breakpoint ($screen-md-min) {
+      font-size: $font-m;
+    }
+  }
+
+  .field-name-field-location-name .field-items {
+    line-height: 1;
+    margin-right: 10px;
+  }
+}
+
+#block-cls-faculty-faculty-link,
+#block-cls-events-calendar-law-school-events-link,
+#block-cls-events-calendar-law-school-events-link-bottom {
+  border-bottom: 1px solid $color-gray-border;
+  font-size: $font-sxl;
+  padding: 12px 25px;
+
+  @include breakpoint($screen-md-min) {
+    font-size: $font-ml;
+    padding: 18px 10%;
+  }
+
+  a {
+    color: $color-blue-background-dark;
+
+    &::before {
+      @extend %svg-image;
+      background: url("../images/arrow-knockout-blue.svg") no-repeat;
+      display: inline-block;
+      height: 25px;
+      margin-right: 20px;
+      position: relative;
+      top: -1px;
+      transform: rotate(180deg);
+      vertical-align: middle;
+      width: 25px;
+
+      @include breakpoint($screen-md-min) {
+        height: 32px;
+        top: -2px;
+        width: 32px;
+      }
+    }
+  }
+}
+
+#block-cls-events-calendar-law-school-events-link-bottom {
+  border-bottom: none;
+  border-top: 1px solid $color-gray-border;
+  margin-top: 25px;
+  @include breakpoint($screen-sm-min) {
+    margin-top: 60px;
+  }
+}
+
+
+.node-type-calendar #block-cls-events-calendar-events-add-to-calendar {
+  margin-top: 0;
+  @include breakpoint($screen-sm-min) {
+    border-bottom: 1px solid $color-gray-lightest;
+    margin-bottom: 25px;
+    margin-top: 10px;
+    padding-bottom: 25px;
+  }
+
+  .left__sidebar .title__wrap .block-title,
+  .title__wrap .block-title {
+    color: $color-gray-darker;
+    font-size: $font-s;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  & > ul {
+    @extend %lists;
+
+    @include breakpoint($screen-sm-max) {
+      display: inline-block;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    @include breakpoint($screen-sm-min) {
+      margin-top: 15px;
+    }
+
+    li {
+      @extend %list-add-to-calendar;
+    }
+  }
+}
+
+.calendar-date-month,
+.views-field-field-event-date,
+.block-cls-events-calendar {
+  line-height: 1;
+
+  .month {
+    display: block;
+    font-size: $font-sm;
+    font-weight: bold;
+  }
+
+  .day {
+    display: block;
+    font-size: $font-lm;
+  }
+}
