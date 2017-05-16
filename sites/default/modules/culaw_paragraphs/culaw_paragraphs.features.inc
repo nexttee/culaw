@@ -39,14 +39,54 @@ function culaw_paragraphs_node_info() {
  */
 function culaw_paragraphs_paragraphs_info() {
   $items = array(
+    'cta_card' => array(
+      'name' => 'CTA Card',
+      'bundle' => 'cta_card',
+      'locked' => '1',
+    ),
+    'feed_card' => array(
+      'name' => 'Feed Card',
+      'bundle' => 'feed_card',
+      'locked' => '1',
+    ),
     'media_card' => array(
       'name' => 'Media Card',
       'bundle' => 'media_card',
       'locked' => '1',
     ),
+    'navigation_row' => array(
+      'name' => 'Navigation Row',
+      'bundle' => 'navigation_row',
+      'locked' => '1',
+    ),
+    'quick_links_card' => array(
+      'name' => 'Quick Links Card',
+      'bundle' => 'quick_links_card',
+      'locked' => '1',
+    ),
     'row_with_columns' => array(
-      'name' => 'Row with Columns',
+      'name' => 'Layout Row',
       'bundle' => 'row_with_columns',
+      'locked' => '1',
+    ),
+    'section_navigation_card' => array(
+      'name' => 'Section Navigation Card',
+      'bundle' => 'section_navigation_card',
+      'locked' => '1',
+    ),
+    'social_media_card' => array(
+      'name' => 'Social Media Card',
+      'bundle' => 'social_media_card',
+      'locked' => '1',
+    ),
+    'sticky_navigation_card' => array(
+      'name' => 'Sticky Navigation Card',
+      'bundle' => 'sticky_navigation_card',
+      'locked' => '1',
+    ),
+    'text_card' => array(
+      'name' => 'Text Card',
+      'bundle' => 'text_card',
       'locked' => '1',
     ),
   );
