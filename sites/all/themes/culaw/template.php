@@ -86,6 +86,8 @@ function culaw_preprocess_page(&$variables) {
   if (array_key_exists('node', $variables)) {
     if ($variables['node']->type == 'calendar') {
       $variables['theme_hook_suggestions'][] = 'page__node_' . $variables['node']->type;
+    } else {
+      $variables['theme_hook_suggestions'][] = 'page__' . $variables['node']->type;
     }
     $variables['title'] = check_markup($variables['node']->title, 'full_html');
   }

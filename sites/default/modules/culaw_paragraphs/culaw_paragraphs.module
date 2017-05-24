@@ -5,3 +5,53 @@
  */
 
 include_once 'culaw_paragraphs.features.inc';
+
+
+function culaw_paragraphs_preprocess_node(&$variables) {
+    $node = $variables['node'];
+    switch($node->type) {
+        case 'landing_page':
+            break;
+        default:
+            break;
+    }
+
+}
+
+function culaw_paragraphs_preprocess_entity(&$variables) {
+    if ($variables['entity_type'] == 'paragraphs_item') {
+        $bundle_type = $variables['paragraphs_item']->bundle;
+        switch ($bundle_type) {
+            case 'section_navigation_card':
+                //get parent headline
+                $parent_bundle = $variables['paragraphs_item']->hostEntity();
+                $headline = $parent_bundle->field_headline['und'][0]['value'];
+                $variables['content']['field_headline'] = $headline;
+                break;
+            case 'media_card':
+            case 'cta_card':
+                $parent_bundle = $variables['paragraphs_item']->hostEntity();
+                $variables['content']['style_option'] = culaw_paragraphs_format_class($parent_bundle->field_cta_options['und'][0]['value']);
+                break;
+            default;
+                //print $variables['paragraphs_item']->bundle ;
+                break;
+        }
+    }
+}
+
+
+function culaw_paragraphs_render_menu($menu) {
+    $menuItems = menu_tree_page_data($menu);
+    foreach ($menuItems as $key => $m) {
+        if ($m['link']['in_active_trail'] && $menuItems[$key]['below']) {
+            $tree_output = menu_tree_output($menuItems[$key]['below']);
+            $menu = render($tree_output);
+        }
+    }
+    print $menu;
+}
+
+function culaw_paragraphs_format_class($var) {
+    return str_replace(" ","-",strtolower($var));
+}

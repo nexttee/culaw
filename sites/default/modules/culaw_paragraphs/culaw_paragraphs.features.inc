@@ -17,6 +17,85 @@ function culaw_paragraphs_ctools_plugin_api($module = NULL, $api = NULL) {
 }
 
 /**
+ * Implements hook_views_api().
+ */
+function culaw_paragraphs_views_api($module = NULL, $api = NULL) {
+  return array("api" => "3.0");
+}
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function culaw_paragraphs_image_default_styles() {
+  $styles = array();
+
+  // Exported image style: flexible_grid.
+  $styles['flexible_grid'] = array(
+    'label' => 'flexible_grid',
+    'effects' => array(
+      4 => array(
+        'name' => 'focal_point_scale_and_crop',
+        'data' => array(
+          'width' => 250,
+          'height' => 250,
+          'focal_point_advanced' => array(
+            'shift_x' => '',
+            'shift_y' => '',
+          ),
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  // Exported image style: responsive_1200w.
+  $styles['responsive_1200w'] = array(
+    'label' => 'responsive_1200w',
+    'effects' => array(
+      1 => array(
+        'name' => 'image_scale',
+        'data' => array(
+          'width' => 1200,
+          'height' => '',
+          'upscale' => 1,
+        ),
+        'weight' => 1,
+      ),
+      2 => array(
+        'name' => 'focal_point_crop',
+        'data' => array(
+          'width' => 1200,
+          'height' => 350,
+          'focal_point_advanced' => array(
+            'shift_x' => '',
+            'shift_y' => '',
+          ),
+        ),
+        'weight' => 2,
+      ),
+    ),
+  );
+
+  // Exported image style: round_250w.
+  $styles['round_250w'] = array(
+    'label' => 'round_250w',
+    'effects' => array(
+      3 => array(
+        'name' => 'image_scale',
+        'data' => array(
+          'width' => 250,
+          'height' => '',
+          'upscale' => 1,
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  return $styles;
+}
+
+/**
  * Implements hook_node_info().
  */
 function culaw_paragraphs_node_info() {
@@ -49,6 +128,11 @@ function culaw_paragraphs_paragraphs_info() {
       'bundle' => 'feed_card',
       'locked' => '1',
     ),
+    'layout_row' => array(
+      'name' => 'Layout Row',
+      'bundle' => 'layout_row',
+      'locked' => '1',
+    ),
     'media_card' => array(
       'name' => 'Media Card',
       'bundle' => 'media_card',
@@ -62,11 +146,6 @@ function culaw_paragraphs_paragraphs_info() {
     'quick_links_card' => array(
       'name' => 'Quick Links Card',
       'bundle' => 'quick_links_card',
-      'locked' => '1',
-    ),
-    'row_with_columns' => array(
-      'name' => 'Layout Row',
-      'bundle' => 'row_with_columns',
       'locked' => '1',
     ),
     'section_navigation_card' => array(

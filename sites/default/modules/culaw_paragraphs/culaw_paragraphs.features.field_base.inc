@@ -72,33 +72,6 @@ function culaw_paragraphs_field_default_field_bases() {
     'type' => 'paragraphs',
   );
 
-  // Exported field_base: 'field_columns'.
-  $field_bases['field_columns'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_columns',
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(
-        1 => 1,
-        2 => 2,
-        3 => 3,
-        4 => 4,
-      ),
-      'allowed_values_function' => '',
-    ),
-    'translatable' => 0,
-    'type' => 'list_integer',
-  );
-
   // Exported field_base: 'field_content_rows'.
   $field_bases['field_content_rows'] = array(
     'active' => 1,
@@ -229,6 +202,31 @@ function culaw_paragraphs_field_default_field_bases() {
     'type' => 'file',
   );
 
+  // Exported field_base: 'field_media_layout_options'.
+  $field_bases['field_media_layout_options'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_media_layout_options',
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        'Media Card' => 'Media Card',
+        'banner' => 'Banner Graphic with Overlapping Text',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'list_text',
+  );
+
   // Exported field_base: 'field_media_link'.
   $field_bases['field_media_link'] = array(
     'active' => 1,
@@ -280,8 +278,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'settings' => array(
       'allowed_values' => array(
         'Main Navigation' => 'Main Navigation',
-        'Manual Entry' => 'Manual Entry',
-        'Other' => 'Other',
+        'main-menu' => 'Main Navigation',
       ),
       'allowed_values_function' => '',
     ),
