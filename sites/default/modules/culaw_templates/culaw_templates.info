@@ -1,0 +1,6 @@
+name = CuLaw Templates
+description = display the PSD2HTML templates in our site
+core = 7.x
+package = CuLaw
+version = 7.x-1.0
+project = CuLaw

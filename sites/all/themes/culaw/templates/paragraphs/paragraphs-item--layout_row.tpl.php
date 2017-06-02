@@ -26,28 +26,66 @@
  * @see template_process()
  */
 //dpm($content);
+
 $content_classes = array("");
+if (isset($content['field_cta_options']['#items'][0])) {
+    $layout_option = $content['field_cta_options']['#items'][0];
+    unset($content['field_cta_options']);
+}
 if (isset($content['field_backgrounds'])) {
+    $row_id = $content['row_id']['#value'];
     $background = $content['field_backgrounds'];
     unset($content['field_backgrounds']);
     $bg_tid = $background['#items'][0]['tid'];
     $bg_term = taxonomy_term_load($bg_tid);
     $bg_uri = $bg_term->field_media_file['und'][0]['uri'];
     $bg_image = image_style_url('responsive_1200w', $bg_uri);
-    $content_classes[] = "content-background";
-?>
-<style>
-    .content-background {
-        background:transparent url(<?php print $bg_image; ?>) no-repeat;
+    $content_classes[] = "content-background-".$row_id;
+    ?>
+
+    <style>
+        .content-background-<?php print $row_id; ?> {
+            background:transparent url(<?php print $bg_image; ?>) no-repeat;
+        }
+    </style>
+
+    <?php
 }
-</style>
-<?php
+
+//handle wrapper for content here
+//format headline, optional
+switch($layout_option['value']) {
+    case 'flexible-grid':
+        $classes = "four-column";
+        break;
+    case 'circle-images':
+        $classes = "three-column";
+        break;
+    default:
+        unset($content['field_headline']);
+        unset($content['headline']);
+        break;
 }
+$content_classes[] = "container";
+
 ?>
 
 <div class="<?php print $classes; ?>"<?php print $attributes; ?>>
     <div class="content<?php print implode(" ", $content_classes); ?>"<?php print $content_attributes; ?>>
-        <?php print render($content); ?>
-        <div class="clear"></div>
+
+        <div class="row">
+
+            <?php print render($content); ?>
+            <div class="clear"></div>
+
+        </div>
     </div>
 </div>
+
+<!--layout row for flex grid
+<div class="flex-grid-multi-color">
+    <div class="four-column">
+
+    </div>
+</div>
+-->

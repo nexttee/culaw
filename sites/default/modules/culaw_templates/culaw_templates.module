@@ -1,0 +1,55 @@
+<?php
+
+function culaw_templates_theme($existing, $type, $theme, $path) {
+    if($type == 'module') {
+        return array(
+            'banner' => array('template' => 'templates/banner'),
+            'callout' => array('template' => 'templates/callout'),
+            'events' => array('template' => 'templates/events'),
+            'flexible_grid' => array('template' => 'templates/flexible_grid'),
+            'quicklinks' => array('template' => 'templates/quicklinks'),
+            'section_nav' => array('template' => 'templates/section_nav'),
+            'social' => array('template' => 'templates/social'),
+            'sticky_nav' => array('template' => 'templates/sticky_nav'),
+            'testimonial' => array('template' => 'templates/testimonial'),
+            'text' => array('template' => 'templates/text'),
+            'three_column_background' => array('template' => 'templates/three_column_background'),
+            'three_column' => array('template' => 'templates/three_column'),
+            'threecolumnspotlight' => array('template' => 'templates/threecolumnspotlight'),
+        );
+    }
+    return array(); //will raise fatal error if void
+}
+
+function culaw_templates_block_info() {
+
+
+    $blocks['banner'] = array('info' => t('banner'));
+    $blocks['callout'] = array('info' => t('callout'));
+    $blocks['events'] = array('info' => t('events'));
+    $blocks['flexible_grid'] = array('info' => t('flexible_grid'));
+    $blocks['quicklinks'] = array('info' => t('quicklinks'));
+    $blocks['section_nav'] = array('info' => t('section_nav'));
+    $blocks['social'] = array('info' => t('social'));
+    $blocks['sticky_nav'] = array('info' => t('sticky_nav'));
+    $blocks['testimonial'] = array('info' => t('testimonial'));
+    $blocks['text'] = array('info' => t('text'));
+    $blocks['three_column_background'] = array('info' => t('three_column_background'));
+    $blocks['three_column'] = array('info' => t('three_column'));
+    $blocks['threecolumnspotlight'] = array('info' => t('threecolumnspotlight'));
+
+    return $blocks;
+}
+
+function culaw_templates_block_view($delta = '') {
+    // This example is adapted from node.module.
+    $block = array();
+
+    switch ($delta) {
+        default:
+            $block['subject'] = t($delta);
+            $block['content'] = theme($delta);
+            break;
+    }
+    return $block;
+}

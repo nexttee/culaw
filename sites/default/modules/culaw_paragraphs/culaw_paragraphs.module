@@ -22,6 +22,14 @@ function culaw_paragraphs_preprocess_entity(&$variables) {
     if ($variables['entity_type'] == 'paragraphs_item') {
         $bundle_type = $variables['paragraphs_item']->bundle;
         switch ($bundle_type) {
+            case 'layout_row':
+                //dpm($variables);
+                if (isset($variables['id'])) {
+                    $variables['content']['row_id'] = array("#type"=>'field','#value'=>$variables['id']);
+                }
+
+                break;
+            case 'quick_links_card':
             case 'section_navigation_card':
                 //get parent headline
                 $parent_bundle = $variables['paragraphs_item']->hostEntity();
@@ -32,7 +40,7 @@ function culaw_paragraphs_preprocess_entity(&$variables) {
             case 'cta_card':
                 $parent_bundle = $variables['paragraphs_item']->hostEntity();
                 $variables['content']['style_option'] = culaw_paragraphs_format_class($parent_bundle->field_cta_options['und'][0]['value']);
-                break;
+            break;
             default;
                 //print $variables['paragraphs_item']->bundle ;
                 break;
@@ -46,12 +54,61 @@ function culaw_paragraphs_render_menu($menu) {
     foreach ($menuItems as $key => $m) {
         if ($m['link']['in_active_trail'] && $menuItems[$key]['below']) {
             $tree_output = menu_tree_output($menuItems[$key]['below']);
-            $menu = render($tree_output);
+            $links = array();
+            foreach($tree_output AS $key => $value) {
+                if (is_numeric($key)) {
+                    $links[] = array(
+                        "title"=>$value['#title'],
+                        "href"=>$value['#href'],
+                        "attributes" => $value['#attributes']
+                    );
+                }
+            }
+            //split menut into 3 columns
+            //change #theme to custom
+            //$menu = render($tree_output);
+            //reference ... https://api.drupal.org/api/drupal/includes%21theme.inc/function/theme_links/7.x
+            $menu = '<div class="col-sm-4 col-xs-12 same-height">'.theme('links', array('links' => $links, 'attributes' => array('class' => array('subnavigation-wrap__subnavigation-links', 'list-unstyled')), 'header' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible')))).'</div>';
         }
     }
-    print $menu;
+    print $menu.$menu.$menu;
 }
 
 function culaw_paragraphs_format_class($var) {
     return str_replace(" ","-",strtolower($var));
+}
+
+//from paragraph template files
+function _culaw_paragraphs_format_content($id, $format) {
+    $node = node_load($id);
+    switch($format) {
+        case 'news_feed_row':
+            $date = $node->created;
+            //cls_mcl_event_datetime
+            //$node->created
+            break;
+        case 'event_feed_row':
+            $date = strtotime($node->cls_mcl_event_datetime['und'][0]['value']);
+            break;
+        default:
+            break;
+    }
+    $summary = "";
+    if (isset($node->body)) {
+        $summary = $node->body['und'][0]['safe_summary'] != "" ? $node->body['und'][0]['safe_summary'] : strip_tags($node->body['und'][0]['safe_value']);
+    }
+    $date_array = array(
+        'month' => date("M",$date),
+        'day' => date("j",$date),
+        'class' => date("Y-m-d",$date),
+        'date' => date("F dS, Y",$date)
+    );
+    $row = array(
+        'category' => 'News',
+        'summary' => $summary,
+        'date' => $date_array,
+        'source' => $node->title,
+        'url' => "/node/" . $node->nid
+    );
+    return $row;
 }

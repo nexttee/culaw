@@ -358,46 +358,6 @@ function culaw_paragraphs_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'paragraphs_item-feed_card-field_tags'.
-  $field_instances['paragraphs_item-feed_card-field_tags'] = array(
-    'bundle' => 'feed_card',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'taxonomy',
-        'settings' => array(),
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 1,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_tags',
-    'label' => 'Tags',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'taxonomy',
-      'settings' => array(
-        'autocomplete_path' => 'taxonomy/autocomplete',
-        'size' => 60,
-      ),
-      'type' => 'taxonomy_autocomplete',
-      'weight' => 4,
-    ),
-  );
-
   // Exported field_instance: 'paragraphs_item-layout_row-field_backgrounds'.
   $field_instances['paragraphs_item-layout_row-field_backgrounds'] = array(
     'bundle' => 'layout_row',
@@ -635,6 +595,43 @@ function culaw_paragraphs_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'paragraphs_item-media_card-field_media_category'.
+  $field_instances['paragraphs_item-media_card-field_media_category'] = array(
+    'bundle' => 'media_card',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 6,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_media_category',
+    'label' => 'Media Category',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 3,
+    ),
+  );
+
   // Exported field_instance: 'paragraphs_item-media_card-field_media_file'.
   $field_instances['paragraphs_item-media_card-field_media_file'] = array(
     'bundle' => 'media_card',
@@ -858,46 +855,6 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
       'type' => 'text_textarea',
       'weight' => 4,
-    ),
-  );
-
-  // Exported field_instance: 'paragraphs_item-media_card-field_tags'.
-  $field_instances['paragraphs_item-media_card-field_tags'] = array(
-    'bundle' => 'media_card',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'taxonomy',
-        'settings' => array(),
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 2,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_tags',
-    'label' => 'Tags',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'taxonomy',
-      'settings' => array(
-        'autocomplete_path' => 'taxonomy/autocomplete',
-        'size' => 60,
-      ),
-      'type' => 'taxonomy_autocomplete',
-      'weight' => 3,
     ),
   );
 
@@ -1554,12 +1511,12 @@ function culaw_paragraphs_field_default_field_instances() {
   t('Layout Options');
   t('Link');
   t('Links');
+  t('Media Category');
   t('Media File');
   t('Media Layout Options');
   t('Menu Option');
   t('Style Card');
   t('Summary');
-  t('Tags');
   t('Text Formatting');
 
   return $field_instances;

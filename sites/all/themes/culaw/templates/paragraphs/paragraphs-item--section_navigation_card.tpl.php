@@ -45,37 +45,57 @@ if (isset($content['field_menu_option']['#items'][0]['value'])) {
 $headline = $content['field_headline'];
 
 ?>
-<style>
-    .section_nav_wrapper {
-        position: relative;
-        overflow:hidden;
-    }
-    .section_nav_wrapper .background img {
-        position:absolute;
-        z-index:0;
-    }
-    .section_nav_wrapper .cta {
-        position: relative;
-        float:right;
-        z-index:1;
-    }
-    .section_nav_wrapper .headline {
-        position: relative;
-        float:left;
-        z-index:1;
-        padding:20px;
-    }
-    .section_nav_wrapper .menu {
-        clear:both;
-        position: relative;
-        z-index:1;
-    }
-</style>
-<div class="section_nav_wrapper">
-    <div class="background"><?php print $bg_image;?></div>
+<div class="apply-area">
     <div class="cta"><?php print $cta; ?></div>
     <div class="headline"><?php print $headline; ?></div>
-    <div class="menu">
-        <?php print culaw_paragraphs_render_menu($menu); ?>
+</div>
+<div class="subnavigation-area">
+    <div class="container">
+        <div class="subnavigation-frame">
+            <a href="#" class="subnavigation-opener visible-xs">In this section<i class="icon-keyboard_arrow_down"></i></a>
+            <div class="subnavigation-wrap row js-slide-hidden">
+                <?php print culaw_paragraphs_render_menu($menu); ?>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- subnavigation area -->
+<!---<div class="subnavigation-area">
+    <div class="container">
+        <div class="subnavigation-frame">
+            <a href="#" class="subnavigation-opener visible-xs">In this section<i class="icon-keyboard_arrow_down"></i></a>
+            <div class="subnavigation-wrap row">
+                <div class="col-sm-4 col-xs-12 same-height">
+                    <ul class="subnavigation-wrap__subnavigation-links list-unstyled">
+                        <li class="active"><a href="#">Learn</a>
+                            <ul class="subnavigation-wrap__links-dropdown list-unstyled">
+                                <li><a href="#">The History</a></li>
+                                <li><a href="#">The Curriculum</a></li>
+                                <li><a href="#">Centers &amp; Programs</a></li>
+                                <li><a href="#">Clinics &amp; Externships</a></li>
+                                <li><a href="#">Viewbook</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Experience</a></li>
+                        <li><a href="#" title="link3">Visit</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-xs-12 same-height">
+                    <ul class="subnavigation-wrap__subnavigation-links list-unstyled">
+                        <li><a href="#">Apply</a></li>
+                        <li><a href="#">Entering Class Profile</a></li>
+                        <li><a href="#">Joint Degree Programs</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-xs-12 same-height">
+                    <ul class="subnavigation-wrap__subnavigation-links list-unstyled">
+                        <li><a href="#">My Columbia Law</a></li>
+                        <li><a href="#">Admitted Student Website</a></li>
+                        <li><a href="#" title="link7">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>--->

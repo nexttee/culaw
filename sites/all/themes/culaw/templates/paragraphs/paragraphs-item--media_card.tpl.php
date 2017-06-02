@@ -27,22 +27,39 @@
  */
 //dpm($content);
 
+$cta = "";
 $layout_option = $content['field_media_layout_options']['#items'][0]['value'];
 $style_option = $content['style_option'];
-
-$bg_uri = $content['field_media_file']['#items'][0]['uri'];
-switch ($layout_option) {
-    case 'banner':
-        $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'responsive_1200w'));
-        break;
-    default:
-        $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes'=>array("class"=>$style_option)));
-        break;
+if ($layout_option != "banner") {
+    $layout_option = $style_option;
 }
 
-$cta_url = $content['field_media_link']['#items'][0]['url'];
-$cta_title = $content['field_media_link']['#items'][0]['title'];
-$cta = l($cta_title, $cta_url);
+if (isset($content['field_media_file']['#items'][0]['uri'])) {
+    $bg_uri = $content['field_media_file']['#items'][0]['uri'];
+    switch ($layout_option) {
+        case 'banner':
+            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'responsive_1200w'));
+            break;
+        case 'flexible-grid':
+            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'flexible_grid', 'attributes' => array("class" => $style_option)));
+            $bg_path = image_style_url('flexible_grid',$bg_uri);
+            break;
+        case 'basic-column':
+            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
+            $bg_path = image_style_url('medium',$bg_uri);
+            break;
+        default:
+            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
+            $bg_path = image_style_url('medium',$bg_uri);
+            break;
+    }
+}
+
+if (isset($content['field_media_link']['#items'][0]['url'])) {
+    $cta_url = $content['field_media_link']['#items'][0]['url'];
+    $cta_title = $content['field_media_link']['#items'][0]['title'];
+    $cta = l($cta_title, $cta_url);
+}
 
 $headline = $content['field_headline']['#items'][0]['value'];
 
@@ -52,7 +69,7 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
 ?>
 
 <style>
-    .banner_wrapper {
+    /*.banner_wrapper {
         position:relative;
         height:350px;
         overflow:hidden;
@@ -65,7 +82,7 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
         text-align:center;
         margin:100px auto;
         font-size:3em;
-    }
+    }*/
     .media_card_wrapper {
         float:left;
     }
@@ -73,21 +90,107 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
 
 <?php switch($layout_option) : ?>
 <?php case 'banner': ?>
-    <div class="banner_wrapper">
+        <!-- hero banner -->
+        <div class="hero-banner">
+            <?php print $bg_image;?>
+            <div class="hero-banner-wrap">
+                <div class="hero-banner__caption-holder hidden-xs">
+                    <div class="container">
+                        <div class="hero-banner__caption">
+                            <blockquote class="hero-banner__blockquote">
+                                <?php print $summary; ?>
+                                <!--<cite><strong class="hero-banner__name">David Leapheart</strong>Class of 2014</cite>-->
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+				<!-- apply area -->
+				<div class="apply-area">
+					<div class="container">
+						<div class="apply-holder">
+							<h1><a href="#" title="link1"><?php print $headline; ?></a></h1>
+							<a href="<?php print $cta_url; ?>" class="btn btn-default"><span class="btn__text"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
+						</div>
+					</div>
+				</div>
+            </div>
+        </div>
+    <?php break; ?>
+<?php case 'flexible-grid': ?>
+        <!--<div class="flexible_grid_wrapper">
         <div class="background"><?php print $bg_image;?></div>
         <div class="summary_wrapper">
             <div class="headline"><?php print $headline; ?></div>
-            <div class="summary"><?php print $summary; ?></div>
+            <?php if (isset($summary)) : ?>
+                <div class="summary"><?php print $summary; ?></div>
+            <?php endif; ?>
             <div class="cta"><?php print $cta; ?></div>
         </div>
-    </div>
-    <?php break; ?>
-<?php default: ?>
-    <div class="media_card_wrapper">
+    </div>-->
+
+
+        <div class="four-column__block yellow">
+            <?php if (isset($bg_path)) :?>
+                <div class="four-column__image-wrap bg-stretch">
+                    <span data-srcset="<?php print $bg_path; ?>"></span>
+                </div>
+            <?php endif; ?>
+            <div class="four-column__image-caption">
+                <div class="four-column__image-caption-wrap">
+                    <strong class="four-column__title h3"><?php print $headline; ?></strong>
+                    <div class="four-column__wrap">
+                        <p><?php print $summary; ?></p>
+                        <a href="#" class="four-column__more"><span class="hidden">more link</span><i class="icon-keyboard_arrow_right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php break; ?>
+    <?php case 'basic-column': ?>
+
+        <div class="col-sm-4 col-xs-12">
+			<div class="spotlight">
+                <?php if (isset($bg_image)) :?>
+                    <div class="three-column__image-wrap">
+                        <?php print $bg_image;?>
+                        <a class="lightbox fancybox.iframe thumb three-column__play-btn" href="https://www.youtube.com/embed/P_rbC-qgB5o"><span class="hidden">video</span></a>
+                    </div>
+                    </div>
+                <?php endif; ?>
+                <div class="three-column__detail">
+                    <span class="three-column__voice">Student Voices</span>
+                    <strong class="three-column__heading h4"><?php print $headline; ?></strong>
+                    <p><?php print $summary; ?></p>
+                    <a href="#" class="more-link">Read More<i class="icon-keyboard_arrow_right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <?php break; ?>
+    <?php case 'circular-images': ?>
+    <?php default: ?>
+        <!--<div class="media_card_wrapper">
         <div class="background"><?php print $bg_image;?></div>
         <div class="headline"><?php print $headline; ?></div>
         <div class="summary"><?php print $summary; ?></div>
         <div class="cta"><?php print $cta; ?></div>
-    </div>
-    <?php break; ?>
+    </div>-->
+
+        <div class="col-sm-4 col-xs-12">
+            <div class="three-column__circle-images">
+                <?php if (isset($bg_image)) :?>
+                    <div class="three-column__image-holder">
+                        <?php print $bg_image;?>
+                    </div>
+                <?php endif; ?>
+                <div class="three-column__description">
+                    <strong class="three-column__title h3"><?php print $headline; ?></strong>
+                    <p><?php print $summary; ?></p>
+                    <a href="#" class="three-column__more"><span class="hidden">more link</span><i class="icon-keyboard_arrow_right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <?php break; ?>
 <?php endswitch; ?>

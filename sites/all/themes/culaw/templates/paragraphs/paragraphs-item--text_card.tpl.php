@@ -26,19 +26,30 @@
  * @see template_process()
  */
 //dpm($content);
+$summary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sed elit tellus. Nam ullam tincidunt bibendum. Sed ipsum augue, mattis sed tristique at.";
 
 $layout_option = culaw_paragraphs_format_class($content['field_text_formatting']['#items'][0]['value']);
 
-$bg_uri = $content['field_media_file']['#items'][0]['uri'];
-switch ($layout_option) {
-    default:
-        $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium'));
-        break;
+if (isset($content['field_media_file']['#items'][0]['uri'])) {
+    $bg_uri = $content['field_media_file']['#items'][0]['uri'];
+    switch ($layout_option) {
+        default:
+            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium'));
+            $bg_path = image_style_url('medium',$bg_uri);
+            break;
+    }
 }
 
-$headline = $content['field_headline']['#items'][0]['value'];
-$summary = $content['field_summary']['#items'][0]['safe_value'];
-$attribution = $content['field_attribution']['#items'][0]['safe_value'];
+if (isset($content['field_headline']['#items'][0]['value'])) {
+    $headline = $content['field_headline']['#items'][0]['value'];
+}
+if (trim($content['field_summary']['#items'][0]['safe_value']) != "") {
+    $summary = $content['field_summary']['#items'][0]['safe_value'];
+}
+
+if (isset($content['field_attribution']['#items'][0]['safe_value'])) {
+    $attribution = $content['field_attribution']['#items'][0]['safe_value'];
+}
 
 ?>
 
@@ -46,13 +57,34 @@ $attribution = $content['field_attribution']['#items'][0]['safe_value'];
     </style>
 
 <?php switch($layout_option) : ?>
+<?php case 'testimonial': ?>
+        <div class="testimonial">
+            <div class="container">
+                <div class="testimonial-holder">
+                    <div class="testimonial-holder__image-wrap">
+                        <a href="#"><img src="<?php print $bg_path; ?>" width="166" height="166" alt="image-description"></a>
+                    </div>
+                    <blockquote>
+                        <?php if (isset($summary)) : ?>
+                            <q><?php print $summary; ?></q>
+                        <?php endif; ?>
+                        <?php if (isset($attribution)) : ?>
+                            <cite><?php print $attribution; ?></cite>
+                        <?php endif; ?>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    <?php break; ?>
 <?php case 'callout-text': ?>
-    <div class="callout-text-wrapper">
-        <div class="headline"><h3><?php print $headline; ?></h3></div>
-        <div class="background"><?php print $bg_image;?></div>
-        <div class="summary"><?php print $summary; ?></div>
-        <div class="attribution"><?php print $attribution; ?></div>
+    <div class="callout-holder">
+        <div class="container">
+            <div class="callout-frame">
+                <strong class="callout-holder__tagline"><?php print $summary; ?></strong>
+            </div>
+        </div>
     </div>
+
     <?php break; ?>
 
-    <?php endswitch; ?>
+<?php endswitch; ?>

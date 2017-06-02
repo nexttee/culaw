@@ -32,10 +32,10 @@ function culaw_paragraphs_taxonomy_default_vocabularies() {
         ),
       ),
     ),
-    'tags' => array(
-      'name' => 'Tags',
-      'machine_name' => 'tags',
-      'description' => 'Use tags to group articles on similar topics into categories.',
+    'media_card_categories' => array(
+      'name' => 'Media Card Categories',
+      'machine_name' => 'media_card_categories',
+      'description' => 'Used in the Media Card Paragraph Bundle',
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,

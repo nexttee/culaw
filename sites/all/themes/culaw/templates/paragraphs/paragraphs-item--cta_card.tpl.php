@@ -39,6 +39,8 @@ if ($media_type == "video/youtube" || $media_type == "video/vimeo") {
     switch ($style_option) {
         case 'flexible-grid':
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'flexible_grid', 'attributes' => array("class" => $style_option)));
+            //$bg_path = file_create_url($bg_uri);
+            $bg_path = image_style_url('flexible_grid',$bg_uri);
             break;
         default:
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
@@ -52,6 +54,7 @@ $cta = l($cta_title, $cta_url);
 
 $headline = $content['field_headline']['#items'][0]['value'];
 
+$summary = "";
 if (isset($content['field_summary']['#items'][0])) {
     $summary = $content['field_summary']['#items'][0]['safe_value'];
 }
@@ -86,7 +89,7 @@ if (isset($content['field_summary']['#items'][0])) {
 
 <?php switch($style_option) : ?>
 <?php case 'flexible-grid': ?>
-    <div class="flexible_grid_wrapper">
+    <!--<div class="flexible_grid_wrapper">
         <div class="background"><?php print $bg_image;?></div>
         <div class="summary_wrapper">
             <div class="headline"><?php print $headline; ?></div>
@@ -95,7 +98,24 @@ if (isset($content['field_summary']['#items'][0])) {
             <?php endif; ?>
             <div class="cta"><?php print $cta; ?></div>
         </div>
-    </div>
+    </div>-->
+
+
+        <div class="four-column__block yellow">
+            <div class="four-column__image-wrap bg-stretch">
+                <span data-srcset="<?php print $bg_path; ?>"></span>
+            </div>
+            <div class="four-column__image-caption">
+                <div class="four-column__image-caption-wrap">
+                    <strong class="four-column__title h3"><?php print $headline; ?></strong>
+                    <div class="four-column__wrap">
+                        <p><?php print $summary; ?></p>
+                        <a href="#" class="four-column__more"><span class="hidden">more link</span><i class="icon-keyboard_arrow_right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <?php break; ?>
 <?php default: ?>
     <div class="cta_card_wrapper">
