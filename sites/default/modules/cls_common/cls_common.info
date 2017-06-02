@@ -1,0 +1,9 @@
+name = CLS Common
+description = Provides common functionality to Columbia Law School custom modules.
+package = Columbia Law School
+
+core = 7.x
+
+dependencies[] = libraries (>=2.x)
+
+version = "7.x-1.3"

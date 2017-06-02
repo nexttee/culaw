@@ -1,0 +1,344 @@
+body div.mcl-update-profile-form-column h3 {
+  margin-top: 20px;
+}
+
+body div.mcl-update-profile-form-column span.error-msg {
+	color: #cc0000;
+}
+
+body div.mcl-update-profile-form-column label {
+  float: left;
+  width: 175px;
+  color: #666666;
+  font: 14px Verdana,Arial,Helvetica,sans-serif;
+  margin-top: 7px;
+}
+
+body div.mcl-update-profile-form-column div.form-item-application-year label {
+  float: none;
+  width: 500px;
+  font: bold 18px Verdana,Arial,Helvetica,sans-serif;
+  color: #666666;
+  margin: 20px 0 10px;
+}
+
+body div.mcl-update-profile-form-column input.form-text {
+	background-color: #FFFFFF;
+    border: 2px solid #999999;
+    border-radius:15px;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+    color: #666666;
+    display: block;
+    font: 14px/12px Verdana,Arial,Helvetica,sans-serif;
+    height: 25px;
+    margin: 10px 0;
+    padding: 1px 10px 3px;
+    width: 240px;
+}
+
+html.js body div.mcl-update-profile-form-column input.form-autocomplete {
+  background-position: 100% 8px;
+}
+
+html.js body div.mcl-update-profile-form-column input.throbbing {
+  background-position: 100% -12px;
+}
+
+html.js body div.mcl-update-profile-form-column div#autocomplete {
+  background-color: #ffffff;
+}
+
+html.js body div.mcl-update-profile-form-column div#autocomplete ul li {
+  list-style: none;
+  margin: 0;
+  padding: 5px;
+}
+
+
+body div.mcl-update-profile-form-column select.form-select,
+#cls-mcl-interest-update-form select.form-select {
+  color: #666666;
+  display: block;
+  font: 12px/10px Verdana,Arial,Helvetica,sans-serif;
+  height: 33px;
+  margin: 10px 0;
+  padding: 5px 0 5px 5px;
+  width: 264px;
+}
+
+body div.mcl-update-profile-form-column input#edit-lsac-account-number,
+body div.mcl-update-profile-form-column input#edit-birth-date {
+  width: 90px;
+}
+
+body div.mcl-update-profile-form-column input#edit-security-question-other {
+  margin-left: 175px;
+}
+
+body div.mcl-update-profile-form-column input.form-text:focus {
+	border: #186E9E 2px solid;
+}
+
+body div.mcl-update-profile-form-column input.form-mcl-new-account-button,
+#cls-mcl-interest-update-form #edit-save, #edit-cancel {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #333333;
+    border: 2px solid #999999;
+    color: #FFFFFF;
+    font: 15px Verdana, Arial, sans-serif;
+    padding: 1px 10px 3px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+body div.mcl-update-profile-form-column input#edit-cancel {
+    margin-left: 15px;
+}
+
+body div.mcl-update-profile-form-column input#edit-prev, body div.mcl-update-profile-form-column input#edit-skip-tour {
+  background: none;
+  border: none;
+  color: #186E9D;
+  float: left;
+  font-size: 12px;
+  margin-top: 20px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+body div.mcl-update-profile-form-column input#edit-prev, body div.mcl-update-profile-form-column input#edit-skip-tour:hover {
+  cursor: pointer;
+}
+
+body div.mcl-update-profile-form-column input#edit-submit:active {
+    background-color: #186E9E;
+    color: #FFFFFF;
+}
+
+body div.mcl-update-profile-form-column input.new-account-field {
+	background-color: #FFFFFF;
+    border: 2px solid #999999;
+    border-radius:15px;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+    color: #666666;
+    display: block;
+    font: 21px/18px Verdana,Arial,Helvetica,sans-serif;
+    height: 25px;
+    margin: 15px 0 20px;
+    padding: 1px 10px 3px;
+    width: 180px;
+}
+
+body div.mcl-update-profile-form-column .messages {
+    padding: 10px;
+}
+
+body div.mcl-update-profile-form-column .clientside-error li {
+    list-style: none;
+    margin: 0 0 5px 0;
+}
+
+body div#cls-mcl-profile-update-serverside-errors {
+    color: #cc0000;
+    font-size: 8pt;
+    background-image: none;
+    margin: 0 0 0 20px;
+    background-color: #ffffff;
+}
+
+body div#cls-mcl-account-errors {
+    background-image: none;
+    margin: 0 0 20px;
+}
+
+body div#cls-mcl-account-errors label {
+  width: auto;
+  float: none;
+  color: #cc0000;
+}
+
+body div#cls-mcl-account-errors li {
+ margin: 0 0 5px 15px;
+ color: #cc0000;
+}
+
+div#cls-mcl-account-errors:after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+    width: 0;
+}
+
+body .hidden {
+  display: none;
+}
+
+body .divider {
+  clear: both;
+}
+
+#cls-mcl-profile-update div.form-select2 {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 14px !important;
+}
+
+#cls-mcl-profile-update div.form-select2 a.select2-choice {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 2px solid #999999;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: none;
+    color: #999999 !important;
+    height: 29px !important;
+    line-height: inherit;
+}
+
+#cls-mcl-profile-update div.select2-dropdown-open a.select2-choice {
+    border-bottom: 0 none;
+    border-radius: 15px 15px 0 0;
+}
+
+#cls-mcl-profile-update .select2-chosen {
+    font: 14px/12px Verdana,Arial,Helvetica,sans-serif;
+    height: 16px;
+    margin: 6px 0 0 !important;
+    padding: 2px 5px 3px;
+    /* text-transform: lowercase; */
+    width: 225px;
+}
+
+#cls-mcl-profile-update .select2-choice abbr {
+    right: 10px !important;
+    top: 7px !important;
+}
+
+#cls-mcl-profile-update .select2-arrow {
+    display: none !important;
+}
+
+#cls-mcl-profile-update div.select2-dropdown-open a.select2-choice {
+    border-bottom: 0 none;
+    border-radius: 15px 15px 0 0;
+}
+
+#cls-mcl-profile-update .select2-drop,
+#cls-mcl-profile-update .select2-drop-active {
+    border-bottom: 2px solid #999999;
+    border-left: 2px solid #999999;
+    border-radius: 0 0 15px 15px;
+    border-right: 2px solid #999999;
+    padding: 2px 4px 3px;
+}
+
+#cls-mcl-profile-update .select2-search {
+    padding: 0 8px;
+}
+
+#cls-mcl-profile-update .select2-search input,
+#cls-mcl-profile-update .select2-search input {
+    color: #666666;
+    font-family: Verdana,Arial,sans-serif !important;
+    font-size: 14px !important;
+    padding-bottom: 5px !important;
+    padding-top: 4px !important;
+}
+
+#cls-mcl-profile-update .select2-results {
+    margin: 4px 8px 4px 4px;
+}
+
+#cls-mcl-profile-update .select2-results .select2-highlighted {
+    background: none repeat scroll 0 0 #186E9D;
+}
+
+#cls-mcl-profile-update .select2-results .select2-highlighted .select2-result-label {
+    color: #FFFFFF;
+}
+
+#cls-mcl-profile-update .select2-results .select2-result-label {
+    color: #666666;
+    font-family: Verdana,Arial,sans-serif !important;
+    font-size: 12px;
+}
+
+#cls-mcl-profile-update .select2-drop.select2-drop-above.select2-drop-active {
+    border-radius: 15px 15px 0 0;
+    border-top: 2px solid #999999;
+    padding-top: 6px;
+}
+
+#cls-mcl-profile-update .select2-dropdown-open.select2-drop-above .select2-choice,
+#cls-mcl-profile-update .select2-dropdown-open.select2-drop-above .select2-choices {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 2px solid #999999;
+    border-radius: 0 0 15px 15px;
+}
+
+#cls-mcl-profile-update .select2-results .select2-no-results,
+#cls-mcl-profile-update .select2-results .select2-searching,
+#cls-mcl-profile-update .select2-results .select2-selection-limit {
+    background: #FFFFFF;
+    display: list-item;
+    font-family: Verdana,Arial,sans-serif !important;
+    font-size: 12px;
+    color: #666666;
+}
+
+#cls-mcl-profile-update .select2-results .select2-no-results a {
+  cursor: pointer;
+}
+
+#cls-mcl-profile-update .select2-search input.select2-active {
+    background-position: 98% center, 0 0;
+}
+
+#cls-mcl-profile-update div.form-type-textfield {
+  min-height: 32px;
+}
+
+body #cls-mcl-profile-update .school-other-display-link-area {
+    color: #2D2D2D;
+    float: left;
+    font-size: 11px;
+    font-style: italic;
+    margin: 0 0 0 165px;
+    text-align: right;
+    width: 264px;
+}
+
+#cls-mcl-profile-update .school-other-display-link-area > a {
+    cursor: pointer;
+}
+
+#edit-undergrad-school-name,
+.form-item.form-type-textfield.form-item-undergrad-school-name,
+#edit-grad-school-name,
+.form-item.form-type-textfield.form-item-grad-school-name {
+    margin-bottom: 4px;
+}
+
+#edit-undergrad-school-name-other,
+.form-item.form-type-textfield.form-item-undergrad-school-name-other,
+#edit-grad-school-name-other,
+.form-item.form-type-textfield.form-item-grad-school-name-other {
+    margin-bottom: 3px;
+}
+
+.form-item-undergrad-graduation-year,
+.form-item-grad-graduation-year {
+    margin-top: 15px;
+}
+
+.account-cancel-link a {
+  font-size: 12px;
+  font-style: italic;
+}

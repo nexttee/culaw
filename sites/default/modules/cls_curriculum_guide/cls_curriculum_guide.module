@@ -1,0 +1,1597 @@
+<?php
+
+/**
+* Implementation of hook_init().
+*/
+function cls_curriculum_guide_init() {
+  if ($_GET['q'] == 'courses') {
+    $GLOBALS['conf']['cache'] = FALSE;
+  }
+}
+
+/**
+* Implements hook_menu().
+*/
+function cls_curriculum_guide_menu(){
+  $items = array();
+
+  $items['admin/config/services/cls-rest-api/cls_cg_offering/settings'] = array(
+    'title' => 'CLS Curriculum Guide Settings',
+    'description' => 'Adminster settings for CLS Curriculum Guide',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cls_curriculum_guide_settings_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items['courses'] = array(
+    'title' => 'Courses',
+    'page callback' => 'cls_curriculum_guide_homepage_callback',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.homepage.inc',
+  );
+
+  $items['courses/%'] = array(
+    'page callback' => 'cls_curriculum_guide_offering_page_callback',
+    'page arguments' => array(1),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.offering.inc',
+  );
+
+  $items['courses/%/ajax-sections/%'] = array(
+    'title' => 'AJAX: Offering Sections',
+    'page callback' => 'cls_curriculum_guide_offering_ajax_sections_callback',
+    'page arguments' => array(1,3),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.offering.inc',
+  );
+
+  $items['courses/search'] = array(
+    'title' => 'Search',
+    'page callback' => 'cls_curriculum_guide_search_page_callback',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.search.inc',
+  );
+
+  $items['courses/ajax-categories/%'] = array(
+    'title' => 'AJAX: Categories',
+    'page callback' => 'cls_curriculum_guide_ajax_categories_callback',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.search.inc',
+  );
+
+  $items['courses/ajax-instructors/%'] = array(
+    'title' => 'AJAX: Instructors',
+    'page callback' => 'cls_curriculum_guide_ajax_instructors_callback',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.search.inc',
+  );
+
+  $items['courses/search-results'] = array(
+    'title' => 'Search Results',
+    'page callback' => 'cls_curriculum_guide_search_results_callback',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.search.inc',
+  );
+
+  $items['courses/ajax-search-results-course-details/%/%'] = array(
+    'title' => 'AJAX: Search Results Course Details',
+    'page callback' => 'cls_curriculum_guide_ajax_search_results_course_details_callback',
+    'page arguments' => array(2, 3),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.search.inc',
+  );
+
+  $items['courses/ajax-search-results-batch'] = array(
+    'title' => 'AJAX: Search Results Batch',
+    'page callback' => 'cls_curriculum_guide_ajax_search_results_batch_callback',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.search.inc',
+  );
+
+  $items['courses/search-results/download'] = array(
+    'title' => 'Download Search Results',
+    'page callback' => 'cls_curriculum_guide_search_results_download_callback',
+    'page arguments' => array('xlsx'),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.search.inc',
+  );
+
+  $items['courses/sections/%'] = array(
+    'page callback' => 'cls_curriculum_guide_section_page_callback',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.section.inc',
+  );
+
+  $items['courses/instructors/%'] = array(
+    'page callback' => 'cls_curriculum_guide_instructor_page_callback',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.instructor.inc',
+  );
+
+  $items['courses/instructors/%/ajax-sections/%'] = array(
+    'title' => 'AJAX: Instructor Sections',
+    'page callback' => 'cls_curriculum_guide_instructor_ajax_sections_callback',
+    'page arguments' => array(2,4),
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'includes/cls_curriculum_guide.instructor.inc',
+  );
+
+  $items['admin/config/services/cls-rest-api/cls_cg_offering/migration'] = array(
+    'title' => 'Migrate Course Offerings',
+    'page callback' => 'cls_curriculum_guide_migration_page',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('manage course offering'),
+    'file' => 'includes/cls_curriculum_guide.migration.inc',
+  );
+
+  // redirect rtsb "view current courses" link to instructor page
+  $items['courses/browse/instructor'] = array(
+    'title' => 'Redirect RTSB Link',
+    'page callback' => 'cls_curriculum_guide_redirect_rtsb_link',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+  );
+
+  $items['faculty/json'] = array(
+    'title' => 'JSON: Faculty Profile',
+    'page callback' => 'cls_curriculum_guide_faculty_profile_json',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+function cls_curriculum_guide_redirect_rtsb_link(){
+  $query_parameters = drupal_get_query_parameters();
+
+  if (!empty($query_parameters['id'])) {
+    $id = $query_parameters['id'];
+    $id = intval(trim($id));
+
+    $instructor = db_select('cls_courses_faculty', 'f')
+              ->fields('f')
+              ->condition('rtsb_id', $id)
+              ->condition('status', 1)
+              ->execute()
+              ->fetchAll();
+
+    if (!empty($instructor)) {
+      $lawnet_login = $instructor[0]->lawnet;
+
+      $client_id = variable_get('cls_client_id');
+      $client_secret = variable_get('cls_client_secret');
+      $client = cls_rest_api_make_api_request($client_id, $client_secret);
+      $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+      $response = $client->fetch($endpoint_base_url.'/public/curriculum/instructors/'. $lawnet_login . '/id', array(), 'GET', array('Content-Type' => 'application/json'));
+      $response_code = intval($response['code']);
+      if($response_code == 200){
+        $id = $response['result'];
+        drupal_goto('courses/instructors/' . $id);
+      }
+    }else{
+      drupal_goto('courses/search');
+    }
+  }else{
+    drupal_goto('courses/search');
+  }
+}
+
+function cls_curriculum_guide_faculty_profile_json(){
+  drupal_add_http_header('Cache-Control', 'no-cache, must-revalidate, post-check=0, pre-check=0');
+  drupal_add_http_header('Content-Type', 'application/javascript');
+  $query_parameters = drupal_get_query_parameters();
+
+  $no_profile_array = array(
+    'statusCode' => 0,
+    "statusCodeMessage" => "No profile found for the requested CLS username or profile ID",
+    "profileURL" => ""
+  );
+
+  if (!empty($query_parameters['username'])) {
+    $cas_name = $query_parameters['username'];
+
+    $user_data = db_query(
+      "SELECT u.uid FROM {cas_user} cu INNER JOIN {users} u ON u.uid = cu.uid WHERE cu.cas_name = :cas_name",
+          array(':cas_name' => $cas_name)
+      )->fetchObject();
+
+    if (isset($user_data->uid) && $user_data->uid) {
+      $user_loaded = user_load($user_data->uid);
+    }
+
+    if($user_loaded){
+      $profile_url = url("user/" . $user_loaded->uid, array('absolute' => TRUE));
+      $data = array(
+        'statusCode' => 1,
+        "statusCodeMessage" => "Profile found",
+        "profileURL" => $profile_url
+      );
+
+      $json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+
+      if( isset($_GET['callback']) ) {
+        echo $_GET['callback']."(".$json.")";
+      }
+      else{
+        echo $json;
+      }
+    }
+    else{
+      $json = json_encode($no_profile_array, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+
+      if( isset($_GET['callback']) ) {
+        echo $_GET['callback']."(".$json.")";
+      }
+      else{
+        echo $json;
+      }
+    }
+  }
+  else{
+    $json = json_encode($no_profile_array, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+
+    if( isset($_GET['callback']) ) {
+      echo $_GET['callback']."(".$json.")";
+    }
+    else{
+      echo $json;
+    }
+  }
+}
+
+/**
+* Implements hook_theme().
+*/
+function cls_curriculum_guide_theme($existing, $type, $theme, $path) {
+  return array(
+    'cls_curriculum_guide_homepage' => array(
+      'variables' => array(
+        'course_spotlight' => array(),
+        'related_offerings' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_homepage',
+    ),
+    'cls_curriculum_guide_offering_page' => array(
+      'variables' => array(
+        'offering' => array(),
+        'type' => array(),
+        'level' => array(),
+        'categories' => array(),
+        'sections' => array(),
+        'academic_years' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_offering_page',
+    ),
+    'cls_curriculum_guide_offering_ajax_sections'=> array(
+      'variables' => array(
+        'sections' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_offering_ajax_sections',
+    ),
+    'cls_curriculum_guide_search_page' => array(
+      'variables' => array(
+        'academic_years' => array(),
+        'search_any_year_string' => array(),
+        'curriculum_levels' => array(),
+        'evaluation_methods' => array(),
+        'course_types' => array(),
+        'categories' => array(),
+        'tags' => array(),
+        'instructors' => array(),
+        'weekdays' => array(),
+        'hours' => array(),
+        'points' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_search_page',
+    ),
+    'cls_curriculum_guide_ajax_instructors' => array(
+      'variables' => array(
+        'instructors' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_ajax_instructors',
+    ),
+    'cls_curriculum_guide_ajax_categories' => array(
+      'variables' => array(
+        'categories' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_ajax_categories',
+    ),
+    'cls_curriculum_guide_search_results_page' => array(
+      'variables' => array(
+        'sections' => array(),
+        'result_count_text' => array(),
+        'result_count' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_search_results_page',
+    ),
+    'cls_curriculum_guide_section_page' => array(
+      'variables' => array(
+        'name' => array(),
+        'course_number' => array(),
+        'section' => array(),
+        'semester' => array(),
+        'schedules' => array(),
+        'locations' => array(),
+        'instructors' => array(),
+        'description' => array(),
+        'points' => array(),
+        'method' => array(),
+        'course_type' => array(),
+        'level' => array(),
+        'textbook_url' => array(),
+        'jd_writing_credit_description' => array(),
+        'registration_limitations' => array(),
+        'instructor_prerequistes' => array(),
+        'instructor_corequisites' => array(),
+        'recommended_courses' => array(),
+        'goals' => array(),
+        'categories' => array(),
+        'other_sections' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_section_page',
+    ),
+    'cls_curriculum_guide_instructor_page' => array(
+      'variables' => array(
+        'name' => array(),
+        'title' => array(),
+        'profile_url' => array(),
+        'photo_url' => array(),
+        'sections' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_instructor_page',
+    ),
+    'cls_curriculum_guide_instructor_ajax_sections' => array(
+      'variables' => array(
+        'sections' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_instructor_ajax_sections',
+    ),
+    'cls_curriculum_guide_search_results_block' => array(
+      'variables' => array(
+        'year' => array(),
+        'level' => array(),
+        'course_name' => array(),
+        'course_number' => array(),
+        'term' => array(),
+        'points' => array(),
+        'method' => array(),
+        'days' => array(),
+        'start_time' => array(),
+        'end_time' => array(),
+        'writing_credit' => array(),
+        'categories' => array(),
+        'tags' => array(),
+        'types' => array(),
+        'instructors' => array(),
+        'download_path' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_search_results_block',
+    ),
+    'cls_curriculum_guide_top_nav' => array(
+      'variables' => array(
+        'request_path' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_top_nav',
+    ),
+    'cls_curriculum_guide_instructor_sections_by_year_block' => array(
+      'variables' => array(
+        'academic_years' => array(),
+      ),
+      'template' => 'templates/cls_curriculum_guide_instructor_sections_by_year_block',
+    ),
+  );
+}
+
+function cls_curriculum_guide_settings_form($form, &$form_state){
+  _cls_curriculum_guide_add_assets();
+
+  $client_id = variable_get('cls_client_id');
+  $client_secret = variable_get('cls_client_secret');
+  $client = cls_rest_api_make_api_request($client_id, $client_secret);
+  $academic_years = _cls_curriculum_guide_fetch_all_academic_years($client);
+  $dictionaries = _cls_curriculum_guide_fetch_search_form_dictionaries_by_academic_year($client, variable_get('cls_curriculum_guide_default_year'));
+  $tags = $dictionaries['tags'];
+
+  $year_options = array();
+  $tag_options = array();
+
+  foreach($academic_years as $option){
+    $year_options[$option['id']] = t($option['academicYear']);
+  }
+
+  foreach($tags as $tag){
+    $tag_options[$tag['id']] = t($tag['name']);
+  }
+
+  $form['container'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('clearfix'),
+    ),
+  );
+
+  $form['container']['cls_curriculum_guide_default_year'] = array(
+    '#type' => 'radios',
+    '#title' => t('Select default academic year'),
+    '#options' => $year_options,
+    '#default_value' => variable_get('cls_curriculum_guide_default_year'),
+  );
+
+  $form['container']['cls_curriculum_guide_selected_years'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Select academic years to display'),
+    '#options' => $year_options,
+    '#default_value' => variable_get('cls_curriculum_guide_selected_years'),
+  );
+
+  $form['container']['cls_curriculum_guide_tags'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Select tags to display (based on default year)'),
+    '#options' => $tag_options,
+    '#default_value' => variable_get('cls_curriculum_guide_tags'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+* Implements hook_entity_info.
+*/
+function cls_curriculum_guide_entity_info() {
+  $items = array();
+
+  $items['cls_cg_offering'] = array(
+    'label' => t('CLS Course Offering'),
+    'base table' => 'cls_cg_offering',
+    //'exportable' => TRUE,
+    'metatags' => FALSE,
+    'entity keys' => array(
+      'id' => 'id',
+      'label' => 'name',
+    ),
+    'entity class' => 'CLSCurriculumGuideOfferingEntity',
+    'uri callback' => 'entity_class_uri',
+    'controller class' => 'CLSCurriculumGuideOfferingEntityController',
+    'access callback' => 'cls_curriculum_guide_offering_access_callback',
+    'module' => 'cls_curriculum_guide',
+    'admin ui' => array(
+      'path' => 'admin/config/services/cls-rest-api/cls_cg_offering',
+      'controller class' => 'CLSCurriculumGuideOfferingUIController',
+      'file' => 'includes/cls_curriculum_guide.offering.admin.inc',
+    ),
+    'fieldable' => TRUE,
+    'bundles' => array(
+      'cls_cg_offering' => array(
+        'label' => t('CLS Course Offering'),
+        'admin' => array(
+          'path' => 'admin/config/services/cls-rest-api/cls_cg_offering',
+          'access arguments' => array('manage course offering'),
+        ),
+      ),
+    ),
+  );
+
+  return $items;
+}
+
+/**
+* Implements hook_permmission
+*/
+
+function cls_curriculum_guide_permission() {
+  $permissions = array();
+
+  $permissions['manage course offering'] = array(
+    'title' => t('Manage CLS Curriculum Guide Offering'),
+  );
+
+  return $permissions;
+}
+
+function cls_curriculum_guide_offering_access_callback($op, $offering = NULL, $account = NULL) {
+  if(user_access('manage course offering', $account)){
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+* Implements hook_entity_property_info().
+*/
+function cls_curriculum_guide_entity_property_info() {
+  $info = array();
+  $properties = &$info['cls_curriculum_guide_offering']['properties'];
+  $properties['id'] = array(
+    'label' => t('Offering ID'),
+    'description' => t('The uniquie ID of the offering.'),
+    'type' => 'integer',
+    'schema field' => 'id',
+  );
+  $properties['name'] = array(
+    'label' => t('Name'),
+    'description' => t('Name of the offering'),
+    'type' => 'text',
+    'schema field' => 'name',
+  );
+  $properties['course_offering_number'] = array(
+    'label' => t('Course Offering Number'),
+    'description' => t(''),
+    'type' => 'text',
+    'schema field' => 'course_offering_number',
+  );
+  $properties['created_timestamp'] = array(
+    'label' => t('Created date'),
+    'description' => t('Date the offering was created'),
+    'type' => 'date',
+    'schema field' => 'created_timestamp',
+  );
+  $properties['updated_timestamp'] = array(
+    'label' => t('Updated date'),
+    'description' => t('Date the offering last updated'),
+    'type' => 'date',
+    'schema field' => 'updated_timestamp',
+  );
+
+  return $info;
+}
+
+/**
+* Implements hook_form_alter().
+*/
+function cls_curriculum_guide_form_alter(&$form, &$form_state, $form_id){
+  if ($form_id == 'cls_cg_offering_form') {
+    unset($form['redirect']);
+  }
+}
+
+/**
+* Implements hook_block_info().
+*/
+function cls_curriculum_guide_block_info(){
+  $blocks = array();
+
+  $blocks['cls_cg_search_results'] = array(
+    'info' => t('Curriculum Guide: Search Results Block'),
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  $blocks['cls_cg_top_nav'] = array(
+    'info' => t('Curriculum Guide: Top Navigation'),
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  $blocks['cls_cg_sections_by_year'] = array(
+    'info' => t('Curriculum Guide: Instructor Sections By Year'),
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  return $blocks;
+}
+
+/**
+* Implements hook_block_view().
+*/
+function cls_curriculum_guide_block_view($delta = '') {
+  $block = array();
+
+  switch($delta) {
+    case 'cls_cg_search_results':
+      $block['content'] = _cls_curriculum_guide_search_results_block_view();
+      break;
+    case 'cls_cg_top_nav':
+      $block['content'] = theme('cls_curriculum_guide_top_nav', array('request_path' => request_path()));
+      break;
+    case 'cls_cg_sections_by_year':
+      $block['content'] = _cls_curriculum_guide_instructor_sections_by_year_block_view();
+      break;
+  }
+
+  return $block;
+}
+
+function _cls_curriculum_guide_instructor_sections_by_year_block_view(){
+  $client_id = variable_get('cls_client_id');
+  $client_secret = variable_get('cls_client_secret');
+  $client = cls_rest_api_make_api_request($client_id, $client_secret);
+  $selected_years = array_filter(variable_get('cls_curriculum_guide_selected_years', array()));
+  $academic_years = _cls_curriculum_guide_get_academic_year_data_by_ids($client, $selected_years);
+
+  return theme('cls_curriculum_guide_instructor_sections_by_year_block', array(
+      'academic_years' => $academic_years,
+    )
+  );
+}
+
+function _cls_curriculum_guide_search_results_block_view(){
+  $client_id = variable_get('cls_client_id');
+  $client_secret = variable_get('cls_client_secret');
+  $client = cls_rest_api_make_api_request($client_id, $client_secret);
+  $academic_years = _cls_curriculum_guide_fetch_all_academic_years($client);
+  $qp = _cls_curriculum_guide_get_query_parameters();
+  $default_year = variable_get('cls_curriculum_guide_default_year');
+  $academic_year_id = isset($qp['schoolYear'][0]) ? $qp['schoolYear'][0] : $default_year;
+
+  if (preg_match('/^\d+$/', $academic_year_id)){
+    $academic_year_id = intval($academic_year_id);
+  }
+  elseif (preg_match('/^\d+(?:,\d+)*$/', $academic_year_id)){
+    $academic_year_id = $academic_year_id;
+  }
+  else{
+    return theme('cls_curriculum_guide_search_results_block', array());
+  }
+
+  $dictionaries = _cls_curriculum_guide_fetch_search_form_dictionaries_by_academic_year($client, $academic_year_id);
+  $course_types = $dictionaries['course_types'];
+  $categories = $dictionaries['course_categories'];
+  $course_tags = $dictionaries['tags'];
+  $course_instructors = $dictionaries['instructors'];
+  $download_path = '/courses/search-results/download?' . $_SERVER['QUERY_STRING'];
+
+  $academic_year = '';
+  $course_number = '';
+  $course_name = '';
+  $data = array();
+  $years = array();
+  $cats = array();
+  $tags = array();
+  $types = array();
+  $instructors = array();
+
+  if(isset($qp['keyword'])){
+    if(strlen($qp['keyword'][0]) == 5 && !is_numeric(substr($qp['keyword'][0], 0, 1)) &&  is_numeric(substr($qp['keyword'][0], 1, 4))){
+      $course_number = $qp['keyword'][0];
+    }
+    else{
+      $course_name = $qp['keyword'][0];
+    }
+  }else{
+    $course_number = isset($qp['courseNumber'][0]) ? $qp['courseNumber'][0] : '';
+    $course_name = isset($qp['courseName'][0]) ? $qp['courseName'][0] : '';
+  }
+
+
+  $academic_year_ids = explode(',', $academic_year_id);
+
+  foreach($academic_year_ids as $id){
+    foreach($academic_years as $year){
+      if(intval($id) == $year['id']){
+        $years[] = $year['academicYear'];
+        break;
+      }
+    }
+  }
+
+  if(isset($qp['categoryId'])){
+    foreach($qp['categoryId'] as $id){
+      foreach($categories as $cat){
+        if(intval($id) == $cat['id']){
+          $cats[] = $cat['name'];
+          break;
+        }
+      }
+    }
+  }
+
+  if(isset($qp['tagId'])){
+    foreach($qp['tagId'] as $id){
+      foreach($course_tags as $tag){
+        if(intval($id) == $tag['id']){
+          $tags[] = $tag['name'];
+          break;
+        }
+      }
+    }
+  }
+
+  if(isset($qp['courseType'])){
+    foreach($qp['courseType'] as $id){
+      foreach($course_types as $type){
+        if(intval($id) == $type['id']){
+          $types[] = $type['name'];
+          break;
+        }
+      }
+    }
+  }
+
+  if(isset($qp['instructorId'])){
+    foreach($qp['instructorId'] as $id){
+      foreach($course_instructors as $instructor){
+        if(intval($id) == $instructor['id']){
+          $instructors[] = $instructor['name'];
+          break;
+        }
+      }
+    }
+  }
+
+  return theme('cls_curriculum_guide_search_results_block', array(
+      'year' => $years,
+      'level' => isset($qp['curriculumType'][0]) ? $qp['curriculumType'][0] : '',
+      'course_name' => $course_name,
+      'course_number' => $course_number,
+      'term' => isset($qp['term']) ? $qp['term'] : array(),
+      'points' => isset($qp['points'][0]) ? number_format(intval($qp['points'][0]), 1) : '',
+      'method' => isset($qp['evalMethods'][0]) ? $qp['evalMethods'][0] : '',
+      'days' => isset($qp['days']) ? array_map('strval', $qp['days']) : array(),
+      'start_time' => isset($qp['startTime'][0]) ? $qp['startTime'][0] : '',
+      'end_time' => isset($qp['endTime'][0]) ? $qp['endTime'][0] : '',
+      'writing_credit' => isset($qp['writingCredit'][0]) ? intval($qp['writingCredit'][0]) : 0,
+      'categories' => $cats,
+      'tags' => $tags,
+      'types' => $types,
+      'instructors' => $instructors,
+      'download_path' => $download_path,
+    )
+  );
+}
+
+/**
+* Implements hook_query_TAG_alter.
+*/
+function cls_curriculum_guide_query_random_alter($query) {
+  $query->orderRandom();
+}
+
+/**
+* Following functions are utility functions for this module
+*/
+function _cls_curriculum_guide_add_assets(){
+  drupal_add_css(drupal_get_path('module', 'cls_curriculum_guide') . '/css/cls_curriculum_guide.css');
+  drupal_add_js(drupal_get_path('module', 'cls_curriculum_guide') . '/js/cls_curriculum_guide.js');
+}
+
+function _cls_curriculum_guide_get_query_parameters(){
+  $query = explode('&', $_SERVER['QUERY_STRING']);
+
+  $qp = array();
+
+  foreach($query as $param) {
+    list($name, $value) = explode('=', $param);
+    $new_value = check_plain(trim(urldecode($value)));
+    if(strlen($new_value) > 0) {
+      $qp[check_plain(urldecode($name))][] = $new_value;
+    }
+  }
+
+  return $qp;
+}
+
+function _cls_curriculum_guide_fetch_all_academic_years($client){
+  $client_id = variable_get('cls_client_id');
+  $client_secret = variable_get('cls_client_secret');
+  $client = cls_rest_api_make_api_request($client_id, $client_secret);
+  $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+  $response = $client->fetch($endpoint_base_url.'/public/curriculum/academicYears', null, 'GET', array('Content-Type' => 'application/json'));
+
+  if(isset($response['result']) && $response['code'] !== 404){
+    $data = $response['result'];
+  }
+  elseif($response['code'] == 404){
+    drupal_not_found();
+    drupal_exit();
+  }
+  else{
+    watchdog('cls_curriculum_guide', '_cls_curriculum_guide_fetch_all_academic_years: <pre>@print_r</pre>', array('@print_r' => print_r($response, TRUE)), WATCHDOG_ERROR);
+  }
+
+  return $data;
+}
+
+function _cls_curriculum_guide_get_academic_year_data_by_ids($client, $selected_years){
+  $academic_years = array();
+  $api_academic_years = _cls_curriculum_guide_fetch_all_academic_years($client);
+
+  foreach($api_academic_years as $year){
+    foreach($selected_years as $key => $value){
+      if(intval($year['id']) == intval($key)){
+        $academic_years[] = $year;
+        break;
+      }
+    }
+  }
+
+  return $academic_years;
+}
+
+function _cls_curriculum_guide_get_tag_data_by_ids($client, $selected_tags){
+  $academic_year_id = intval(variable_get('cls_curriculum_guide_default_year'));
+  $dictionaries = _cls_curriculum_guide_fetch_search_form_dictionaries_by_academic_year($client, $academic_year_id);
+  $tags = $dictionaries['tags'];
+  $tag_data = array();
+
+  foreach($selected_tags as $id){
+    foreach($tags as $tag){
+      if(intval($id) == $tag['id']){
+        $tag_data[] = $tag;
+        break;
+      }
+    }
+  }
+
+  return $tag_data;
+}
+
+function _cls_curriculum_guide_fetch_search_form_dictionaries_by_academic_year($client, $academic_year_id){
+  $client_id = variable_get('cls_client_id');
+  $client_secret = variable_get('cls_client_secret');
+  $client = cls_rest_api_make_api_request($client_id, $client_secret);
+  $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+
+  $response = $client->fetch($endpoint_base_url.'/public/curriculum/academicYears/'.$academic_year_id.'/courses/search-dictionaries', null, 'GET', array('Content-Type' => 'application/json'));
+  $prepared_data = array();
+
+  if(isset($response['result']) && $response['code'] !== 404){
+    $prepared_data = array(
+      'curriculum_levels' => isset($response['result']['curriculumLevelsList']) ? $response['result']['curriculumLevelsList'] : array(),
+      'evaluation_methods' => isset($response['result']['evaluationMethods']) ? $response['result']['evaluationMethods'] : array(),
+      'weekdays' => _cls_curriculum_guide_get_weekdays(),
+      'hours' => _cls_curriculum_guide_get_hours(28800, 75600),
+    );
+
+    $prepared_data['course_types'] = array();
+    $prepared_data['course_categories'] = array();
+    $prepared_data['tags'] = array();
+    $prepared_data['instructors'] = array();
+
+    if(isset($response['result']['courseTypesList'])){
+      foreach ($response['result']['courseTypesList'] as $course_type) {
+        $prepared_data['course_types'][] = array('id' => $course_type['id'], 'name' => ucwords(strtolower($course_type['name'])));
+      }
+    }
+
+    if(isset($response['result']['categoriesList'])){
+      foreach ($response['result']['categoriesList'] as $category) {
+        $prepared_data['course_categories'][] = array('id' => $category['id'], 'name' => $category['name']);
+      }
+    }
+
+    if(isset($response['result']['tags'])){
+      foreach ($response['result']['tags'] as $tag) {
+        $prepared_data['tags'][] = array('id' => $tag['id'], 'name' => $tag['name']);
+      }
+    }
+
+    if(isset($response['result']['instructorsList'])){
+      foreach ($response['result']['instructorsList'] as $instructor) {
+        $prepared_data['instructors'][] = array('id' => $instructor['id'], 'name' => $instructor['fullName']);
+      }
+    }
+  }
+  elseif($response['code'] == 404){
+    drupal_not_found();
+    drupal_exit();
+  }
+  else{
+    watchdog('cls_curriculum_guide', '_cls_curriculum_guide_fetch_search_form_dictionaries_by_academic_year: <pre>@print_r</pre>', array('@print_r' => print_r($response, TRUE)), WATCHDOG_ERROR);
+  }
+
+  return $prepared_data;
+}
+
+function _cls_curriculum_guide_fetch_course_offering_data($client, $entity_id){
+  $entity_data = array();
+
+  $entity = entity_load_single('cls_cg_offering', intval($entity_id));
+  $related_ids = array();
+
+  if(isset($entity->field_recommended_offerings['und'])){
+    $recommended_offerings = $entity->field_recommended_offerings['und'];
+    foreach($recommended_offerings as $offering){
+      $related_ids[] = $offering['target_id'];
+    }
+  }
+
+  $course_offering_numbers = array();
+  $course_offering_numbers[] = $entity->course_offering_number;
+  $qp = array(
+    'courseNumber' => $course_offering_numbers,
+  );
+
+  $api_results = _cls_curriculum_guide_fetch_search_results($client, $qp);
+
+  $instructors = array();
+
+  if(isset($api_results['result'])){
+    $points = isset($api_results['result'][0]) ? $api_results['result'][0]['jdPoints'] : '';
+    foreach($api_results['result'] as $section){
+      $section_details = _cls_curriculum_guide_fetch_section_details($client, $section['id']);
+      foreach($section_details['instructors'] as $instructor){
+        $instructors[] = $instructor;
+      }
+    }
+  }
+
+  $entity_data = array(
+    'name' => $entity->name,
+    'course_offering_number' => $entity->course_offering_number,
+    'bg_color' => isset($entity->field_featured_bg_color['und'][0]['value']) ? $entity->field_featured_bg_color['und'][0]['value'] : '',
+    'image_url' => isset($entity->field_image['und'][0]['uri']) ? file_create_url($entity->field_image['und'][0]['uri']) : '',
+    'description' => array(
+      'short' => views_trim_text(array(
+        'max_length' => 255,
+        'word_boundary' => TRUE,
+        'ellipsis' => TRUE
+      ),
+      strip_tags($entity->field_offering_description['und'][0]['value'])
+    ),
+    'long' => $entity->field_offering_description['und'][0]['value'],
+  ),
+  'instructors' => $instructors,
+  'points' => '('. $points. ' pts.)',
+  'related_ids' => $related_ids,
+  );
+
+  return $entity_data;
+}
+
+function _cls_curriculum_guide_fetch_search_results($client, $qp){
+
+  $parameters_are_valid = _cls_curriculum_guide_validate_query_parameters($qp);
+
+  if ($parameters_are_valid) {
+    $default_year = variable_get('cls_curriculum_guide_default_year');
+    $academic_year_id = isset($qp['schoolYear'][0]) ? $qp['schoolYear'][0] : $default_year;
+
+    $course_number = '';
+    $course_name = '';
+
+    if(isset($qp['keyword'])){
+      if(strlen($qp['keyword'][0]) == 5 && !is_numeric(substr($qp['keyword'][0], 0, 1)) &&  is_numeric(substr($qp['keyword'][0], 1, 4))){
+        $course_number = $qp['keyword'][0];
+      }
+      else{
+        $course_name = "*" . $qp['keyword'][0] . "*";
+      }
+    }else{
+      $course_number = isset($qp['courseNumber'][0]) ? $qp['courseNumber'][0] : null;
+      $course_name = isset($qp['courseName'][0]) ? "*" . $qp['courseName'][0] . "*" : null;
+    }
+
+    $data = array();
+
+    $data = array(
+      'term' => isset($qp['term']) ? $qp['term'] : array(),
+      'instructorId' => isset($qp['instructorId']) ? array_map('intval', $qp['instructorId']) : array(),
+      'courseNumber' => $course_number,
+      'courseName' => $course_name,
+      'courseType' => isset($qp['courseType']) ? array_map('intval', $qp['courseType']) : array(),
+      'courseCategory' => isset($qp['categoryId']) ? array_map('intval', $qp['categoryId']) : array(),
+      'courseTag' => isset($qp['tagId']) ? array_map('intval', $qp['tagId']) : array(),
+      'curriculumLevel' => isset($qp['curriculumType'][0]) ? $qp['curriculumType'][0] : null,
+      'courseScheduleDays' => isset($qp['days']) ? array_map('strval', $qp['days']) : array(),
+      'courseScheduleStartTime' => isset($qp['startTime'][0]) ? $qp['startTime'][0] : null,
+      'courseScheduleEndTime' => isset($qp['endTime'][0]) ? $qp['endTime'][0] : null,
+      'evaluationMethod' => isset($qp['evalMethods'][0]) ? $qp['evalMethods'][0] : null,
+      'points' => isset($qp['points'][0]) ? number_format(intval($qp['points'][0]), 1) : null,
+      'majorWritingCreditAvailable' => isset($qp['writingCredit'][0]) ? true : null,
+    );
+
+    $client_id = variable_get('cls_client_id');
+    $client_secret = variable_get('cls_client_secret');
+    $client = cls_rest_api_make_api_request($client_id, $client_secret);
+    $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+    $response = $client->fetch($endpoint_base_url.'/public/curriculum/academicYears/'.$academic_year_id.'/courses/search', json_encode($data), 'POST', array('Content-Type' => 'application/json'));
+
+    if(isset($response['result']) && $response['code'] !== 404){
+      return $response;
+    }
+    elseif($response['code'] == 404){
+      drupal_not_found();
+      drupal_exit();
+    }
+    else{
+      watchdog('cls_curriculum_guide', '_cls_curriculum_guide_fetch_search_results: <pre>@print_r</pre>', array('@print_r' => print_r($response, TRUE)), WATCHDOG_ERROR);
+    }
+  }
+  else {
+    drupal_not_found();
+    drupal_exit();
+  }
+}
+
+function _cls_curriculum_guide_validate_query_parameters($qp) {
+  if (isset($qp['schoolYear'][0])){
+    $academic_year_id = $qp['schoolYear'][0];
+    if ( !preg_match('/^\d+$/', $academic_year_id) && ! preg_match('/^\d+(?:,\d+)*$/', $academic_year_id)){
+      return FALSE;
+    }
+  }
+
+  if (isset($qp['courseNumber'][0])) {
+    $course_number = $qp['courseNumber'][0];
+    if (!strlen($course_number) == 5) {
+      return FALSE;
+    }
+    if (is_numeric(substr($course_number, 0, 1))) {
+      return FALSE;
+    }
+    if (!is_numeric(substr($course_number, 1, 4))) {
+      return FALSE;
+    }
+  }
+
+  if (count($qp['term']) > 0) {
+    foreach ($qp['term'] as $term) {
+      if (!in_array($term, array('Fall', 'Spring'))) {
+        return FALSE;
+      }
+    }
+  }
+
+  if (count($qp['instructorId']) > 0) {
+    foreach ($qp['instructorId'] as $id) {
+      if (!ctype_digit($id)) {
+        return FALSE;
+      }
+    }
+  }
+
+  if (count($qp['courseType']) > 0) {
+    foreach ($qp['courseType'] as $type) {
+      if (!ctype_digit($type)) {
+        return FALSE;
+      }
+    }
+  }
+
+  if (count($qp['categoryId']) > 0) {
+    foreach ($qp['categoryId'] as $id) {
+      if (!ctype_digit($id)) {
+        return FALSE;
+      }
+    }
+  }
+
+  if (count($qp['tagId']) > 0) {
+    foreach ($qp['tagId'] as $type) {
+      if (!ctype_digit($type)) {
+        return FALSE;
+      }
+    }
+  }
+
+  if (isset($qp['curriculumType'][0])) {
+    if (!in_array($qp['curriculumType'][0], array('All', 'Foundation', 'Upperclass'))) {
+      return FALSE;
+    }
+  }
+
+  if (count($qp['days']) > 0) {
+    foreach ($qp['days'] as $day) {
+      if (!in_array($day, array('Mon', 'Tue', 'Wed', 'Thu', 'Fri'))) {
+        return FALSE;
+      }
+    }
+  }
+
+  if (isset($qp['startTime'][0])) {
+    $start_time = $qp['startTime'][0];
+    if ( !preg_match('/^(?:[1-9]|1[0-2]) (AM|PM)$/', $start_time)) {
+      return FALSE;
+    }
+  }
+
+  if (isset($qp['endTime'][0])) {
+    $start_time = $qp['endTime'][0];
+    if ( !preg_match('/^(?:[1-9]|1[0-2]) (AM|PM)$/', $start_time)) {
+      return FALSE;
+    }
+  }
+
+  if (isset($qp['evalMethods'][0])) {
+    if (!in_array($qp['evalMethods'][0], array('Paper', 'Exam', 'Paper and Exam', 'Other'))) {
+      return FALSE;
+    }
+  }
+
+  if (isset($qp['points'][0])) {
+    if (!ctype_digit($qp['points'][0])) {
+      return FALSE;
+    }
+  }
+
+  if (isset($qp['writingCredit'][0])) {
+    if ($qp['writingCredit'][0] !== 'true') {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
+}
+
+function _cls_curriculum_guide_prepare_search_results_data($client, $results){
+  $prepared_data = array();
+
+  if($results['code'] == 200){
+    foreach($results['result'] as $result){
+      $section_details = _cls_curriculum_guide_fetch_section_details($client, $result['id'], true);
+      $number_section = str_replace(' ', '', $result['courseCode']);
+      $number_section = str_replace('LAW-', '', $number_section);
+      $section = array(
+        'id' => $result['id'],
+        'number_section' => $number_section,
+        'term' => $result['term']['yearTerm'],
+        'name' => $result['sectionName'],
+        'instructors' => $section_details['instructors'],
+        'schedules' => $section_details['schedules'],
+        'locations' => $section_details['locations'],
+        'level' => $section_details['level'],
+        'categories' => $section_details['categories'],
+        'type' => ucwords(strtolower($result['academicYearCourse']['clsCourse']['courseType']['name'])),
+        'points' => number_format($result['jdPoints'], 1),
+        'description' => $section_details['description'],
+      );
+      $prepared_data[] = $section;
+    }
+  }
+
+  return $prepared_data;
+}
+
+function _cls_curriculum_guide_fetch_section_details($client, $section_id, $search_page = false, $section_page = false){
+  set_time_limit(0);
+
+  if (preg_match('/^\d+$/', $section_id)){
+    $section_id = intval($section_id);
+  }
+  else{
+    drupal_not_found();
+    drupal_exit();
+  }
+
+  if($section_id !== 0 && $section_id !== 1){
+    $client_id = variable_get('cls_client_id');
+    $client_secret = variable_get('cls_client_secret');
+    $client = cls_rest_api_make_api_request($client_id, $client_secret);
+    $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+    $response = $client->fetch($endpoint_base_url.'/public/curriculum/courses/'.$section_id.'/details', null, 'GET', array('Content-Type' => 'application/json'));
+
+    $cls_curriculum_guide_selected_years = variable_get('cls_curriculum_guide_selected_years');
+    $admin_selected_years = array_filter($cls_curriculum_guide_selected_years, function($id){return $id !== 0;});
+
+
+    $data = array();
+    if(isset($response['result']['course']) && $response['code'] !== 404){
+
+      $section = $response['result']['course'];
+      $section_year_id = $section['term']['schoolYear']['id'];
+
+      if(!in_array($section_year_id, $admin_selected_years) && strpos(current_path(), 'courses/sections/') !== false){
+        drupal_not_found();
+        drupal_exit();
+      }
+
+      $course_number = $section['academicYearCourse']['clsCourse']['universityCourse']['number'];
+      $title = $course_number . ' ' . $section['sectionName'];
+
+      if ($section_page == true) drupal_set_title(t($title));
+
+      $schedule_data = _cls_curriculum_guide_format_schedule_and_location($response['result']['schedules']);
+      $other_sections = (arg(1) == 'sections') ? _cls_curriculum_guide_get_section_other_sections($client, $course_number, $section_id) : array();
+      $instructors = ($search_page == true) ?
+                    _cls_curriculum_guide_get_instructors_for_search_page($response['result']['instructors']) :
+                    _cls_curriculum_guide_get_instructors_for_section($response['result']['instructors']);
+
+      $data = array(
+        'id' => $section_id,
+        'academic_year_id' => $section['academicYearCourse']['academicYear']['id'],
+        'name' => $section['sectionName'],
+        'course_code' => str_replace(' -', '_', $section['courseCode']),
+        'course_calendar_year' => $section['term']['calendarYear'],
+        'course_cu_term_number' => $section['term']['cuTermNumber'],
+        'course_number' => $course_number,
+        'section' => sprintf('%03d', $section['section']),
+        'semester' => $section['term']['termName'],
+        'schedules' => $schedule_data['schedules'],
+        'locations' => $schedule_data['locations'],
+        'instructors' => $instructors,
+        'description' => nl2br(html_entity_decode($section['courseDescription'])),
+        'points' => number_format(intval($section['jdPoints']), 1),
+        'method' => $section['evaluationMethod'],
+        'course_type' => ucwords(strtolower($section['academicYearCourse']['clsCourse']['courseType']['name'])),
+        'level' => $section['academicYearCourse']['courseLevel'],
+        'jd_writing_credit_description' => _cls_curriculum_guide_get_section_jd_writing_credit_description($section),
+        'registration_limitations' => ($section['registrationLimitations'] == '') ? 'None' : $section['registrationLimitations'],
+        'instructor_prerequistes' => ($section['instructorPreRequisites'] == '') ? 'None' : $section['instructorPreRequisites'],
+        'instructor_corequisites' => ($section['instructorCoRequisites'] == '') ? 'None' : $section['instructorCoRequisites'],
+        'recommended_courses' => ($section['recommendedCourses'] == '') ? 'None' : $section['recommendedCourses'],
+        'goals' => _cls_curriculum_guide_get_section_goals($response['result']['goals']),
+        'categories' => _cls_curriculum_guide_get_section_categories($response['result']['curriculumCategories']),
+        'other_sections' => $other_sections,
+      );
+    }
+    elseif($response['code'] == 404){
+      drupal_not_found();
+      drupal_exit();
+    }
+    else{
+      watchdog('cls_curriculum_guide', '_cls_curriculum_guide_fetch_section_details: <pre>@print_r</pre>', array('@print_r' => print_r($response, TRUE)), WATCHDOG_ERROR);
+    }
+  }
+
+  return $data;
+}
+
+function _cls_curriculum_guide_get_section_other_sections($client, $number, $section_id){
+  $numbers = array();
+  $numbers[] = $number;
+  $qp = array(
+    'courseNumber' => $numbers,
+  );
+
+  $results = _cls_curriculum_guide_fetch_search_results($client, $qp);
+
+  $other_section_ids = array();
+
+  foreach($results['result'] as $result){
+    if($result['id'] !== intval($section_id)){
+      $other_section_ids[] = $result['id'];
+    }
+  }
+
+  $other_sections_data = (count($other_section_ids) > 0) ? _cls_curriculum_guide_get_section_other_sections_data($client, $other_section_ids) : array();
+
+  return $other_sections_data;
+}
+
+function _cls_curriculum_guide_get_section_other_sections_data($client, $other_section_ids){
+  set_time_limit(0);
+
+  $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+  $data = array();
+
+  foreach($other_section_ids as $id){
+    if (preg_match('/^\d+$/', $id)){
+      $id = intval($id);
+    }
+    else{
+      continue;
+    }
+
+    if($id !== 0 && $id !== 1){
+      $client_id = variable_get('cls_client_id');
+      $client_secret = variable_get('cls_client_secret');
+      $client = cls_rest_api_make_api_request($client_id, $client_secret);
+      $response = $client->fetch($endpoint_base_url.'/public/curriculum/courses/'.$id.'/details', null, 'GET', array('Content-Type' => 'application/json'));
+      if(isset($response['result']['course'])){
+        $section = $response['result']['course'];
+        $schedule_data = _cls_curriculum_guide_format_schedule_and_location($response['result']['schedules']);
+        $section_semester = 'Section ' . sprintf('%03d', $section['section']) . ', ' . $section['term']['termName'];
+        $object = array(
+          'id' => $id,
+          'schedules' => $schedule_data['schedules'],
+          'section_semester' => $section_semester,
+          'instructors' => _cls_curriculum_guide_get_instructors_for_section($response['result']['instructors']),
+        );
+        $data[] = $object;
+      }else{
+        watchdog('cls_curriculum_guide', '_cls_curriculum_guide_get_section_other_sections_data: <pre>@print_r</pre>', array('@print_r' => print_r($response, TRUE)), WATCHDOG_ERROR);
+      }
+    }
+  }
+
+  return $data;
+}
+
+function _cls_curriculum_guide_fetch_sections_by_instructor($client, $id){
+  $client_id = variable_get('cls_client_id');
+  $client_secret = variable_get('cls_client_secret');
+  $client = cls_rest_api_make_api_request($client_id, $client_secret);
+  $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+  $section_ids = array();
+
+  if (preg_match('/^\d+$/', $id)){
+    $id = intval($id);
+  }
+  else{
+    drupal_not_found();
+    drupal_exit();
+  }
+
+  $results = $client->fetch($endpoint_base_url.'/public/curriculum/instructor/'.$id.'/courses', null, 'GET', array('Content-Type' => 'application/json'));
+  foreach($results['result'] as $result){
+    $section_ids[] = $result['id'];
+  }
+
+  $sections_data = (count($section_ids) > 0) ? _cls_curriculum_guide_get_instructor_sections_data($client, $section_ids) : array();
+
+  return $sections_data;
+}
+
+function _cls_curriculum_guide_get_instructor_sections_data($client, $section_ids){
+  $data = array();
+  foreach($section_ids as $id){
+    $object = _cls_curriculum_guide_fetch_section_details($client, $id);
+    $data[] = $object;
+  }
+
+  return $data;
+}
+
+function _cls_curriculum_guide_prepare_instructor_data($client, $id){
+  $client_id = variable_get('cls_client_id');
+  $client_secret = variable_get('cls_client_secret');
+  $client = cls_rest_api_make_api_request($client_id, $client_secret);
+  $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+  $id = intval($id);
+  $instructor_data = array();
+
+  if( is_int($id) ){
+    $response = $client->fetch($endpoint_base_url.'/public/directory/employees/'. $id, null, 'GET', array('Content-Type' => 'application/json'));
+    $result = $response['result'];
+
+    if(isset($result) && $response['code'] !== 404){
+      $name = $result['employee']['firstName'] . ' ' . $result['employee']['lastName'];
+      drupal_set_title(t($name));
+
+      $cas_name = $result['employee']['login'];
+      $user_data = db_query(
+        "SELECT u.uid FROM {cas_user} cu INNER JOIN {users} u ON u.uid = cu.uid WHERE cu.cas_name = :cas_name",
+            array(':cas_name' => $cas_name)
+        )->fetchObject();
+
+      if (isset($user_data->uid) && $user_data->uid) {
+        $user_loaded = user_load($user_data->uid);
+      }
+
+      if($user_loaded){
+        $photo_url = isset($user_loaded->field_faculty_profile_image['und'][0]['uri']) ? file_create_url($user_loaded->field_faculty_profile_image['und'][0]['uri'])
+        : '';
+        $profile_url = drupal_get_path_alias("/user/" . $user_loaded->uid);
+
+      }
+      else{
+        $photo_url = '';
+        $profile_url = '';
+      }
+
+      $instructor_data = array(
+        'name' => $name,
+        'login' => $result['employee']['login'],
+        'title' => $result['titles'][0]['title'],
+        'profile_url' => $profile_url,
+        'photo_url' => $photo_url,
+      );
+    }
+    elseif($response['code'] == 404){
+      drupal_not_found();
+      drupal_exit();
+    }
+    else{
+      watchdog('cls_curriculum_guide', '_cls_curriculum_guide_prepare_instructor_data: <pre>@print_r</pre>', array('@print_r' => print_r($response, TRUE)), WATCHDOG_ERROR);
+    }
+
+    return $instructor_data;
+  }
+  else{
+    drupal_not_found();
+    drupal_exit();
+  }
+
+}
+
+function _cls_curriculum_guide_remove_trailing_commas($json){
+  $json = preg_replace('/,\s*([\]}])/m', '$1', $json);
+  return $json;
+}
+
+function _cls_curriculum_guide_get_weekdays(){
+  $timestamp = strtotime('next Monday');
+  $days = array();
+  for ($i = 0; $i < 5; $i++) {
+    $days[] = strftime('%a', $timestamp);
+    $timestamp = strtotime('+1 day', $timestamp);
+  }
+
+  return $days;
+}
+
+function _cls_curriculum_guide_get_hours($lower = 0, $upper = 86400, $step = 3600, $format = '') {
+  $times = array();
+
+  if(empty($format)){
+    $format = 'g:i a';
+  }
+  $index = 'g A';
+
+  foreach(range($lower, $upper, $step) as $increment){
+    $gmdate = gmdate('H:i', $increment);
+    list($hour, $minutes) = explode(':', $gmdate);
+    $date = new DateTime($hour . ':' . $minutes);
+    $times[(string) $date->format($index)] = $date->format($format);
+  }
+
+  return $times;
+}
+
+function _cls_curriculum_guide_get_course_points(){
+  $points = array();
+  for ($i = 0; $i < 4; $i++) {
+    $points[$i] = $i . ' pts';
+  }
+
+  return $points;
+}
+
+function _cls_curriculum_guide_format_schedule_and_location($schedules){
+  $data = array();
+  $formatted_schedules = array();
+  $formatted_locations = array();
+
+  foreach($schedules as $schedule){
+    $days = $schedule['weekdays'];
+    $start_time = date("g:i", strtotime($schedule['startTime']['localTime']));
+    $end_time = date("g:i a", strtotime($schedule['endTime']['localTime']));
+    $formatted_schedules[] = $days . ' ' . $start_time . '-' . $end_time;
+    if($schedule['buildingCode'] !== 'TBA'){
+      $formatted_locations[] = $schedule['buildingCode'] . ' ' . $schedule['classRoom'];
+    }else{
+      $formatted_locations[] = 'T.B.A.';
+    }
+  }
+
+  $data = array(
+    'schedules' => $formatted_schedules,
+    'locations' => $formatted_locations,
+  );
+
+  return $data;
+}
+
+function _cls_curriculum_guide_get_instructors_for_search_page($instructors){
+  $data = array();
+
+  foreach($instructors as $instructor){
+    $f_name = $instructor['instructor']['firstName'];
+    $f_initial = substr($f_name, 0, 1);
+    $l_name = $instructor['instructor']['lastName'];
+
+    $object = array(
+      'name' => $f_initial . ". " . $l_name,
+    );
+    $data[] = $object;
+  }
+
+  return $data;
+}
+
+function _cls_curriculum_guide_get_instructors_for_section($instructors){
+  $data = array();
+  foreach($instructors as $instructor){
+    $f_name = $instructor['instructor']['firstName'];
+    $f_initial = substr($f_name, 0, 1);
+    $l_name = $instructor['instructor']['lastName'];
+    $cas_name = $instructor['instructor']['login'];
+
+    $user_data = db_query(
+      "SELECT u.uid FROM {cas_user} cu INNER JOIN {users} u ON u.uid = cu.uid WHERE cu.cas_name = :cas_name",
+          array(':cas_name' => $cas_name)
+      )->fetchObject();
+
+    if (isset($user_data->uid) && $user_data->uid) {
+      $user_loaded = user_load($user_data->uid);
+    }
+
+    if($user_loaded){
+      $photo_url = isset($user_loaded->field_faculty_profile_image['und'][0]['uri']) ? file_create_url($user_loaded->field_faculty_profile_image['und'][0]['uri'])
+      : '';
+    }
+    else{
+      $photo_url = '';
+    }
+
+    $object = array(
+      'id' => $instructor['instructor']['id'],
+      'name' => $f_initial . ". " . $l_name,
+      'full_name' => $f_name . ' ' . $l_name,
+      'login' => $instructor['instructor']['login'],
+      'photo_url' => $photo_url,
+    );
+    $data[] = $object;
+  }
+  return $data;
+}
+
+function _cls_curriculum_guide_get_section_jd_writing_credit_description($course){
+  $minor_writing_credit_available = $course['minorWritingCreditAvailable'];
+  $minor_writing_credit_automatically = $course['minorWritingCreditAutomatically'];
+  $major_writing_credit_available = $course['majorWritingCreditAvailable'];
+  $writing_credit_note = $course['writingCreditNote'];
+  $jd_writing_credit_description = '';
+
+  if($minor_writing_credit_available == 1) {
+    $jd_writing_credit_description .= 'Minor';
+    if($minor_writing_credit_automatically == 1) {
+      $jd_writing_credit_description .= ' (automatic)';
+    }
+    else{
+      $jd_writing_credit_description .= ' (upon consultation)';
+    }
+  }
+
+  if($major_writing_credit_available == 1 && $minor_writing_credit_available == 1) {
+    $jd_writing_credit_description .= ', ';
+  }
+
+  if($major_writing_credit_available == 1 ) {
+    $jd_writing_credit_description .= 'Major (only upon consultation)';
+  }
+
+  if($writing_credit_note != '') {
+    if($major_writing_credit_available == 1 || $minor_writing_credit_available == 1) {
+      $jd_writing_credit_description .= ' ';
+    }
+    $jd_writing_credit_description .= "($writing_credit_note)";
+  }
+  if($jd_writing_credit_description == '') {
+    $jd_writing_credit_description = 'No';
+  }
+
+  return $jd_writing_credit_description;
+}
+
+function _cls_curriculum_guide_get_section_goals($goals){
+
+  $data = array('primary' => array(), 'secondary' => array());
+
+  foreach($goals as $goal){
+    if($goal['goalType'] == 'PRIMARY'){
+      $data['primary'][] = $goal['goal'];
+    }else{
+      $data['secondary'][] = $goal['goal'];
+    }
+  }
+
+  return $data;
+}
+
+function _cls_curriculum_guide_get_section_categories($categories){
+  $data = array();
+
+  foreach($categories as $cat){
+    $object = array();
+    $object['id'] = $cat['curriculumCategory']['id'];
+    $object['name'] = $cat['curriculumCategory']['name'];
+    $data[] = $object;
+  }
+
+  return $data;
+}
+
+function _cls_curriculum_guide_load_offering_by_course_number($client, $course_number){
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'cls_cg_offering')
+        ->propertyCondition('course_offering_number', $course_number, '=');
+  $result = $query->execute();
+
+  if (isset($result['cls_cg_offering'])) {
+    $result = array_keys($result['cls_cg_offering']);
+  }
+
+  $offering = array();
+
+  if(isset($result[0])){
+    $offering = _cls_curriculum_guide_fetch_course_offering_data($client, $result[0]);
+  }
+
+  return $offering;
+}

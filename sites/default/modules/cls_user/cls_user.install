@@ -1,0 +1,276 @@
+<?php
+// $Id: cls_user.install 1122 2011-06-21 07:16:43Z cstuck $
+
+/**
+ * @file
+ * Install file for the cls_user module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * @see node_type_set_defaults()
+ * @see field_info_instance()
+ * @see field_update_instance()
+ * @see field_create_field()
+ * @see field_create_instance()
+ */
+function cls_user_install() {
+  // use get_t() to get the name of our localization function for translation
+  // during install, when t() is not available.
+  $t = get_t();
+
+  // Create all the fields we are adding to our content type.
+  // http://api.drupal.org/api/function/field_create_field/7
+  foreach (_cls_user_installed_fields() as $field) {
+    field_create_field($field);
+  }
+
+  // Create all the instances for our fields.
+  // http://api.drupal.org/api/function/field_create_instance/7
+  foreach (_cls_user_installed_instances() as $instance) {
+    $instance['entity_type'] = 'user';
+    $instance['bundle'] = 'user';
+    field_create_instance($instance);
+  }
+
+}
+
+/**
+ * Return a structured array defining the fields created by this content type.
+ *
+ * This is packaged in a function so it can be used in both
+ * cls_user_install() and cls_user_uninstall().
+ */
+function _cls_user_installed_fields() {
+  $t = get_t();
+  return array(
+    'cls_user_first_name' => array(
+      'field_name' => 'cls_user_first_name',
+      'type'       => 'text',
+      'cardinality' => 1,
+    ),
+    'cls_user_middle_name' => array(
+        'field_name' => 'cls_user_middle_name',
+        'type'       => 'text',
+        'cardinality' => 1,
+    ),
+    'cls_user_last_name' => array(
+      'field_name'  => 'cls_user_last_name',
+      'cardinality' => 1,
+      'type'        => 'text',
+    ),
+    'cls_user_prefix' => array(
+      'field_name'  => 'cls_user_prefix',
+      'cardinality' => 1,
+      'type'        => 'text',
+    ),
+    'cls_user_suffix' => array(
+      'field_name'  => 'cls_user_suffix',
+      'cardinality' => 1,
+      'type'        => 'text',
+    ),
+    'cls_user_advance_id' => array(
+        'field_name'  => 'cls_user_advance_id',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_user_harris_id' => array(
+        'field_name'  => 'cls_user_harris_id',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_user_department' => array(
+        'field_name'  => 'cls_user_department',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_user_title' => array(
+        'field_name'  => 'cls_user_title',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_user_alternate_email' => array(
+        'field_name'  => 'cls_user_alternate_email',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_user_alumni_preferred_degree' => array(
+          'field_name'  => 'cls_user_alumni_preferred_degree',
+          'cardinality' => 1,
+          'type'        => 'text',
+    ),
+    'cls_user_alumni_preferred_year' => array(
+          'field_name'  => 'cls_user_alumni_preferred_year',
+          'cardinality' => 1,
+          'type'        => 'text',
+    ),
+    'cls_user_alumni_preferred_email' => array(
+            'field_name'  => 'cls_user_alumni_preferred_email',
+            'cardinality' => 1,
+            'type'        => 'text',
+    ),
+    'cls_user_raisers_edge_id' => array(
+          'field_name'  => 'cls_user_raisers_edge_id',
+          'cardinality' => 1,
+          'type'        => 'text',
+    ),
+    'cls_user_uni' => array(
+              'field_name'  => 'cls_user_uni',
+              'cardinality' => 1,
+              'type'        => 'text',
+    ),
+    'cls_user_upn' => array(
+                'field_name'  => 'cls_user_upn',
+                'cardinality' => 1,
+                'type'        => 'text',
+    ),
+
+  );
+}
+
+/**
+ * Return a structured array defining the instances for this content type.
+ *
+ * The instance lets Drupal know which widget to use to allow the user to enter
+ * data and how to react in different view modes.  We are going to display a
+ * page that uses a custom "cls_user_list" view mode.  We will set a
+ * cardinality of three allowing our content type to give the user three color
+ * fields.
+ *
+ * This is provided as a function so that it can be used in both hook_install()
+ * and hook_uninstall().
+ */
+function _cls_user_installed_instances() {
+  $t = get_t();
+  return array(
+    'cls_user_first_name' => array(
+      'field_name' => 'cls_user_first_name',
+      'label' => $t('First Name'),
+      'required' => FALSE,
+    ),
+    'cls_user_middle_name' => array(
+      'field_name' => 'cls_user_middle_name',
+      'label' => $t('Middle Name'),
+      'required' => FALSE,
+    ),
+    'cls_user_last_name' => array(
+      'field_name'  => 'cls_user_last_name',
+      'label' => $t('Last Name'),
+      'required' => FALSE,
+    ),
+    'cls_user_prefix' => array(
+        'field_name'  => 'cls_user_prefix',
+        'label' => $t('Prefix'),
+        'required' => FALSE,
+    ),
+    'cls_user_suffix' => array(
+        'field_name'  => 'cls_user_suffix',
+        'label' => $t('Suffix'),
+        'required' => FALSE,
+    ),
+    'cls_user_advance_id' => array(
+        'field_name'  => 'cls_user_advance_id',
+        'label' => $t('Advance ID'),
+        'required' => FALSE,
+    ),
+    'cls_user_harris_id' => array(
+        'field_name'  => 'cls_user_harris_id',
+        'label' => $t('Harris ID'),
+        'required' => FALSE,
+    ),
+    'cls_user_department' => array(
+      'field_name'  => 'cls_user_department',
+      'label' => $t('Department'),
+      'required' => FALSE,
+    ),
+    'cls_user_title' => array(
+      'field_name'  => 'cls_user_title',
+      'label' => $t('Title'),
+      'required' => FALSE,
+    ),
+    'cls_user_alternate_email' => array(
+      'field_name'  => 'cls_user_alternate_email',
+      'label' => $t('Altenate Email'),
+      'required' => FALSE,
+    ),
+    'cls_user_alumni_preferred_degree' => array(
+      'field_name'  => 'cls_user_alumni_preferred_degree',
+      'label' => $t('Alumni Preferred Degree'),
+      'required' => FALSE,
+    ),
+    'cls_user_alumni_preferred_year' => array(
+      'field_name'  => 'cls_user_alumni_preferred_year',
+      'label' => $t('Alumni Preferred Year'),
+      'required' => FALSE,
+    ),
+    'cls_user_alumni_preferred_email' => array(
+        'field_name'  => 'cls_user_alumni_preferred_email',
+        'label' => $t('Alumni Preferred Email'),
+        'required' => FALSE,
+    ),
+    'cls_user_raisers_edge_id' => array(
+          'field_name'  => 'cls_user_raisers_edge_id',
+          'label' => $t('Raisers Edge ID'),
+          'required' => FALSE,
+    ),
+    'cls_user_uni' => array(
+          'field_name'  => 'cls_user_uni',
+          'label' => $t('UNI'),
+          'required' => FALSE,
+    ),
+    'cls_user_upn' => array(
+            'field_name'  => 'cls_user_upn',
+            'label' => $t('UPN'),
+            'required' => FALSE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function cls_user_uninstall() {
+  // Loop over each of the fields defined by this module and delete
+  // all instances of the field, their data, and the field itself.
+  // http://api.drupal.org/api/function/field_delete_field/7
+  foreach (array_keys(_cls_user_installed_fields()) as $field) {
+    field_delete_field($field);
+  }
+
+  // Loop over any remaining field instances attached to the cls_user
+  // content type (such as the body field) and delete them individually.
+  // http://api.drupal.org/api/function/field_delete_field/7
+  //$instances = field_info_instances('node', 'cls_user');
+  foreach ($instances as $instance_name => $instance) {
+    field_delete_instance($instance);
+  }
+
+  // Purge all field infromation
+  // http://api.drupal.org/api/function/field_purge_batch/7
+  field_purge_batch(1000);
+
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enables the cls_core module for more mainstream global updates
+ */
+function cls_user_update_7003() {
+  if (!module_enable(array('cls_core'), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enables the cls_migrate_rt custom module.
+ */
+function cls_user_update_7004() {
+  if (!module_enable(array('cls_migrate_rt'), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+

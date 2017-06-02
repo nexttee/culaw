@@ -1,0 +1,453 @@
+<?php
+
+/**
+ * Implements hook_rules_condition_info().
+ */
+function cls_common_rules_condition_info() {
+  return array(
+    'entity_exists' => array(
+      'label' => t('Entity exists by property'),
+      'parameter' => array(
+        'type' => array(
+          'type' => 'text',
+          'label' => t('Entity type'),
+          'options list' => 'rules_entity_action_type_options',
+          'description' => t('Specifies the type of the entity that should be fetched.'),
+          'restriction' => 'input',
+        ),
+        'property' => array(
+          'type' => 'text',
+          'label' => t('Property'),
+          'options list' => 'rules_action_entity_query_property_options_list',
+          'description' => t('The entity property to test for.'),
+          'restriction' => 'input',
+        ),
+        'value' => array(
+          'type' => 'unknown',
+          'label' => t('Value'),
+          'description' => t('The property value of the entity to be fetched.'),
+        ),
+      ),
+      'group' => t('Entities'),
+      'access callback' => 'rules_entity_action_access',
+      'base' => 'cls_common_rules_condition_entity_exists',
+      'callbacks' => array(
+        'form_alter' => 'rules_action_type_form_alter',
+      ),
+    ),
+  );
+}
+
+/**
+ * Condition: Entity exists with the matching property value.
+ */
+function cls_common_rules_condition_entity_exists($type, $property, $value) {
+  $result = entity_property_query($type, $property, $value, 1);
+  return !empty($result);
+}
+
+/**
+ * Implements hook_libraries_info().
+ */
+function cls_common_libraries_info() {
+  return array(
+    'PHPExcel' => array(
+      'name' => 'PHPExcel',
+      'vendor url' => 'http://phpexcel.codeplex.com/',
+      'download url' => 'https://github.com/PHPOffice/PHPExcel',
+      'version arguments' => array(
+        'file' => 'PHPExcel.php',
+        'pattern' => "/@version\s+([0-9\.]+)/",
+        'lines' => 25,
+      ),
+      'files' => array(
+        'php' => array(
+          'PHPExcel.php',
+        ),
+      ),
+    ),
+    'php-pushover' => array(
+      'name' => 'Pushover',
+      'vendor url' => 'https://github.com/kryap/php-pushover',
+      'download url' => 'https://github.com/kryap/php-pushover',
+      'version arguments' => array(
+        'file' => 'Pushover.php',
+        'pattern' => "/@version\s+([0-9\.]+)/",
+        'lines' => 25,
+      ),
+      'files' => array(
+        'php' => array(
+          'Pushover.php',
+        ),
+      ),
+    ),
+  );
+}
+
+function cls_common_cronapi($op, $function = NULL) {
+  switch($op) {
+    case 'list':
+      return array(
+        'cls_common_cronjob_test' => 'CLS Common Cron Job Test',
+      );
+    case 'rule':
+      return '*/5 * * * *'; // Every 5 minutes.
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function cls_courses_preprocess_html(&$variables) {
+  $additional_classes = cls_common_add_body_class();
+  if (!empty($additional_classes)) {
+    $variables['classes_array'] = array_merge($variables['classes_array'], $additional_classes);
+  }
+}
+
+/**
+ * Implements hook_autologout_prevent().
+ *
+ * Prevent autologout from displaying and logging out users
+ * when certain conditions are met.
+ */
+function cls_common_autologout_prevent() {
+  // Don't include autologout JavaScript checks on ajax callbacks.
+  if (in_array(arg(0), array('ajax', 'autologout_ahah_logout', 'autologout_ahah_set_last'))) {
+    return TRUE;
+  }
+}
+
+/**
+ * Adds a class to the body tag of the document.
+ *
+ * @param $class
+ *   (optional) The class name to add.
+ * @return
+ *   An array of classes that have been added.
+ */
+function cls_common_add_body_class($class = '') {
+  $classes = &drupal_static(__FUNCTION__, array());
+  if (!empty($class)) {
+    $classes[] = drupal_html_class($class);
+  }
+  return $classes;
+}
+
+function cls_common_cronjob_test() {
+
+  // Try to load the php-pushover library and check if that worked.
+  if (($library = libraries_load('php-pushover')) && !empty($library['loaded'])) {
+    $push = new Pushover();
+    $push->setToken('fjwHTctkBUDPXkcJFhtmYUKUXueduw');
+    $push->setUser('DoqfUDDBDpBvoFtTpyo1ithdW0xDdX');
+
+    $push->setTitle('Cron Job Test');
+    $push->setMessage('Time: ' . REQUEST_TIME . ', Host: ' . gethostname());
+
+    $push->setTimestamp(time());
+    $push->setDebug(true);
+    $push->setSound('bike');
+
+    $go = $push->send();
+
+    echo '<pre>';
+    print_r($go);
+    echo '</pre>';
+  }
+
+  watchdog('cls_common', 'php-pushover module is not installed.', array(), WATCHDOG_ERROR);
+  return FALSE;
+
+}
+
+function cls_common_send_pushover_notification($title, $message = '') {
+
+  // Try to load the php-pushover library and check if that worked.
+  if (($library = libraries_load('php-pushover')) && !empty($library['loaded'])) {
+    $push = new Pushover();
+    $push->setToken('fjwHTctkBUDPXkcJFhtmYUKUXueduw');
+    $push->setUser('DoqfUDDBDpBvoFtTpyo1ithdW0xDdX');
+
+    $push->setTitle($title);
+    $push->setMessage($message);
+
+    $push->setTimestamp(time());
+    $push->setDebug(true);
+    $push->setSound('bike');
+
+    $go = $push->send();
+    return TRUE;
+  }
+
+  watchdog('cls_common', 'php-pushover module is not installed.', array(), WATCHDOG_ERROR);
+  return FALSE;
+
+}
+
+function cls_common_user_add_role_by_name($role_name, $uid)  {
+  $results = db_select('users_roles', 'ur')
+    ->fields('ur', array('rid'))
+    ->condition('ur.uid', $uid)
+    ->execute();
+  $_add_to_user = TRUE;
+  if ($results->rowCount() > 0)  {
+    // check to see if the user already has this role assigned to them
+    foreach ($results as $rid)  {
+      $name = user_role_load($rid->rid)->name;
+      if ($name == $role_name) {
+        $_add_to_user = FALSE;
+      }
+    }
+  }
+  if ($_add_to_user)  {
+    $results = db_select('role', 'r')
+      ->fields('r', array('rid'))
+      ->condition('r.name', $role_name)
+      ->execute();
+    if ($results->rowCount() > 0)  {
+      if ($record = $results->fetchAssoc()) {
+        $insert = db_insert('users_roles')
+          ->fields(array(
+            'uid' => $uid,
+            'rid' => $record['rid'],
+          ))
+          ->execute();
+        // Updating particular field value based on role.
+        // cls_common_update_user_field($record['rid'], $uid);
+      }
+    }
+  }
+}
+
+function cls_common_user_remove_role_by_name($role_name, $uid)  {
+  $results = db_select('users_roles', 'ur')
+    ->fields('ur', array('rid'))
+    ->condition('ur.uid', $uid)
+    ->execute();
+  $rid = user_role_load_by_name($role_name)->rid;
+  $delete = db_delete('users_roles')
+    ->condition('uid', $uid)
+    ->condition('rid', $rid)
+    ->execute();
+  // Removing role related term from respective fields.
+  // cls_common_remove_role_value_from_field($rid, $uid);
+}
+
+/**
+ * This function will update relevant user field based on current role.
+ */
+function cls_common_update_user_field($rid, $uid) {
+
+  $user = user_load($uid, TRUE);
+  $wrapper_user = entity_metadata_wrapper('user', $user);
+
+  // Getting value from current field and saving it, so that future update won't
+  // overwrite it.
+  $current_jd_gls_terms = $wrapper_user->field_current_student_type->value();
+  foreach ($current_jd_gls_terms AS $term) {
+    $jd_gls_term_ids[] = $term->tid;
+  }
+
+  $prospective_terms = $wrapper_user->field_prospective_student_type->value();
+  foreach ($prospective_terms AS $term) {
+    $prospective_term_ids[] = $term->tid;
+  }
+
+  // Updating settings for student with J.D. and G.L.S. related roles.
+  module_load_include('inc', 'cls_user', 'includes/cls_user.update_user');
+  $jd_student_mapping = cls_user_map_jd_student_role();
+  $gls_student_mapping = cls_user_map_gls_student_role();
+  $jd_student_mapping = array_merge($jd_student_mapping, $gls_student_mapping);
+  if (!empty($jd_student_mapping[$rid])) {
+    $vocabulary = taxonomy_vocabulary_machine_name_load('current_student_type');
+    $jd_gls_term_ids[] = cls_common_get_term_id_from_role($jd_student_mapping[$rid], $vocabulary);
+    // Setting "Current Student Type" field value.
+    $wrapper_user->field_current_student_type->set($jd_gls_term_ids);
+  }
+
+  // Applying processing for "Prospective students' Introduction.
+  $prospective_student_mapping = cls_user_map_prospective_student_role();
+  if (!empty($prospective_student_mapping[$rid])) {
+    $vocabulary = taxonomy_vocabulary_machine_name_load('prospective_student_type');
+    switch ($prospective_student_mapping[$rid]) {
+      case 'My Columbia LL.M. User':
+        $prospective_term_ids[] = cls_user_get_term_id($vocabulary, 'MCLLM');
+        break;
+      case 'My Columbia Law User':
+        $prospective_term_ids[] = cls_user_get_term_id($vocabulary, 'MCL');
+        break;
+      default:
+        $term_ids[] = '';
+    }
+    // Setting "Current Student Type" field value.
+    $wrapper_user->field_prospective_student_type->set($prospective_term_ids);
+  }
+  $wrapper_user->save();
+}
+
+/**
+ * This function will remove relevant term values from field when particular
+ * role is removed.
+ */
+function cls_common_remove_role_value_from_field($rid, $uid) {
+  $user = user_load($uid, TRUE);
+  $wrapper_user = entity_metadata_wrapper('user', $user);
+
+  // Removing J.D and G.L.S role related terms from user fields.
+  module_load_include('inc', 'cls_user', 'includes/cls_user.update_user');
+  $jd_student_mapping = cls_user_map_jd_student_role();
+  $gls_student_mapping = cls_user_map_gls_student_role();
+  $jd_student_mapping = array_merge($jd_student_mapping, $gls_student_mapping);
+
+  if (!empty($jd_student_mapping[$rid])) {
+    $vocabulary = taxonomy_vocabulary_machine_name_load('current_student_type');
+    $jd_gls_term_id = cls_common_get_term_id_from_role($jd_student_mapping[$rid], $vocabulary);
+
+    // Getting value from current field. Iterating values array and remove
+    // particular term related to removed role.
+    $current_jd_gls_terms = $wrapper_user->field_current_student_type->value();
+    foreach ($current_jd_gls_terms AS $term) {
+      if ($term->tid != $jd_gls_term_id) {
+        $jd_gls_term_ids[] = $term->tid;
+      }
+    }
+    $wrapper_user->field_current_student_type->set($jd_gls_term_ids);
+  }
+
+  // Removing "Prospective students' role related terms from user fields.
+  $prospective_student_mapping = cls_user_map_prospective_student_role();
+  if (!empty($prospective_student_mapping[$rid])) {
+    $vocabulary = taxonomy_vocabulary_machine_name_load('prospective_student_type');
+    switch ($prospective_student_mapping[$rid]) {
+      case 'My Columbia LL.M. User':
+        $prospective_term_id = cls_user_get_term_id($vocabulary, 'MCLLM');
+        break;
+      case 'My Columbia Law User':
+        $prospective_term_id = cls_user_get_term_id($vocabulary, 'MCL');
+        break;
+      default:
+        $prospective_term_id = '';
+    }
+    // Getting value from current field. Iterating values array and remove
+    // particular term related to removed role.
+    $current_prospective_terms = $wrapper_user->field_prospective_student_type->value();
+    foreach ($current_prospective_terms AS $term) {
+      if ($term->tid != $prospective_term_id) {
+        $prospective_term_ids[] = $term->tid;
+      }
+    }
+    // Setting "Current Student Type" field value.
+    $wrapper_user->field_prospective_student_type->set($prospective_term_ids);
+  }
+  $wrapper_user->save();
+}
+
+/**
+ * This function will return particular term based on J.D and G.L.S roles.
+ */
+function cls_common_get_term_id_from_role($role_name, $vocabulary) {
+  module_load_include('inc', 'cls_user', 'includes/cls_user.update_user');
+  switch ($role_name) {
+    case 'Admitted Student (J.D.) User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'JD Admitted');
+      break;
+    case 'Deposited Deferred Student (J.D.) User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'JD Deposited Deferred');
+      break;
+    case 'Deposited Student (J.D.) LawNet User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'JD Deposited Lawnet');
+      break;
+    case 'Deposited Student (J.D.) User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'JD Deposited');
+      break;
+    case 'Student: J.D.: 1L User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'JD 1L');
+      break;
+    case 'Student: J.D.: 2L User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'JD 2L');
+      break;
+    case 'Student: J.D.: 3L User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'JD 3L');
+      break;
+    case 'Deferred Student (J.D.) User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'Deferred Student (J.D.) User');
+      break;
+    case 'Admitted Student (GLS) User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'GLS Admitted');
+      break;
+    case 'Committed Student (GLS) Lawnet User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'GLS Committed Lawnet');
+      break;
+    case 'Committed Student (GLS) User':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'GLS Committed');
+      break;
+    case 'Current LL.M. Students':
+      $jd_gls_term_id = cls_user_get_term_id($vocabulary, 'Current LL.M. Students');
+      break;
+    default:
+      $jd_gls_term_id = '';
+  }
+  return $jd_gls_term_id;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cls_common_form_nodequeue_edit_queue_form_alter(&$form, &$form_state, $form_id) {
+  $queue = nodequeue_load(filter_xss(arg(3)));
+  // Add configuration option to specify minimum size for the queue.
+  // Submit buttons will be disable until queue doesn't have minimum specified
+  // nodes.
+  $form['minimum_size'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Minimum Queue size'),
+    '#default_value' => variable_get($queue->name . '_min_size', 0),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#description' => t('The minimum number of nodes will appear in the queue. Enter 0 for no limit'),
+  );
+
+  $form['submit']['#weight'] = 5; // Setting weight of "Submit" button.
+  $form[0]['#weight'] = 5; // Setting weight of "Delete" button.
+
+  $form['#validate'][] = 'cls_common_form_validate';
+  $form['#submit'][] = 'cls_common_form_submit';
+}
+
+/**
+ * Custom validation handler for extra form field on node queue edit form.
+ * This will validate whether $min_size is less than maximum allowed nodes in
+ * queue.
+ */
+function cls_common_form_validate($form, &$form_state) {
+  $max_size = $form_state['values']['size'];
+  $min_size = $form_state['values']['minimum_size'];
+  if ($min_size > $max_size && $max_size != 0) {
+    form_set_error('minimum_size', t('Minimum size should be less than max queue size.'));
+  }
+}
+
+/**
+ * Submit handler to save newly added form field.
+ */
+function cls_common_form_submit($form, &$form_state) {
+  $machine_name = $form_state['values']['name'];
+  variable_set($machine_name . '_min_size', $form_state['values']['minimum_size']);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cls_common_form_nodequeue_arrange_subqueue_form_alter(&$form, &$form_state, $form_id) {
+  // Check whether number of nodes in queue are less than minimum specified.
+  // If there are less nodes then hide submit and related buttons.
+  $min_size = variable_get($form['nodes']['#queue']['name'] . '_min_size', 0);
+  $count = $form['nodes']['#subqueue']['count'];
+  if ($min_size > $count) {
+    $form['actions']['submit']['#disabled']  = TRUE;
+    $form['actions']['reverse']['#disabled'] = TRUE;
+    $form['actions']['shuffle']['#disabled'] = TRUE;
+    $form['actions']['clear']['#disabled']   = TRUE;
+  }
+}

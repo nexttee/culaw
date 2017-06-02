@@ -1,0 +1,144 @@
+<?php
+
+include_once "cls_user.features.inc";
+
+/**
+* Implements hook_menu().
+*/
+function cls_user_menu() {
+  $items = array();
+
+  $items['delegated-masquerade/%user'] = array(
+    'title' => 'Masquerade as user',
+    'page callback' => 'cls_user_delegated_masquerade_page',
+    'page arguments' => array(1),
+    'type' => MENU_CALLBACK,
+    'access callback' => 'cls_user_edit_access',
+    'access arguments' => array(1),
+  );
+
+  return $items;
+}
+
+function cls_user_menu_alter(&$items) {
+  $items['user/%user/edit']['access callback'] = 'cls_user_edit_access';
+  $items['user/%user/edit']['access arguments'] = array(1);
+  $items['delegated-masquerade/%user']['access callback'] = 'cls_user_edit_access';
+  $items['delegated-masquerade/%user']['access arguments'] = array(1);
+}
+
+function cls_user_permission() {
+  return array(
+    'edit delegated users - jd admissions' => array(
+      'title' => t('Edit delegated users: J.D. Admissions'),
+      'description' => t('Edit J.D. prospective, applied, admitted, and committed student users.'),
+    ),
+    'edit delegated users - gls admissions' => array(
+      'title' => t('Edit users: GLS Admissions'),
+      'description' => t('Edit GLS prospective, applied, admitted, and committed student users.'),
+    ),
+  );
+}
+
+function cls_user_delegated_masquerade_page($account = NULL) {
+  global $user;
+  static $_original_user, $_old_state;
+
+  if (!is_null($account)) {
+    ///TODO check $_original_user, $_old_state are NOT set
+    $_original_user = $user;
+    $_old_state = drupal_save_session();
+    $new_user = user_load($account->uid);
+    drupal_save_session(TRUE);
+    drupal_session_regenerate();
+    $user = $new_user;
+  }
+  return 'You are now masquerading.';
+}
+
+function cls_user_edit_access($account) {
+/*
+  $echo = cls_user_check_user_roles($account);
+  print_r($account);
+*/
+  return ((user_edit_access($account)) || cls_user_check_user_roles($account)) && $account->uid > 0;
+}
+
+function cls_user_check_user_roles($user) {
+  if (is_numeric($user)) {
+    $user = user_load($user);
+  }
+  elseif (is_string($user)) {
+    $user = user_load_by_name($user);
+  }
+  elseif (!is_object($user) || !isset($user->roles)) {
+    return FALSE;
+  }
+  return cls_user_check_roles($user->roles);
+}
+
+function cls_user_check_roles($roles = array()) {
+  foreach ($roles as $rid => $role) {
+    if ($rid != DRUPAL_AUTHENTICATED_RID) {
+      if (!cls_user_check_role_permission($role)) {
+        return FALSE;
+      }
+    }
+  }
+
+  // Handle the case where the target user has just the authenticated user role.
+  // If it is the target user's only role, only then we ned to check if the
+  // current user has rights to switch to the target user.
+  if (count($roles) == 1 && key($roles) == DRUPAL_AUTHENTICATED_RID
+        && !cls_user_check_role_permission('authenticated user')) {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+function cls_user_check_role_permission($role) {
+  $role_delegations = array(
+    'My Columbia Law User' => 'jd',
+    'My Columbia LL.M. User' => 'gls',
+    'Admitted Student (GLS) User' => 'gls',
+    'Admitted Student (J.D.) User' => 'jd',
+    'Deposited Student (J.D.) User' => 'jd',
+    'Deferred Student (J.D.) User' => 'jd',
+    'Deposited Deferred Student (J.D.) User' => 'jd',
+    'Deposited Student (J.D.) LawNet User' => 'jd',
+    'Deposited Student (GLS) User' => 'gls',
+    'Committed Student (GLS) User' => 'gls',
+  );
+  if (isset($role_delegations[$role])) {
+    $permission = 'edit delegated users - ' . $role_delegations[$role] . ' admissions';
+    return user_access($permission);
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function cls_user_entity_info_alter(&$entity_info) {
+  $entity_info['user']['view modes']['faculty_detail'] = array(
+    'label' => t('Faculty Detail'),
+    'custom settings' => TRUE,
+  );
+  $entity_info['paragraphs_item']['view modes']['faculty_detail_items'] = array(
+    'label' => t('Faculty Detail Items'),
+    'custom settings' => TRUE,
+  );
+}
+
+/**
+ * Implements hook_entity_view_mode_alter().
+ */
+function cls_user_entity_view_mode_alter(&$view_mode, $context) {
+  if ($context['entity_type'] == 'user'){
+    $user = $context['entity'];
+    $rid = array_search('Faculty User', user_roles());
+    if (user_has_role($rid, $user)) {
+      $view_mode = 'faculty_detail';
+    }
+  }
+}

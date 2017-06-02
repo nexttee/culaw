@@ -1,0 +1,403 @@
+<?php
+
+/**
+ * Implements hook_libraries_info().
+ */
+function cls_mandrill_integration_libraries_info() {
+  $libraries['mandrill-php'] = array(
+    'name' => 'mandrill-php',
+    'vendor url' => 'https://github.com/kai5263499/mandrill-php',
+    'download url' => 'https://github.com/kai5263499/mandrill-php/archive/master.zip',
+    'version arguments' => array(
+      'file' => 'Mandrill.php',
+      'pattern' => '/version\s([0-9\.-]+)/',
+    ),
+    'versions' => array(
+      '1.0' => array(
+        'files' => array(
+          'php' => array(
+            'Mandrill.php',
+          ),
+        ),
+      ),
+    ),
+  );
+  return $libraries;
+}
+
+/**
+ * Sends a single email through Mandrill.
+ *
+ * @param array $message_options
+ *   An associative array containing with the following keys:
+ *   - html: (optional if text key is included) The HTML version of the email.
+ *   - text: (optional if html key is included) The text version of the email.
+ *   - subject: The subject line of the email. Default: Test email
+ *   - from_email: The email address of the sender. Default: $conf['site_mail']
+ *   - from_name: (optional) The name of the sender.
+ *   - to_email: The email address of the recipient. Default: $conf['site_mail']
+ *   - to_name: (optional) The name of the recipient.
+ *   - track_opens: Track opens. Default: TRUE
+ *   - track_clicks: Track clicks. Default: TRUE
+ *   - auto_text: Autogenerate text copy from HTML if no text version is sent. Default: TRUE
+ *   - url_strip_qs: Strip querystrings from URLs. Default: TRUE
+ * @param array $metadata
+ *   (optional) An associative array containing Mandrill metadata fields.
+ * @param string $api_key
+ *   (optional) The Mandrill API key to use.
+ *   Default: the value of the cls_mandrill_integration.config.mandrill_api_key
+ *   Drupal variable.
+ * @param array $send_options
+ *   (optional) An associative array containing the following
+ *   optional key-value pairs:
+ *     - 'force_production_mode': A boolean to indicate if the message should be
+ *       sent to the original recipient even when this module is configured to
+ *       run in test mode. This is useful for allowing test users to receive
+ *       email triggered by their own actions (i.e., registration emails,
+ *       cancellation emails, password resets, etc.). Defaults to: FALSE
+ *
+ * @return
+ *   A boolean indicating if the whether the email was successfully sent.
+ */
+function cls_mandrill_integration_send_email($message_options, $metadata = array(), $api_key = '', $send_options = array()) {
+
+  global $conf;
+
+  // Provide default send options
+  $send_options += array(
+    'force_production_mode' => FALSE,
+  );
+
+  // Provide default message options
+  $message_options += array(
+    'html' => "",
+    'text' => "",
+    'subject' => "Test email",
+    'from_email' => $conf['site_mail'],
+    'to_email' => $conf['site_mail'],
+    'track_opens' => TRUE,
+    'track_clicks' => TRUE,
+    'auto_text' => TRUE,
+    'url_strip_qs' => TRUE,
+  );
+
+  // If both html and text message options are blank,
+  // then return FALSE.
+  if ($message_options['html'] == '' && $message_options['text']) {
+    return FALSE;
+  }
+
+  // Try to load the Mandrill library and check if that worked.
+  if (($library = libraries_load('mandrill-php')) && !empty($library['loaded'])) {
+
+    $force_production_mode = FALSE;
+    if (!empty($send_options['force_production_mode']) && $send_options['force_production_mode'] == TRUE) {
+      $force_production_mode = TRUE;
+    }
+
+    // If module is not in production mode, then send all emails to
+    // the site administrator.
+    $production_mode = variable_get('cls_mandrill_integration.config.production_mode', FALSE);
+    if ($production_mode != TRUE && $force_production_mode != TRUE) {
+      $metadata['original_recipient'] = $message_options['to_email'];
+      $message_options['to_email'] = $conf['site_mail'];
+    }
+
+    // Set the Mandrill API key.
+    if ($api_key != '') {
+      Mandrill::setApiKey($api_key);
+    }
+    else {
+      Mandrill::setApiKey(variable_get('cls_mandrill_integration.config.mandrill_api_key'));
+    }
+
+    // Build the Mandrill message array.
+    $message = array();
+    $message['html'] = $message_options['html'];
+    $message['text'] = $message_options['text'];
+    $message['subject'] = $message_options['subject'];
+    $message['from_email'] = $message_options['from_email'];
+    $message['from_name'] = $message_options['from_name'];
+    $message['to'][0] = (object) array(
+      'email' => $message_options['to_email'],
+      'name' => $message_options['to_name'],
+    );
+    $message['track_opens'] = $message_options['track_opens'];
+    $message['track_clicks'] = $message_options['track_clicks'];
+    $message['auto_text'] = $message_options['auto_text'];
+    $message['url_strip_qs'] = $message_options['url_strip_qs'];
+    $message['metadata'] = $metadata;
+
+    // Send the request to Mandrill.
+    $response = Mandrill::call(array('type'=>'messages', 'call'=>'send', 'message'=> (object) $message));
+
+    return cls_mandrill_integration_process_mandrill_response($response, $message_options['subject'], $message_options['to_email']);
+
+  }
+  watchdog('cls_mandrill_integration', 'Mandrill library is not installed.', array(), WATCHDOG_ERROR);
+  return FALSE;
+
+}
+
+/**
+ * Sends a single email through Mandrill using a Mandrill template.
+ *
+ * @param string $template_name
+ *   The name/slug of an existing admininstrator-created template on Mandrill.
+ *
+ * @param array $message
+ *   An associative array containing with the following keys:
+ *   - text: (optional) The text version of the email.
+ *   - subject: The subject line of the email. Default: Test email
+ *   - from_email: The email address of the sender. Default: $conf['site_mail']
+ *   - from_name: (optional) The name of the sender.
+ *   - to_email: The email address of the recipient. Default: $conf['site_mail']
+ *   - to_name: (optional) The name of the recipient.
+ *   - track_opens: Track opens. Default: TRUE
+ *   - track_clicks: Track clicks. Default: TRUE
+ *   - auto_text: Autogenerate text copy from HTML if no text version is sent.
+ *     Default: TRUE
+ *   - url_strip_qs: Strip querystrings from URLs. Default: TRUE
+ * @param array $merge_variables
+ *   (optional) An associative array containing Mandrill template merge field
+ *   names as keys and the replacement content as values.
+ * @param array $metadata
+ *   (optional) An associative array containing Mandrill metadata fields.
+ * @param string $api_key
+ *   (optional) The Mandrill API key to use.
+ *   Default: the value of the cls_mandrill_integration.config.mandrill_api_key
+ *   Drupal variable.
+ * @param array $send_options
+ *   (optional) An associative array containing the following
+ *   optional key-value pairs:
+ *     - 'force_production_mode': A boolean to indicate if the message should be
+ *       sent to the original recipient even when this module is configured to
+ *       run in test mode. This is useful for allowing test users to receive
+ *       email triggered by their own actions (i.e., registration emails,
+ *       cancellation emails, password resets, etc.). Defaults to: FALSE
+ *     - 'use_template_defaults': A boolean to indicate if the template defaults
+ *       for subject, from_name, and from_email should be used if the caller
+ *       doesn't specify these options in the message_options parameter. This is
+ *       useful for allowing the subject, from_name, and from_email to all be set
+ *       from within Mandrill by the Mandrill account owner instead of hardcoded
+ *       within the calling module. Defaults to FALSE
+ *
+ * @return
+ *   A boolean indicating if the whether the email was successfully sent.
+ */
+function cls_mandrill_integration_send_template_email($template_name = 'Basic', $message_options, $merge_variables = array(), $metadata = array(), $api_key = '', $send_options = array()) {
+
+  if (empty($template_name)) {
+    return FALSE;
+  }
+
+  global $conf;
+
+  // Provide default send options
+  $send_options += array(
+    'force_production_mode' => FALSE,
+    'use_template_defaults' => FALSE,
+  );
+
+  // Provide default message options
+  $message_options += array(
+    //'text' => '',
+    'to_email' => $conf['site_mail'],
+    'to_name' => $conf['site_name'],
+    'track_opens' => TRUE,
+    'track_clicks' => TRUE,
+    'auto_text' => TRUE,
+    'url_strip_qs' => TRUE,
+  );
+
+  // Provide defaults for subject, from_email, and from_name
+  // unless $send_options['use_template_defaults'] is set to TRUE
+  if (empty($send_options['use_template_defaults']) || $send_options['use_template_defaults'] !== TRUE) {
+    $message_options += array(
+      'subject' => 'Example subject',
+      'from_email' => $conf['site_mail'],
+      'from_name' => $conf['site_name'],
+    );
+  }
+
+  // Try to load the library and check if that worked.
+  if (($library = libraries_load('mandrill-php')) && !empty($library['loaded'])) {
+
+    $force_production_mode = FALSE;
+    if (!empty($send_options['force_production_mode']) && $send_options['force_production_mode'] == TRUE) {
+      $force_production_mode = TRUE;
+    }
+
+    // If module is not in production mode, then send all emails to
+    // the site administrator.
+    $production_mode = variable_get('cls_mandrill_integration.config.production_mode', FALSE);
+    if ($production_mode != TRUE && $force_production_mode != TRUE) {
+      $metadata['original_recipient'] = $message_options['to_email'];
+      $message_options['to_email'] = $conf['site_mail'];
+    }
+
+    // Set the Mandrill API key.
+    if ($api_key != '') {
+      Mandrill::setApiKey($api_key);
+    }
+    else {
+      Mandrill::setApiKey(variable_get('cls_mandrill_integration.config.mandrill_api_key.cls_admissions'));
+    }
+
+    // Build the merge variables array as required by the Mandrill API.
+    $message_global_merge_vars = array();
+    foreach ($merge_variables as $key => $value) {
+      $merge_variable = array();
+      $merge_variable['name'] = $key;
+      $merge_variable['content'] = $value;
+      $message_global_merge_vars[] = (object) $merge_variable;
+    }
+
+    // Build the Mandrill message array.
+    $message = array();
+    $message['text'] = $message_options['text'];
+    $message['subject'] = $message_options['subject'];
+    $message['from_email'] = $message_options['from_email'];
+    $message['from_name'] = $message_options['from_name'];
+    $message['to'][0] = (object) array(
+      'email' => $message_options['to_email'],
+      'name' => $message_options['to_name'],
+    );
+    $message['track_opens'] = $message_options['track_opens'];
+    $message['track_clicks'] = $message_options['track_clicks'];
+    $message['auto_text'] = $message_options['auto_text'];
+    $message['url_strip_qs'] = $message_options['url_strip_qs'];
+    $message['global_merge_vars'] = $message_global_merge_vars;
+    $message['metadata'] = $metadata;
+
+    $response = Mandrill::call(array('type'=>'messages', 'call'=>'send-template', 'template_name'=>$template_name, 'template_content' => array(), 'message'=> (object) $message));
+    
+    return cls_mandrill_integration_process_mandrill_response($response, $message_options['subject'], $message_options['to_email']);
+
+  }
+  watchdog('cls_mandrill_integration', 'Mandrill library is not installed.', array(), WATCHDOG_ERROR);
+  return FALSE;
+
+}
+
+function cls_mandrill_integration_send_template_email_multiple_recipients(
+        $api_key = '', 
+        $template_name = '', 
+        $recipients = array(),
+        $message_options, 
+        $merge_variables = array(), 
+        $metadata = array(), 
+        $send_options = array()) {
+
+  if ( empty($api_key) || empty($template_name) || empty($recipients) || count($recipients) == 0) {
+    return FALSE;
+  }
+
+  global $conf;
+
+  // Provide default send options
+  $send_options += array(
+    'force_production_mode' => FALSE,
+    'use_template_defaults' => FALSE,
+  );
+
+  // Provide default message options
+  $message_options += array(
+    'to_email' => $conf['site_mail'],
+    'to_name' => $conf['site_name']
+  );
+
+  // Provide defaults for subject, from_email, and from_name
+  // unless $send_options['use_template_defaults'] is set to TRUE
+  if (empty($send_options['use_template_defaults']) || $send_options['use_template_defaults'] !== TRUE) {
+    $message_options += array(
+      'subject' => 'Example subject',
+      'from_email' => $conf['site_mail'],
+      'from_name' => $conf['site_name'],
+    );
+  }
+
+  // Try to load the library and check if that worked.
+  if (($library = libraries_load('mandrill-php')) && !empty($library['loaded'])) {
+
+    $force_production_mode = FALSE;
+    if (!empty($send_options['force_production_mode']) && $send_options['force_production_mode'] == TRUE) {
+      $force_production_mode = TRUE;
+    }
+
+    // If module is not in production mode, then send all emails to
+    // the site administrator.
+    $production_mode = variable_get('cls_mandrill_integration.config.production_mode', FALSE);
+    if ($production_mode != TRUE && $force_production_mode != TRUE) {
+      $metadata['original_recipient'] = $message_options['to_email'];
+      $message_options['to_email'] = $conf['site_mail'];
+    }
+
+    // Set the Mandrill API key.
+    Mandrill::setApiKey($api_key);
+    
+    // Build the merge variables array as required by the Mandrill API.
+    $message_global_merge_vars = array();
+    foreach ($merge_variables as $key => $value) {
+      $merge_variable = array();
+      $merge_variable['name'] = $key;
+      $merge_variable['content'] = $value;
+      $message_global_merge_vars[] = (object) $merge_variable;
+    }
+
+    // Build the Mandrill message array.
+    $message = array();
+    $message['text'] = $message_options['text'];
+    $message['subject'] = $message_options['subject'];
+    $message['from_email'] = $message_options['from_email'];
+    $message['from_name'] = $message_options['from_name'];
+    $message['to'] = $recipients;
+    $message['track_opens'] = $message_options['track_opens'];
+    $message['track_clicks'] = $message_options['track_clicks'];
+    $message['auto_text'] = $message_options['auto_text'];
+    $message['url_strip_qs'] = $message_options['url_strip_qs'];
+    $message['global_merge_vars'] = $message_global_merge_vars;
+    $message['metadata'] = $metadata;
+    if(!empty($message_options['merge_language'])) {
+        $message['merge_language'] = $message_options['merge_language'];
+    }
+    if(!empty($message_options['preserve_recipients'])) {
+        $message['preserve_recipients'] = $message_options['preserve_recipients'];
+    }
+    $response = Mandrill::call(array('type'=>'messages', 'call'=>'send-template', 'template_name'=>$template_name, 'template_content' => array(), 'message'=> (object) $message));
+    
+    return cls_mandrill_integration_process_mandrill_response($response, $message_options['subject'], $message_options['to_email']);
+
+  }
+  watchdog('cls_mandrill_integration', 'Mandrill library is not installed.', array(), WATCHDOG_ERROR);
+  return FALSE;
+
+}
+
+/**
+ * Processes a response from Mandrill.
+ */
+function cls_mandrill_integration_process_mandrill_response($response, $subject, $recipient_email) {
+  if (array_key_exists(0, $response)) {
+    if (property_exists($response[0], 'status')) {
+      if ($response[0]->status == 'sent') {
+        return TRUE;
+      }
+      else if ($response[0]->status == 'queued') {
+        return TRUE;
+      }
+      else {
+        watchdog('cls_mandrill_integration', 'Mandrill returned a non-sent, non-queued status when attempting to send a %subject email to %email.', array('%subject' => $subject, '%email' => $recipient_email), WATCHDOG_ERROR);
+        return FALSE;
+      }
+    }
+    else {
+      watchdog('cls_mandrill_integration', 'Mandrill returned an unexpected response when attempting to send a %subject email to %email.', array('%subject' => $subject, '%email' => $recipient_email), WATCHDOG_ERROR);
+      return FALSE;
+    }
+  }
+  else {
+    watchdog('cls_mandrill_integration', 'Mandrill returned an unexpected response when attempting to send a %subject email to %email.', array('%subject' => $subject, '%email' => $recipient_email), WATCHDOG_ERROR);
+    return FALSE;
+  }
+}

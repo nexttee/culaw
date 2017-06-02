@@ -1,0 +1,924 @@
+<?php
+/**
+ * @file
+ * Installation for cls_migrate_rt module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function cls_migrate_rt_schema() {
+  $schema['migrate_profile_main'] = array(
+    'description' => 'The main table for profile records to import from Runtime',
+    'fields' => array(
+      'contact_id' => array(
+        'description' => 'The primary key for the record',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'date_modified' => array(
+        'description' => 'The date the item was last modified',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name_last' => array(
+        'description' => 'Last name',
+        'type' => 'varchar',
+        'length' => 100,
+      ),
+      'name_first' => array(
+        'description' => 'First name',
+        'type' => 'varchar',
+        'length' => 100,
+      ),
+      'name_middle' => array(
+        'description' => 'Middle name',
+        'type' => 'varchar',
+        'length' => 100,
+      ),
+      'prefix' => array(
+        'description' => 'Name prefix',
+        'type' => 'varchar',
+        'length' => 10,
+      ),
+      'suffix' => array(
+        'description' => 'Name suffix',
+        'type' => 'varchar',
+        'length' => 14,
+      ),
+      'title' => array(
+        'description' => 'Person\'s title',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'w_address_1' => array(
+        'description' => 'Work address line 1',
+        'type' => 'varchar',
+        'length' => 100,
+      ),
+      'w_address_2' => array(
+        'description' => 'Work address line 2',
+        'type' => 'varchar',
+        'length' => 100,
+      ),
+      'w_city' => array(
+        'description' => 'Work city',
+        'type' => 'varchar',
+        'length' => 100,
+      ),
+      'w_state' => array(
+        'description' => 'Work state',
+        'type' => 'varchar',
+        'length' => 50,
+      ),
+      'w_zip' => array(
+        'description' => 'Work zip code',
+        'type' => 'varchar',
+        'length' => 50,
+      ),
+      'phone_1' => array(
+        'description' => 'Phone number',
+        'type' => 'varchar',
+        'length' => 70,
+      ),
+      'phone_2' => array(
+        'description' => 'Fax number',
+        'type' => 'varchar',
+        'length' => 70,
+      ),
+      'email' => array(
+        'description' => 'Email address',
+        'type' => 'varchar',
+        'length' => 50,
+      ),
+      'cat1_id' => array(
+        'description' => 'Category 1 ID (Faculty type)',
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'cat2_id' => array(
+        'description' => 'Category 2 ID (secondary faculty type)',
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'usr_meta_1' => array(
+        'description' => 'LawNet username',
+        'type' => 'varchar',
+        'length' => 100,
+      ),
+      'usr_img_1' => array(
+        'description' => 'Profile image path',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'usr_img_2' => array(
+        'description' => 'Image path',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'status' => array(
+        'description' => 'Publication status?',
+        'type' => 'int',
+        'unsigned' => FALSE,
+      ),
+      'w_read' => array(
+        'description' => 'Share (world read)',
+        'type' => 'int',
+        'size' => 'tiny',
+      ),
+      'world_group_id' => array(
+        'description' => 'Group w_read applies to',
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'UUID',
+        'type' => 'varchar',
+        'length' => 40,
+      ),
+      'x_profile_abstract' => array(
+        'description' => 'Short profile',
+        'type' => 'text',
+      ),
+      'catid_list' => array(
+        'description' => 'Array of department IDs',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'x_profile_detail' => array(
+        'description' => 'Full profile',
+        'type' => 'text',
+        'size' => 'medium',
+      ),
+      'x_marketing_abstract' => array(
+        'description' => 'Marketing profile',
+        'type' => 'text',
+        'size' => 'medium',
+      ),
+      'x_assistant_name' => array(
+        'description' => 'Name of assistant',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'x_assistant_email' => array(
+        'description' => 'Assistant email',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'x_assistant_phone' => array(
+        'description' => 'Assistant phone',
+        'type' => 'varchar',
+        'length' => 100,
+      ),
+    ),
+    'primary key' => array('contact_id'),
+    'indexes' => array(
+      'lawnet_user' => array('usr_meta_1'),
+    ),
+    'collation' => 'utf8_unicode_ci',
+  );
+
+  // Extra profile items referenced from profile page right side navigation.
+  $schema['migrate_profile_extras'] = array(
+    'description' => 'Extra elements for each profile',
+    'fields' => array(
+      'contact_id' => array(
+        'description' => 'Contact ID this item belongs to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'element_index' => array(
+        'description' => 'Element index, corresponds to "elementN" from the JSON file',
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'element_name_id' => array(
+        'description' => 'ID of the element category',
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'element_name' => array(
+        'description' => 'Name of this element (displayed in nav)',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'element_description' => array(
+        'description' => 'Content of this item',
+        'type' => 'text',
+        'size' => 'medium',
+      ),
+      'element_url' => array(
+        'description' => 'URL for this item',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'element_attach' => array(
+        'description' => 'Attach variable from JSON',
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+    ),
+    'primary key' => array('contact_id', 'element_index', 'element_name_id'),
+    'collation' => 'utf8_unicode_ci',
+  );
+
+  // Holding pen for incoming content from the RT_CONTENT table retrieved
+  // via the RT JSON API.
+  $schema['json_data'] = array(
+    'description' => 'Holding pen for incoming JSON data',
+    'fields' => array(
+      'id' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Unique identifier for the source item',
+      ),
+      'item_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'table_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'object_type' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'owner_module' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'date_modified' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'page_path' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'json_data' => array(
+        'type' => 'blob',
+        'size' => 'big',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'item_id' => array('table_id', 'item_id'),
+    ),
+    'indexes' => array(
+      'owner_module' => array('owner_module'),
+      'type' => array('object_type', 'owner_module'),
+      'path' => array('page_path'),
+    ),
+    'collation' => 'utf8_unicode_ci',
+  );
+
+  $schema['rt_files'] = array(
+    'description' => 'Source table for RtsbFile migration',
+    'fields' => array(
+      'file_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Unique identifier for the file item',
+      ),
+      'file_name' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'file_size' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'mime_type' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'file_ext' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'relative_path' => array(
+        'type' => 'varchar',
+        'length' => 510,
+        'default' => '',
+      ),
+      'fileroot_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+       'file_name_physical' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'author_email' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'w_read' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+      ),
+      'w_edit' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+      ),
+      'w_link' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+      ),
+      'world_group_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'owner_group_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'owner_controller' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'owner_module' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+    ),
+    'primary key' => array('file_id'),
+  );
+
+  $schema['rt_fileroots'] = array(
+    'description' => 'Base path configuration for files imported from RTSB',
+    'fields' => array(
+      'fileroot_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'site_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+      'fileroot_name' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'fileroot_path' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'default_fileroot' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('fileroot_id'),
+  );
+
+  $schema['rt_categories'] = array(
+    'description' => 'Holding pen for categories imported from RTSB',
+    'fields' => array(
+      'category_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'Unique identifier for the row',
+      ),
+      'parent_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'Parent category ID',
+      ),
+      'category_name' => array(
+        'type' => 'varchar',
+        'length' => 200,
+      ),
+      'category_value' => array(
+        'type' => 'varchar',
+        'length' => 50,
+      ),
+      'description' => array(
+        'type' => 'text',
+        'size' => 'normal',
+      ),
+      'category_attributes' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'priority' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 5,
+      ),
+    ),
+    'primary key' => array('category_id'),
+  );
+
+  $schema['rt_publish'] = array(
+    'description' => 'Map table from RTSB which maps content to pages',
+    'fields' => array(
+      'publish_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Unique identifier for the row',
+      ),
+      'site_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Site ID, always 115',
+      ),
+      'page_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'ID of the page',
+      ),
+      'region' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Region of page content is displayed in',
+      ),
+      'table_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'ID of table the item is from; determines type of content',
+      ),
+      'item_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'ID of content item',
+      ),
+      'sequence' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Order item appears in content on RT',
+      ),
+      'date_created' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'description' => 'Timestamp page was created',
+      ),
+      'creator_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'RT User id of creator',
+      ),
+    ),
+    'primary key' => array('publish_id'),
+    'unique keys' => array(
+      'content_map' => array('page_id', 'item_id', 'table_id', 'region'),
+    ),
+    'indexes' => array(
+      'item_id' => array('item_id', 'table_id'),
+      'page' => array('page_id', 'item_id', 'table_id'),
+    ),
+  );
+  $schema['rt_redirects'] = array(
+    'description' => 'Holding pen for redirects parsed from the legacy apache.conf file which point to current Drupal URLs',
+    'fields' => array(
+      'condition_url' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Source URL from condition, from RT system',
+        'binary' => TRUE,
+      ),
+      'rules' => array(
+        'type' => 'text',
+        'description' => 'JSON encoded array of rewrite rules associated with the condition',
+      ),
+    ),
+    'primary key' => array('condition_url'),
+    'collation' => 'utf8_unicode_ci',
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create json_data table as holding pen for JSON data to be migrated from
+ * Runtime.
+ */
+function cls_migrate_rt_update_7100() {
+  db_create_table('json_data', array(
+    'description' => 'Holding pen for incoming JSON data',
+    'fields' => array(
+      'id' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Unique identifier for the source item',
+      ),
+      'item_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'table_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'object_type' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'owner_module' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'date_modified' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'page_path' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'json_data' => array(
+        'type' => 'blob',
+        'size' => 'big',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'item_id' => array('table_id', 'item_id'),
+    ),
+    'indexes' => array(
+      'owner_module' => array('owner_module'),
+      'type' => array('object_type', 'owner_module'),
+      'path' => array('page_path'),
+    ),
+    'collation' => 'utf8_unicode_ci',
+  ));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create source tables for file migration, first dropping if they exist.
+ */
+function cls_migrate_rt_update_7101() {
+  if (db_table_exists('rt_files')) {
+    db_drop_table('rt_files');
+  }
+  db_create_table('rt_files', array(
+    'description' => 'Source table for RtsbFile migration',
+    'fields' => array(
+      'file_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Unique identifier for the file item',
+      ),
+      'site_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'file_name' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'file_size' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'mime_type' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'file_ext' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'relative_path' => array(
+        'type' => 'varchar',
+        'length' => 510,
+        'default' => '',
+      ),
+      'fileroot_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'directory' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'file_name_physical' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+    ),
+    'primary key' => array('file_id'),
+  ));
+
+  if (db_table_exists('rt_fileroots')) {
+    db_drop_table('rt_fileroots');
+  }
+  db_create_table('rt_fileroots', array(
+    'description' => 'Base path configuration for files imported from RTSB',
+    'fields' => array(
+      'fileroot_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'site_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ),
+      'fileroot_name' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'fileroot_path' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'default_fileroot' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('fileroot_id'),
+  ));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create source table for RT_CATEGORIES table import.
+ */
+function cls_migrate_rt_update_7102() {
+  if (db_table_exists('rt_categories')) {
+    db_drop_table('rt_categories');
+  }
+  db_create_table('rt_categories', array(
+    'description' => 'Holding pen for categories imported from RTSB',
+    'fields' => array(
+      'category_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'Unique identifier for the row',
+      ),
+      'parent_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'Parent category ID',
+      ),
+      'category_name' => array(
+        'type' => 'varchar',
+        'length' => 200,
+      ),
+      'category_value' => array(
+        'type' => 'varchar',
+        'length' => 50,
+      ),
+      'description' => array(
+        'type' => 'text',
+        'size' => 'normal',
+      ),
+      'category_attributes' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'priority' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 5,
+      ),
+    ),
+    'primary key' => array('category_id'),
+  ));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create rt_publish table to hold content <-> page mapping information for
+ * Runtime content migrations.
+ */
+function cls_migrate_rt_update_7103() {
+  if (db_table_exists('rt_publish')) {
+    db_drop_table('rt_publish');
+  }
+  db_create_table('rt_publish', array(
+    'description' => 'Map table from RTSB which maps content to pages',
+    'fields' => array(
+      'publish_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Unique identifier for the row',
+      ),
+      'site_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Site ID, always 115',
+      ),
+      'page_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'ID of the page',
+      ),
+      'region' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Region of page content is displayed in',
+      ),
+      'table_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'ID of table the item is from; determines type of content',
+      ),
+      'item_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'ID of content item',
+      ),
+      'sequence' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Order item appears in content on RT',
+      ),
+      'date_created' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'description' => 'Timestamp page was created',
+      ),
+      'creator_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'RT User id of creator',
+      ),
+    ),
+    'primary key' => array('publish_id'),
+    'unique keys' => array(
+      'content_map' => array('page_id', 'item_id', 'table_id', 'region'),
+    ),
+    'indexes' => array(
+      'item_id' => array('item_id', 'table_id'),
+      'page' => array('page_id', 'item_id', 'table_id'),
+    ),
+  ));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create table rt_redirects to hold incoming redirects from legacy site.
+ */
+function cls_migrate_rt_update_7104() {
+  if (db_table_exists('rt_redirects')) {
+    db_drop_table('rt_redirects');
+  }
+  db_create_table('rt_redirects', array(
+    'description' => 'Holding pen for redirects parsed from the legacy apache.conf file which point to current Drupal URLs',
+    'fields' => array(
+      'condition_url' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Source URL from condition, from RT system',
+        'binary' => TRUE,
+      ),
+      'rules' => array(
+        'type' => 'text',
+        'description' => 'JSON encoded array of rewrite rules associated with the condition',
+      ),
+    ),
+    'primary key' => array('condition_url'),
+  ));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Recreate table rt_files with new metadata fields.
+ */
+function cls_migrate_rt_update_7105() {
+  if (db_table_exists('rt_files')) {
+    db_drop_table('rt_files');
+  }
+  db_create_table('rt_files', array(
+    'description' => 'Source table for RtsbFile migration',
+    'fields' => array(
+      'file_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Unique identifier for the file item',
+      ),
+      'file_name' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'file_size' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'mime_type' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'file_ext' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'relative_path' => array(
+        'type' => 'varchar',
+        'length' => 510,
+        'default' => '',
+      ),
+      'fileroot_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'file_name_physical' => array(
+        'type' => 'varchar',
+        'length' => 510,
+      ),
+      'author_email' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'w_read' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+      ),
+      'w_edit' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+      ),
+      'w_link' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+      ),
+      'world_group_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'owner_group_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ),
+      'owner_controller' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'owner_module' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+    ),
+    'primary key' => array('file_id'),
+  ));
+}

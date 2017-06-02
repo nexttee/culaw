@@ -1,0 +1,8 @@
+name = CLS ACES2 REST API Integration
+description = Provides integration with ACES2 using CLS REST API calls.
+package = Columbia Law School
+
+dependencies[] = cls_rest_api
+
+core = 7.x
+

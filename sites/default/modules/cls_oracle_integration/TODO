@@ -1,0 +1,4 @@
+Add methods to report oci_client_version and oci_server_version
+
+Re-read everything on this page for performance boosts and analyze possible optimizations:
+http://www.php.net/manual/en/oci8.configuration.php#ini.oci8.connection-class

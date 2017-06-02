@@ -1,0 +1,924 @@
+<?php
+
+/**
+ * @file
+ * Module file for the cls_core module.
+ */
+
+/**
+* Implements hook_menu().
+*/
+function cls_core_menu() {
+
+  $items['faculty/ajax-profile-data'] = array(
+    'title' => 'AJAX: Faculty Profile Data',
+    'page callback' => 'cls_core_ajax_faculty_profile_data_callback',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+/**
+* Implements hook_menu_alter().
+*/
+function cls_core_menu_alter(&$items) {
+  $items['user/%user']['title callback'] = 'cls_core_user_page_title';
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function cls_core_form_alter(&$form, &$form_state, $form_id) {
+  if ( (isset($form['operation']['#value']) && $form['operation']['#value'] == 'delete') || $form['#id'] == 'node-delete-confirm' ) {
+    if ( !user_access('can delete content') ) {
+      drupal_set_message('Sorry, you do not have permission to delete content. Please unpublish this content instead.');
+      unset($form['actions']['submit']);
+      $form['actions']['cancel']['#title'] = t('Back to previous page');
+    }
+  }
+
+  if ($form_id == "calendar_node_form") {
+    $form['#validate'][] = '_cls_core_check_if_event_is_duplicate';
+  }
+}
+
+function _cls_core_check_if_event_is_duplicate(&$form, &$form_state) {
+  global $base_url;
+
+  $title = $form_state['values']['title'];
+  $title = trim(preg_replace('/\s\s+/', ' ', str_replace("\n", " ", $title)));
+  $nid = $form_state['values']['nid'];
+
+  $date_value_1 = NULL;
+  $date_value_1 = NULL;
+
+  if (isset($form_state['values']['field_event_date']['und'])) {
+    $date_value_1 = $form_state['values']['field_event_date']['und'][0]['value'];
+    $date_value_2 = $form_state['values']['field_event_date']['und'][0]['value2'];
+    $formatted_date_1 =  date("Y-m-d 00:00:00", strtotime($date_value_1 . ' UTC'));
+    $formatted_date_2 =  date("Y-m-d 23:59:59", strtotime($date_value_2 . ' UTC'));
+  }
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node', '=')
+        ->entityCondition('bundle', 'calendar')
+        ->propertyCondition('title', $title, '=')
+        ->fieldCondition('field_event_date', 'value', array($formatted_date_1, $formatted_date_2), 'BETWEEN');
+
+  $result = $query->execute();
+
+  if (isset($result['node'])) {
+    $event_nids = array_keys($result['node']);
+    if (in_array($nid, $event_nids) == FALSE) {
+      form_set_error('field_event_date', t('There is already a calendar event with the same title and date found at @path',
+      array('@path' => $base_url . drupal_get_path_alias('/node/'.$event_nids[0]))));
+    }
+  }
+}
+
+/**
+* Implements hook_permmission
+*/
+function cls_core_permission() {
+  return array(
+    'can delete content' => array(
+      'title' => t('Can Delete Content'),
+      'description' => t('This permission allows users to delete content and should be only given to admin users. This is to prevent non-admin users from deleting content on the site.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function cls_core_block_info() {
+  $blocks['copyright'] = array(
+    'info' => t('Copyright'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['address'] = array(
+    'info' => t('Address Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['calendar_navigation'] = array(
+    'info' => t('Events - Calendar Navigation Links'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['experience_columbia_law'] = array(
+    'info' => t('Experience Columbia Law School block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['faculty_name_filter_block'] = array(
+    'info' => t('Views exposed form: Faculty name filter'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['faculty_role_filter_block'] = array(
+    'info' => t('Views exposed form: Faculty role filter'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['event_title_search_block'] = array(
+    'info' => t('Views exposed form: Event Title filter'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['event_category_search_block'] = array(
+    'info' => t('Views exposed form: Event Category filter'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cls_core_block_view($delta = '') {
+  switch ($delta) {
+    case 'copyright':
+      $block['subject'] = '';
+      $markup = '<span> &copy; Copyright ' . strftime ("%Y") . ', ';
+      $line1 =  variable_get('copyright_heading', t('The Trustees of Columbia University in the City of New York. ')) .'</span>';
+      $line2 = '<span>' . variable_get('copyright_contact', t('For questions or comments, please contact the  ')) . l(variable_get('web_administrator_text', t('web administrators.')), variable_get('web_administrator_link', 'mailto:webadmin@law.columbia.edu')) . '</span>' ;
+      $block['content'] = $markup . $line1 . $line2;
+      break;
+
+    case 'address':
+      $block['subject'] = t('Columbia Law School');
+      $address = '<span class="address">' . variable_get('cls_core_main_address', t('435 West 116th Street')) . '</span>';
+      $city = '<span class="city">' . variable_get('cls_core_city', t('New York, NY 10027-7297')) .'</span>';
+      $contact = '<span class="contact">' . variable_get('cls_core_contact', t('212-854-2640')) .'</span>';
+      $block['content'] = $address . $city . $contact;
+      break;
+
+    case 'calendar_navigation':
+      $block['subject'] = '';
+      $params = drupal_get_query_parameters();
+      $month_active = '';
+      $week_active = '';
+      $day_active = '';
+      if (isset($params['display']) && $params['display'] == 'month') {
+        $month_active = 'activelink';
+      }
+      elseif (isset($params['display']) && $params['display'] == 'week') {
+        $week_active = 'activelink';
+      }
+      elseif (isset($params['display']) && $params['display'] == 'day') {
+        $day_active = 'activelink';
+      }
+      else if (isset($params['title']) || isset($params['category'])) {
+        $month_active = 'activelink';
+      }
+      else {
+        // Default should be day link.
+        $day_active = 'activelink';
+      }
+      unset($params['display']);
+      $items = array(
+        l(t('Day'), 'events', array(
+            'query' => array('display' => 'day') + $params,
+            'attributes' => array('class' => array('day-link', $day_active)),
+          )
+        ),
+        l(t('Week'), 'events', array(
+            'query' => array('display' => 'week') + $params,
+            'attributes' => array('class' => array('week-link', $week_active)),
+          )
+        ),
+        l(t('Month'), 'events', array(
+            'query' => array('display' => 'month') + $params,
+            'attributes' => array('class' => array('month-link', $month_active)),
+          )
+        ),
+      );
+      $block['content'] = theme('item_list', array('items' => $items));
+      break;
+
+    case 'experience_columbia_law':
+      $description = '<span class="description">' . variable_get('block_description', t('Learn about all that Columbia Law School has to offer.')) . '</span>';
+      $attributes = array(
+        'id' => 'experience_columbia_law_links',
+      );
+      for ($i = 1; $i < 5; $i++) {
+        $items[] = l(variable_get('link_'. $i .'_title'), variable_get('link_'. $i .'_url'));
+      }
+      $links = theme('item_list', array('items' => $items, 'attributes' => $attributes));
+      $title = '<span class="experience-block-title">' . t('Experience Columbia') . '</span>';
+      $block['subject'] = '<span class="experience-title-wrapper">' . $title . $description . '</span>';
+      $block['content'] = $links;
+      break;
+
+    case 'faculty_name_filter_block';
+      $view = views_get_view('faculty_listing');
+      $view->init_display();
+      $view->set_display('listing_page');
+      $view->init_handlers();
+      $form = cls_core_exposed_block_form($view, 'role');
+      $block['content'] = $form;
+      break;
+
+    case 'faculty_role_filter_block';
+      $view = views_get_view('faculty_listing');
+      $view->init_display();
+      $view->set_display('listing_page');
+      $view->init_handlers();
+      $form = cls_core_exposed_block_form($view, 'search');
+      $block['subject'] = t('Faculty Directory');
+      $block['content'] = $form;
+      break;
+
+    case 'event_title_search_block';
+      $view = views_get_view('law_school_events');
+      $view->init_display();
+      $view->set_display('events_listing_page');
+      $view->init_handlers();
+      $form = cls_core_exposed_event_filter_block_form($view, 'category');
+      $block['content'] = $form;
+      break;
+
+    case 'event_category_search_block';
+      $view = views_get_view('law_school_events');
+      $view->init_display();
+      $view->set_display('events_listing_page');
+      $view->init_handlers();
+      $form = cls_core_exposed_event_filter_block_form($view, 'title');
+      $block['subject'] = '';
+      $block['content'] = $form;
+      break;
+  }
+  return $block;
+}
+
+/**
+ * This function will load menu link from given link title and menu name
+ */
+function cls_core_get_menu_from_title($link_title, $menu_name) {
+  if (is_string($link_title)) {
+    $query = db_select('menu_links', 'ml');
+    $query->leftJoin('menu_router', 'm', 'm.path = ml.router_path');
+    $query->fields('ml');
+    // Weight should be taken from {menu_links}, not {menu_router}.
+    $query->addField('ml', 'weight', 'link_weight');
+    $query->fields('m');
+    $query->condition('ml.link_title', $link_title);
+    $query->condition('ml.menu_name', $menu_name);
+    if ($item = $query->execute()->fetchAssoc()) {
+      $item['weight'] = $item['link_weight'];
+      _menu_link_translate($item);
+      return $item;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function cls_core_block_configure($delta = '') {
+  $form = array();
+  if ($delta == 'address') {
+    $form['main-address'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Address Details'),
+      '#size' => 60,
+      '#description' => t('Address of Columbia Law School'),
+      '#default_value' => variable_get('cls_core_main_address', t('435 West 116th Street')),
+    );
+    $form['city'] = array(
+      '#type' => 'textfield',
+      '#title' => t('City'),
+      '#size' => 60,
+      '#default_value' => variable_get('cls_core_city', t('New York, NY 10027-7297')),
+    );
+    $form['contact'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Contact'),
+      '#size' => 60,
+      '#description' => t('Contact details.'),
+      '#default_value' => variable_get('cls_core_contact', t('212-854-2640')),
+    );
+  }
+  if ($delta == 'copyright') {
+    $form['copyright-heading'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Copyright Text Heading'),
+      '#size' => 60,
+      '#default_value' => variable_get('copyright_heading', t('The Trustees of Columbia University in the City of New York. ')),
+    );
+    $form['copyright_contact'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Copyright Text Contact'),
+      '#size' => 60,
+      '#default_value' => variable_get('copyright_contact', t('For questions or comments, please contact the  ')),
+    );
+    $form['web_administrator_text'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link Text'),
+      '#size' => 60,
+      '#default_value' => variable_get('web_administrator_text', t('web administrators.')),
+    );
+    $form['web_administrator_link'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Destination link'),
+      '#size' => 60,
+      '#default_value' => variable_get('web_administrator_link', 'mailto:webadmin@law.columbia.edu'),
+    );
+  }
+  if ($delta == 'experience_columbia_law') {
+    $form['block_description'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Block Description'),
+      '#size' => 60,
+      '#default_value' => variable_get('block_description', t('Learn about all that Columbia Law has to offer. ')),
+    );
+    $form['experience_columbia_law_links'] = array(
+      '#type' => 'container',
+      '#attributes' => array('class' => array('some-class')),
+      '#tree' => TRUE,
+    );
+    $form['experience_columbia_law_links']['link_1'] = array(
+      '#type' => 'link_field',
+      '#field_name' => 'link_field',
+      '#language' => LANGUAGE_NONE,
+      '#field_parents' => array(),
+      '#delta' => 0,
+      '#default_value' => array(
+        'title' => variable_get('link_1_title', t('Explore')),
+        'url' => variable_get('link_1_url', 'https://www.law.columbia.edu/'),
+      ),
+    );
+    $form['experience_columbia_law_links']['link_2'] = array(
+      '#type' => 'link_field',
+      '#field_name' => 'link_field',
+      '#language' => LANGUAGE_NONE,
+      '#field_parents' => array(),
+      '#delta' => 0,
+      '#default_value' => array(
+        'title' => variable_get('link_2_title', t('Degree Programs')),
+        'url' => variable_get('link_2_url', 'https://www.law.columbia.edu/'),
+      ),
+    );
+    $form['experience_columbia_law_links']['link_3'] = array(
+      '#type' => 'link_field',
+      '#field_name' => 'link_field',
+      '#language' => LANGUAGE_NONE,
+      '#field_parents' => array(),
+      '#delta' => 0,
+      '#default_value' => array(
+        'title' => variable_get('link_3_title', t('Class Profiles')),
+        'url' => variable_get('link_3_url', 'https://www.law.columbia.edu/'),
+      ),
+    );
+    $form['experience_columbia_law_links']['link_4'] = array(
+      '#type' => 'link_field',
+      '#field_name' => 'link_field',
+      '#language' => LANGUAGE_NONE,
+      '#field_parents' => array(),
+      '#delta' => 0,
+      '#default_value' => array(
+        'title' => variable_get('link_4_title', t('Courses')),
+        'url' => variable_get('link_4_url', 'https://www.law.columbia.edu/'),
+      ),
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function cls_core_block_save($delta = '', $edit = array()) {
+  if ($delta == 'address') {
+    variable_set('cls_core_main_address', $edit['main-address']);
+    variable_set('cls_core_city', $edit['city']);
+    variable_set('cls_core_contact', $edit['contact']);
+  }
+  if ($delta == 'copyright') {
+    variable_set('web_administrator_link', $edit['web_administrator_link']);
+    variable_set('web_administrator_text', $edit['web_administrator_text']);
+    variable_set('copyright_contact', $edit['copyright_contact']);
+    variable_set('copyright_heading', $edit['copyright-heading']);
+  }
+  if ($delta == 'experience_columbia_law') {
+    for ($i = 1; $i < 5; $i++) {
+      variable_set('link_'. $i .'_title', $edit['experience_columbia_law_links']['link_' . $i]['title']);
+      variable_set('link_' . $i .'_url', $edit['experience_columbia_law_links']['link_' . $i]['url']);
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cls_core_form_system_theme_settings_alter(&$form, &$form_state) {
+  $form['#submit'][] = 'cls_core_system_settings_form_submit';
+}
+
+/**
+ * Submit handler to save to set the time stamp for the cookie value.
+ */
+function cls_core_system_settings_form_submit($form, &$form_state) {
+  if ($form_state['values']['site_announcement_message'] != theme_get_setting('site_announcement_message')) {
+    global $cookie_domain;
+    setcookie('announcement_timestamp', time(), NULL, '/', $cookie_domain);
+  }
+}
+
+function cls_core_init() {
+  drupal_add_library('system', 'jquery.cookie');
+
+  if (filter_xss(arg(0)) == 'events') {
+    $params = drupal_get_query_parameters();
+    if (!empty($params['category']) && $params['category'][0] == 'all') {
+      drupal_goto('events', array('query' => array('category' => 'all')));
+    }
+  }
+}
+
+/**
+ * Implements hook_date_default_argument_alter().
+ */
+function cls_core_date_default_argument_alter(&$argument, &$value) {
+  if ($argument->view->name == 'law_school_events' && $argument->view->current_display == 'events_listing_page') {
+    $params = drupal_get_query_parameters();
+    if (isset($params['display'])) {
+      if ($params['display'] == 'month') {
+        $argument->arg_format = 'Y-m';
+        $value = date($argument->arg_format, REQUEST_TIME);
+      }
+      else if($params['display'] == 'week') {
+        $now = date_now();
+        $week = date_week(date_format($now, 'Y-m-d'));
+        $value = date_format($now, 'o') . '-W' . date_pad($week);
+      }
+      else if ($params['display'] == 'day') {
+        $argument->arg_format = 'Y-m-d';
+        $value = date($argument->arg_format, REQUEST_TIME);
+      }
+    }
+    else if (isset($params['title']) || isset($params['category'])) {
+      $argument->arg_format = 'Y-m';
+      $value = date($argument->arg_format, REQUEST_TIME);
+    }
+  }
+}
+
+/**
+ * Implements hook_mefibs_filter_alter().
+ */
+function cls_core_mefibs_filter_alter(&$filters) {
+  $params = drupal_get_query_parameters();
+  if (!isset($params['mefibs-form-event-title-title']) && !isset($params['field_lawcal_categories_tid'])) {
+    // We are unsetting default values set by "mefibs" module.
+    // "mefibs" module stores values in session and applies values again on page
+    // load. See mefibs_views_pre_build().
+    unset($filters['title']);
+    unset($filters['field_lawcal_categories_tid']);
+  }
+}
+
+/**
+ * Implements hook_date_format_types().
+ */
+function cls_core_date_format_types() {
+  return array(
+    'cls_events_date_short' => t('CLS Event Short Date Month-Date'),
+    'cls_events_date_long' => t('CLS Event Long Date'),
+    'cls_events_date_long_with_year' => t('CLS Event Long Date With Year'),
+  );
+}
+
+/**
+ * Implements hook_date_formats().
+ */
+function cls_core_date_formats() {
+  $formats = array();
+  $formats[] = array(
+    'type' => 'cls_events_date_short',
+    'format' => 'M d',
+    'locales' => array(),
+  );
+  $formats[] = array(
+    'type' => 'cls_events_date_long',
+    'format' => 'l, F jS \@ g:ia',
+    'locales' => array(),
+  );
+  $formats[] = array(
+    'type' => 'cls_events_date_long_with_year',
+    'format' => 'l, F jS, Y \@ g:ia',
+    'locales' => array(),
+  );
+  foreach ($formats as $format) {
+    variable_set('date_format_' . $format['type'], $format['format']);
+  }
+  return $formats;
+}
+
+/**
+ * Implements hook_date_formatter_dates_alter().
+ */
+function cls_core_date_formatter_dates_alter(&$dates, $context) {
+  $field = $context['field'];
+  $format = $context['format'];
+  if ($field['field_name'] == 'field_event_date' && $format == 'l, F jS \@ g:ia') {
+    // Remove extra "@" symbol from time display, as it is added when we have
+    // end date same as of start date.
+    $dates['value2']['formatted_time'] = str_replace('@', '', $dates['value2']['formatted_time']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function cls_core_preprocess_block(&$vars) {
+  if ($vars['block']->title && $vars['block']->title != '<none>'
+    && $vars['block']->module == 'menu_block') {
+    // Format the title with full html text format.
+    $vars['block']->subject = check_markup($vars['block']->title, 'full_html');
+
+    // Strip the outermost <p> which could show up from check_markup
+    preg_match('/^\s*<p>(.*)<\/p>\s*$/is', $vars['block']->subject, $found);
+    $vars['block']->subject = isset($found[1]) ? $found[1] : $vars['block']->subject;
+  }
+}
+
+function cls_core_exposed_block_form($view, $unset_form_field) {
+  $rendered = &drupal_static(__FUNCTION__);
+  $display_id = $view->current_display;
+  $display = $view->display[$display_id]->handler;
+
+  // Inspired by the code in views_plugin_exposed_form::render_exposed_form().
+  $exposed_form = $display->get_plugin('exposed_form');
+
+  // Deal with any exposed filters we may have, before building.
+  $form_state = array(
+    'view' => &$exposed_form->view,
+    'display' => &$exposed_form->display,
+    'method' => 'get',
+    'rerender' => TRUE,
+    'no_redirect' => TRUE,
+    'always_process' => TRUE,
+    'exposed_form_override' => TRUE,
+  );
+
+  // Some types of displays (eg. attachments) may wish to use the exposed
+  // filters of their parent displays instead of showing an additional
+  // exposed filter form for the attachment as well as that for the parent.
+  if (!$display->displays_exposed()) {
+    unset($form_state['rerender']);
+  }
+
+  if (!empty($exposed_form->ajax)) {
+    $form_state['ajax'] = TRUE;
+  }
+
+  // Retrieve the bare form.
+  $form_state['exposed_form_plugin'] = $exposed_form;
+  $form = drupal_build_form('views_exposed_form', $form_state);
+  unset($form[$unset_form_field]);
+
+  //$form['submit']['#value'] = 'submit';
+
+  return $form;
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function cls_core_views_pre_render(&$view) {
+  if ($view->name == 'faculty_listing' && $view->current_display == 'listing_page') {
+    $params = drupal_get_query_parameters();
+    if ($params) {
+      if (isset($params['role'])) {
+        $field = field_info_field('field_faculty_role');
+        $allowed_values = list_allowed_values($field, NULL, 'user', NULL);
+        $allowed_values['All'] = t('All Faculty');
+        $view->build_info['title'] = $allowed_values[$params['role']];
+      }
+      else {
+        $view->build_info['title'] = t('Full-Time Faculty');
+      }
+    }
+    else {
+      $view->build_info['title'] = t('Full-Time Faculty');
+    }
+  }
+
+  if ($view->name == 'faculty_profile_block' && $view->current_display == 'faculty_info_block') {
+    if (isset($view->args[0])) {
+      $uid = $view->args[0];
+      $account = user_load($uid);
+      $faculty_role = user_role_load_by_name('Faculty User');
+      if (user_has_role($faculty_role->rid, $account)) {
+        if (module_exists('cls_rest_api')) {
+          if (isset($account->cas_name)) {
+            $cas_name = $account->cas_name;
+            $cas_name = trim($cas_name);
+            if ($cas_name !== '') {
+              $profile_data = _cls_core_fetch_faculty_profile_data($cas_name);
+
+              if (isset($profile_data['location']['building'])) {
+                $view->result[0]->field_field_faculty_office_address_1[0]['rendered']['#markup'] = $profile_data['location']['building'];
+                $view->result[0]->field_field_office_number[0]['rendered']['#markup'] = $profile_data['location']['room'];
+                $view->result[0]->field_field_faculty_office_address_2[0]['rendered']['#markup'] = $profile_data['location']['address_line'];
+                $view->result[0]->field_field_faculty_office_city[0]['rendered']['#markup'] = $profile_data['location']['city'];
+                $view->result[0]->field_field_faculty_office_state[0]['rendered']['#markup'] = $profile_data['location']['state'];
+                $view->result[0]->field_field_faculty_office_zip_code[0]['rendered']['#markup'] = $profile_data['location']['zip'];
+              }
+
+              if (isset($profile_data['contact']['phone'])) {
+                $view->result[0]->field_field_faculty_office_phone[0]['rendered']['#markup'] = $profile_data['contact']['phone'];
+              }
+
+              if (isset($profile_data['contact']['fax'])) {
+                $view->result[0]->field_field_faculty_office_fax[0]['rendered']['#markup'] = $profile_data['contact']['fax'];
+              }
+
+              if (isset($profile_data['contact']['email'])) {
+                $view->result[0]->field_field_faculty_office_email[0]['rendered']['#markup'] =
+                '<a href="mailto:' . $profile_data['contact']['email'] . '">' . $profile_data['contact']['email'] . '</a>';
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implement hook_views_post_execute().
+ */
+function cls_core_views_post_execute(&$view) {
+  if ($view->name == 'faculty_listing' && $view->current_display == 'listing_page') {
+    // Here we need to redirect 'faculty' page to "faculty?role=103" page.
+    // Because this role should be selected by default on page load. We can
+    // achieve it using hook_views_pre_view() but that won't set link as active
+    $params = drupal_get_query_parameters();
+    $arg1 = arg(1) ? arg(1) : '';
+    if (empty($params) && filter_xss(arg(0)) == 'faculty' && empty($arg1)) {
+      drupal_goto('faculty', array('query' => array('role' => 103)));
+    }
+  }
+}
+
+
+function cls_core_exposed_event_filter_block_form($view, $unset_form_field) {
+  $rendered = &drupal_static(__FUNCTION__);
+  $display_id = $view->current_display;
+  $display = $view->display[$display_id]->handler;
+
+  // Inspired by the code in views_plugin_exposed_form::render_exposed_form().
+  $exposed_form = $display->get_plugin('exposed_form');
+
+  // Deal with any exposed filters we may have, before building.
+  $form_state = array(
+    'view' => &$exposed_form->view,
+    'display' => &$exposed_form->display,
+    'method' => 'get',
+    'rerender' => TRUE,
+    'no_redirect' => TRUE,
+    'always_process' => TRUE,
+    'exposed_form_override' => TRUE,
+  );
+
+  // Some types of displays (eg. attachments) may wish to use the exposed
+  // filters of their parent displays instead of showing an additional
+  // exposed filter form for the attachment as well as that for the parent.
+  if (!$display->displays_exposed()) {
+    unset($form_state['rerender']);
+  }
+
+  if (!empty($exposed_form->ajax)) {
+    $form_state['ajax'] = TRUE;
+  }
+
+  // Retrieve the bare form.
+  $form_state['exposed_form_plugin'] = $exposed_form;
+  $form = drupal_build_form('views_exposed_form', $form_state);
+
+  unset($form[$unset_form_field]);
+
+  //$form['submit']['#value'] = 'submit';
+  return $form;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cls_core_form_views_exposed_form_alter(&$form, &$form_state) {
+  if ($form_state['view']->name == 'law_school_events' && $form_state['view']->current_display == 'events_listing_page') {
+    if ($form['category']) {
+      $form['category']['#options'] = array('all' => t("All Events")) + $form['category']['#options'];
+      $form['category']['#attributes'] = array('onChange' => 'this.form.submit();');
+      //$form['category']['#default_value'] = 'all';
+    }
+  }
+}
+
+/**
+ * Implement hook_user_view().
+ */
+function cls_core_user_view($account, $view_mode, $langcode) {
+  // Ensures we're looking at the user's profile
+  if ((arg(0) == 'user' && is_numeric(arg(1))) && arg(2) == FALSE) {
+    $deny_access = TRUE;
+    $faculty_role = user_role_load_by_name('Faculty User');
+    // Let's get the RID of the Faculty User role
+    if (user_has_role($faculty_role->rid, $account)) {
+      $deny_access = FALSE;
+      if (module_exists('cls_rest_api')) {
+        if (isset($account->cas_name)) {
+          $cas_name = $account->cas_name;
+          $cas_name = trim($cas_name);
+          if ($cas_name !== '') {
+            $courses = _cls_core_fetch_courses_taught_by_faculty($cas_name);
+            if (count($courses) > 0) {
+              $markup =
+              '<div class="field field-name-field-faculty-profile-elements field-type-paragraphs field-label-hidden">
+              <div class="field-items">
+              <div class="field-item">
+              <div class="entity entity-paragraphs-item">
+              <div class="field field-name-field-element-name">
+              <div class="field-item">Courses</div>
+              </div>
+              <div class="group-element-description">
+              <div class="field-items">
+              <div class="field-item">';
+              foreach ($courses as $course) {
+                $markup .= $course . '</br>';
+              }
+              $markup .= '</div></div></div></div></div></div>';
+              $account->content['courses_taught'] = array(
+                '#type' => 'markup',
+                '#markup' => $markup,
+                '#weight' => 50,
+              );
+            }
+          }
+        }
+      }
+    }
+    if ($deny_access) {
+      if (!user_access('administer users')) {
+        drupal_access_denied();
+      }
+    }
+  }
+}
+
+function cls_core_ajax_faculty_profile_data_callback() {
+
+  if( isset($_POST["ids"]) ) {
+    $ids = $_POST["ids"];
+
+    $prepared_data = array();
+
+    foreach ($ids as $id) {
+      $account = user_load($id);
+
+      if (isset($account->cas_name)) {
+        $cas_name = $account->cas_name;
+        $cas_name = trim($cas_name);
+        if ($cas_name !== '') {
+          $result = _cls_core_fetch_faculty_profile_data($cas_name);
+          $object['id'] = $id;
+          $object['phone'] = $result['contact']['phone'];
+          $object['email'] = $result['contact']['email'];
+          $prepared_data[] = $object;
+        }
+      }
+    }
+
+    echo json_encode($prepared_data);
+  }
+}
+
+function _cls_core_fetch_faculty_profile_data($cas_name) {
+  $client_id = variable_get('cls_client_id');
+  $client_secret = variable_get('cls_client_secret');
+  $client = cls_rest_api_make_api_request($client_id, $client_secret);
+
+  $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+  $response = $client->fetch($endpoint_base_url.'/public/directory/employees/username/'. $cas_name, null, 'GET', array('Content-Type' => 'application/json'));
+
+  $faculty_profile_data = array();
+
+  if ($response['code'] == 200) {
+    $result = $response['result'];
+    $location = array(
+      'building' => $result['employee']['buildingRoom']['building']['name'],
+      'room' => isset($result['employee']['buildingRoom']['roomNumber']) ? 'Room '. $result['employee']['buildingRoom']['roomNumber']: "",
+      'address_line' => $result['employee']['buildingRoom']['building']['addressLine'],
+      'city' => $result['employee']['buildingRoom']['building']['city'],
+      'state' => $result['employee']['buildingRoom']['building']['state']['code'],
+      'zip' => $result['employee']['buildingRoom']['building']['zip']
+    );
+
+    $number = NULL;
+    if (isset($result['phones'][0]['phoneNumber'])) {
+      $number = $result['phones'][0]['phoneNumber'];
+      $number = str_replace(array( '(', ')' ), '', $number);
+      $number = str_replace(' ', '-', $number);
+    }
+
+    $fax = NULL;
+    if (isset($result['employee']['fax'])) {
+      if (is_string($result['employee']['fax'])) {
+        $fax = $result['employee']['fax'];
+        $fax = str_replace(array( '(', ')' ), '', $fax);
+        $fax = str_replace(' ', '-', $fax);
+      }
+    }
+
+    $email = NULL;
+    if (count($result['emails']) > 0) {
+      foreach ($result['emails'] as $e) {
+        if ($e['primary']) {
+          $email = $e['emailAddress'];
+          break;
+        }
+      }
+    }
+
+    $contact = array(
+      'email' => $email,
+      'phone' => $number,
+      'fax' => $fax
+    );
+
+    $faculty_profile_data['location'] = $location;
+    $faculty_profile_data['contact'] = $contact;
+
+  }
+
+  return $faculty_profile_data;
+}
+
+function _cls_core_fetch_courses_taught_by_faculty($cas_name){
+  $client_id = variable_get('cls_client_id');
+  $client_secret = variable_get('cls_client_secret');
+  $client = cls_rest_api_make_api_request($client_id, $client_secret);
+
+  $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+  $response = $client->fetch($endpoint_base_url.'/public/directory/employees/username/'. $cas_name, null, 'GET', array('Content-Type' => 'application/json'));
+
+  if ($response['code'] == 200 && count($response['result']['instructorCourses']) > 0  ) {
+    $courses = $response['result']['instructorCourses'];
+    $courses = _cls_core_filter_courses_taught_by_faculty($courses);
+
+    if (count($courses) > 0) {
+      return $courses;
+    }
+    else {
+      return array();
+    }
+
+  }
+  else {
+    return array();
+  }
+}
+
+function _cls_core_filter_courses_taught_by_faculty($courses){
+  if (module_exists('cls_curriculum_guide')) {
+    $filtered_courses = array();
+    $years = _cls_curriculum_guide_fetch_all_academic_years($client = NULL);
+    $years = array_slice($years, 0, 5);
+    $last_five_years = array();
+
+    foreach ($years as $year) {
+      $last_five_years[] = $year['academicYear'];
+    }
+
+    foreach ($courses as $course) {
+      if (in_array($course['term']['schoolYear']['academicYear'], $last_five_years)) {
+        $filtered_courses[] = $course['sectionName'];
+      }
+    }
+
+    if (count($filtered_courses) > 0) {
+      $filtered_courses = array_unique($filtered_courses);
+      return $filtered_courses;
+    }
+    else {
+      return array();
+    }
+  }
+  else {
+    return array();
+  }
+}
+
+function cls_core_user_page_title() {
+  if (arg(0) == 'user') {
+    $user = user_load(arg(1));
+    if (in_array('Faculty User', $user->roles)) {
+      $first_name = isset($user->cls_user_first_name['und'][0]['value']) ? $user->cls_user_first_name['und'][0]['value']: NULL;
+      $middle_name = isset($user->cls_user_middle_name['und'][0]['value']) ? $user->cls_user_middle_name['und'][0]['value']: NULL;
+      $last_name = isset($user->cls_user_last_name['und'][0]['value'])? $user->cls_user_last_name['und'][0]['value']: NULL;
+      $page_title = !empty($first_name || $middle_name || $last_name) ? $first_name . ' ' . $middle_name . ' ' . $last_name : $first_name . ' ' . $last_name;
+
+      return $page_title;
+    }
+  }
+}

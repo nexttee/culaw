@@ -1,0 +1,417 @@
+body.cls-mcl-getting-started div.container .twelvecol {width:960px;margin:0;}
+body.cls-mcl-getting-started div.content-header {display:none;}
+body.cls-mcl-getting-started div.content-container {min-height:300px !important;}
+body.cls-mcl-getting-started div.content-container div.group,
+body.cls-mcl-getting-started div.content-container div.content-main-area {margin:0;}
+.js .twelvecol > .messages {display: none;}
+
+body div.mcl-new-account-form-column h2 {
+	color: #186E9D;
+	font-size: 28px;
+	margin-top: -10px;
+}
+
+body div.mcl-new-account-form-instructions-column {
+  float: left;
+	width: 415px;
+  padding: 20px 25px 25px;
+}
+
+body.cls-mcl-my-columbia-llm div.mcl-new-account-form-instructions-column {
+  /* 30px margin-bottom minus 20px margin-bottom and line-height from the last p tag */
+  margin: 16px 25px 10px;
+  padding: 0;
+}
+
+body.cls-mcl-my-columbia-llm div.mcl-new-account-form-instructions-column p.introduction {
+  font-size: 20px;
+  line-height: 33px;
+}
+
+body.cls-mcl-my-columbia-llm div.mcl-new-account-form-instructions-column img {
+  margin: 8px 0 20px;
+}
+
+body div.mcl-new-account-form-column {
+    width: 440px;
+    float: left;
+    padding: 25px;
+    background-color: #E7F0F5;
+    border-radius: 10px 0 0 10px;
+}
+
+body.cls-mcl-my-columbia-llm div.mcl-new-account-form-column {
+  padding: 25px 25px 30px;
+}
+
+body div.mcl-new-account-form-column h3 {
+  margin-top: 20px;
+}
+
+body div.mcl-new-account-form-column span.error-msg {
+	color: #cc0000;
+}
+
+body div.mcl-new-account-form-column label {
+  float: left;
+  width: 175px;
+  color: #666666;
+  font: 14px Verdana,Arial,Helvetica,sans-serif;
+  margin-top: 7px;
+}
+
+body div.mcl-new-account-form-column div.form-item-application-year label {
+  float: none;
+  width: 500px;
+  font: bold 18px Verdana,Arial,Helvetica,sans-serif;
+  color: #666666;
+  margin: 0 0 10px;
+}
+
+body div.mcl-new-account-form-column input.form-text {
+	background-color: #FFFFFF;
+    border: 2px solid #999999;
+    border-radius:15px;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+    color: #666666;
+    display: block;
+    font: 14px/12px Verdana,Arial,Helvetica,sans-serif;
+    height: 25px;
+    margin: 10px 0;
+    padding: 1px 10px 3px;
+    width: 240px;
+}
+
+html.js body div.mcl-new-account-form-column input.form-autocomplete {
+  background-position: 240px 8px;
+}
+
+html.js body div.mcl-new-account-form-column input.throbbing {
+  background-position: 240px -12px;
+}
+
+html.js body div.mcl-new-account-form-column div#autocomplete {
+  background-color: #ffffff;
+}
+
+html.js body div.mcl-new-account-form-column div#autocomplete ul li {
+  list-style: none;
+  margin: 0;
+  padding: 5px;
+}
+
+
+body div.mcl-new-account-form-column select.form-select {
+  color: #666666;
+  display: block;
+  font: 12px/10px Verdana,Arial,Helvetica,sans-serif;
+  height: 33px;
+  margin: 10px 0;
+  padding: 5px 0 5px 5px;
+  width: 264px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+/* Enhance select box on webkit-based browsers (Chrome, Safari, etc.) */
+  body div.mcl-new-account-form-column select.form-select {
+    color: #333;
+    border: 2px solid #999;
+  }
+  body div.mcl-new-account-form-column select.form-select:focus {
+    border: #186E9E 2px solid;
+  }
+}
+
+body div.mcl-new-account-form-column input#edit-lsac-account-number,
+body div.mcl-new-account-form-column input#edit-birth-date {
+  width: 90px;
+}
+
+div.form-item-security-answer,
+#edit-security-answer {
+  margin: 0 !important;
+}
+
+#edit-security-question-select,
+div.form-item-security-question-select,
+div.form-item-security-question-other {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+body div.mcl-new-account-form-column input#edit-security-question-other {
+  margin-left: 175px;
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+}
+
+body div.mcl-new-account-form-column input.form-text:focus {
+	border: #186E9E 2px solid;
+}
+
+body div.mcl-new-account-form-column input.form-mcl-new-account-button {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #333333;
+    border: 2px solid #999999;
+    color: #FFFFFF;
+    font: 15px Verdana, Arial, sans-serif;
+    padding: 1px 10px 3px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    float: right;
+}
+
+body.cls-mcl-my-columbia-llm div.mcl-new-account-form-column input.form-mcl-new-account-button {
+	margin: 25px 1px 0 0;
+	font-size: 16px;
+	height: 33px;
+	padding: 1px 15px 3px;
+}
+
+body.cls-mcl-my-columbia-llm div.form-item-grad-school-graduation-year,
+body.cls-mcl-my-columbia-llm select#edit-grad-school-graduation-year {
+  margin-bottom: 0;
+}
+
+body div.mcl-new-account-form-column input#edit-prev, body div.mcl-new-account-form-column input#edit-skip-tour {
+  background: none;
+  border: none;
+  color: #186E9D;
+  float: left;
+  font-size: 12px;
+  margin-top: 20px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+body div.mcl-new-account-form-column input#edit-prev, body div.mcl-new-account-form-column input#edit-skip-tour:hover {
+  cursor: pointer;
+}
+
+body div.mcl-new-account-form-column input#edit-submit:active {
+    background-color: #186E9E;
+    color: #FFFFFF;
+}
+
+body div.mcl-new-account-form-column input.new-account-field {
+	background-color: #FFFFFF;
+    border: 2px solid #999999;
+    border-radius:15px;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+    color: #666666;
+    display: block;
+    font: 21px/18px Verdana,Arial,Helvetica,sans-serif;
+    height: 25px;
+    margin: 15px 0 20px;
+    padding: 1px 10px 3px;
+    width: 180px;
+}
+
+body div.mcl-new-account-form-column .messages {
+    padding: 10px;
+}
+
+body div.mcl-new-account-form-column .clientside-error li {
+    list-style: none;
+    margin: 0 0 5px 0;
+}
+
+body div#cls-mcl-new-account-serverside-errors {
+    color: #cc0000;
+    font-size: 8pt;
+    background-image: none;
+    margin: 0 0 0 20px;
+    background-color: #ffffff;
+}
+
+body div#cls-mcl-account-errors {
+    background-image: none;
+    margin: 0 0 20px;
+}
+
+body div#cls-mcl-account-errors label {
+  width: auto;
+  float: none;
+  color: #cc0000;
+}
+
+body div#cls-mcl-account-errors li {
+ margin: 0 0 5px 15px;
+ color: #cc0000;
+}
+
+div#cls-mcl-account-errors:after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+    width: 0;
+}
+
+body .hidden {
+  display: none;
+}
+
+body .divider {
+  clear: both;
+}
+
+.cls-mcl-getting-started div.form-select2 {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 14px !important;
+}
+
+.cls-mcl-getting-started div.form-select2 a.select2-choice {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 2px solid #999999;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: none;
+    color: #999999 !important;
+    height: 29px !important;
+    line-height: inherit;
+}
+
+.cls-mcl-getting-started div.select2-dropdown-open a.select2-choice {
+    border-bottom: 0 none;
+    border-radius: 15px 15px 0 0;
+}
+
+.cls-mcl-getting-started .select2-chosen {
+    font: 14px/12px Verdana,Arial,Helvetica,sans-serif;
+    height: 16px;
+    margin: 6px 0 0 !important;
+    padding: 2px 5px 3px;
+    /* text-transform: lowercase; */
+    width: 225px;
+}
+
+.cls-mcl-getting-started .select2-choice abbr {
+    right: 10px !important;
+    top: 7px !important;
+}
+
+.cls-mcl-getting-started .select2-arrow {
+    display: none !important;
+}
+
+.cls-mcl-getting-started div.select2-dropdown-open a.select2-choice {
+    border-bottom: 0 none;
+    border-radius: 15px 15px 0 0;
+}
+
+.cls-mcl-getting-started .select2-drop,
+.cls-mcl-getting-started .select2-drop-active {
+    border-bottom: 2px solid #999999;
+    border-left: 2px solid #999999;
+    border-radius: 0 0 15px 15px;
+    border-right: 2px solid #999999;
+    padding: 2px 4px 3px;
+}
+
+.cls-mcl-getting-started .select2-search {
+    padding: 0 8px;
+}
+
+.cls-mcl-getting-started .select2-search input,
+.cls-mcl-getting-started .select2-search input {
+    color: #666666;
+    font-family: Verdana,Arial,sans-serif !important;
+    font-size: 14px !important;
+    padding-bottom: 5px !important;
+    padding-top: 4px !important;
+}
+
+.cls-mcl-getting-started .select2-results {
+    margin: 4px 8px 4px 4px;
+}
+
+.cls-mcl-getting-started .select2-results .select2-highlighted {
+    background: none repeat scroll 0 0 #186E9D;
+}
+
+.cls-mcl-getting-started .select2-results .select2-highlighted .select2-result-label {
+    color: #FFFFFF;
+}
+
+.cls-mcl-getting-started .select2-results .select2-result-label {
+    color: #666666;
+    font-family: Verdana,Arial,sans-serif !important;
+    font-size: 12px;
+}
+
+.cls-mcl-getting-started .select2-drop.select2-drop-above.select2-drop-active {
+    border-radius: 15px 15px 0 0;
+    border-top: 2px solid #999999;
+    padding-top: 6px;
+}
+
+.cls-mcl-getting-started .select2-dropdown-open.select2-drop-above .select2-choice,
+.cls-mcl-getting-started .select2-dropdown-open.select2-drop-above .select2-choices {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 2px solid #999999;
+    border-radius: 0 0 15px 15px;
+}
+
+.cls-mcl-getting-started .select2-results .select2-no-results,
+.cls-mcl-getting-started .select2-results .select2-searching,
+.cls-mcl-getting-started .select2-results .select2-selection-limit {
+    background: #FFFFFF;
+    display: list-item;
+    font-family: Verdana,Arial,sans-serif !important;
+    font-size: 12px;
+    color: #666666;
+}
+
+.cls-mcl-getting-started .select2-results .select2-no-results a {
+  cursor: pointer;
+}
+
+.cls-mcl-getting-started .select2-search input.select2-active {
+    background-position: 98% center, 0 0;
+}
+
+.cls-mcl-getting-started div.form-type-textfield {
+  min-height: 32px;
+}
+
+body.cls-mcl-getting-started .school-other-display-link-area {
+    color: #2D2D2D;
+    float: left;
+    font-size: 11px;
+    font-style: italic;
+    margin: 0 0 0 165px;
+    text-align: right;
+    width: 264px;
+}
+
+.cls-mcl-getting-started .school-other-display-link-area > a {
+    cursor: pointer;
+}
+
+#edit-undergrad-school-name,
+.form-item.form-type-textfield.form-item-undergrad-school-name,
+#edit-grad-school-name,
+.form-item.form-type-textfield.form-item-grad-school-name {
+    margin-bottom: 4px;
+}
+
+#edit-undergrad-school-name-other,
+.form-item.form-type-textfield.form-item-undergrad-school-name-other,
+#edit-grad-school-name-other,
+.form-item.form-type-textfield.form-item-grad-school-name-other {
+    margin-bottom: 3px;
+}
+
+.form-item-undergrad-graduation-year,
+.form-item-grad-graduation-year {
+    margin-top: 15px;
+}

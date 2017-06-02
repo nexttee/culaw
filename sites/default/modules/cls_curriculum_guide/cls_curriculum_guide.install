@@ -1,0 +1,51 @@
+<?php
+/**
+* Implements hook_schema.
+*/
+
+function cls_curriculum_guide_schema() {
+  $schema = array();
+
+  $schema['cls_cg_offering'] = array(
+    'description' => 'Base table for offering entity',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'Human readable name of offering entity',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'course_offering_number' => array(
+        'description' => 'Course Offering Number',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'created_timestamp' => array(
+        'description' => 'Created at',
+        'type' => 'int',
+        'length' => 10,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'updated_timestamp' => array(
+        'description' => 'Last modification at',
+        'type' => 'int',
+        'length' => 10,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array(
+      'id',
+    ),
+  );
+
+  return $schema;
+}

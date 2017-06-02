@@ -5,10 +5,12 @@ core = 7.x
 
 ; Stylesheets
 stylesheets[all][] = build/main.css
+stylesheets[all][] = build/main-psd.css
 
 ; Scripts
 scripts[] = build/jquery.touchSwipe.min.js
 scripts[] = build/script.js
+scripts[] = js/jquery.main.js
 
 ; Regions
 

@@ -1,0 +1,199 @@
+body.cls-mcl.not-logged-in div.container .twelvecol {width:960px;margin:0;}
+body.cls-mcl.not-logged-in div.content-header {display:none;}
+body.cls-mcl.not-logged-in div.content-container {background-color: #E7F0F5; min-height:300px !important;}
+body.cls-mcl.not-logged-in div.content-container div.group,
+body.cls-mcl.not-logged-in div.content-container div.content-main-area {margin:0;}
+body.cls-mcl.not-logged-in .messages {display: none;}
+
+body.cls-mcl div.mcl-login-instructions-column {
+	float: left;
+    /* height: 400px; */
+    padding: 15px 25px 25px;
+    width: 600px;
+}
+
+body.cls-mcl div.mcl-login-instructions-column h2 {
+	color: #186E9D;
+	font-size: 40px;
+}
+
+body.cls-mcl.cls-mcl-my-columbia-llm div.mcl-login-instructions-column h2 {
+  font-size: 34px;
+}
+
+body.cls-mcl div.mcl-login-instructions-column h4 {
+	font-size: 21px;
+}
+
+body.cls-mcl div.mcl-login-instructions-column p.introduction {
+  margin-bottom: 20px;
+}
+
+body.cls-mcl.cls-mcl-my-columbia-llm div.mcl-login-instructions-column p.introduction {
+  margin-bottom: 13px;
+}
+
+body.cls-mcl div.mcl-login-instructions-column ul li {
+	font-size: 16px;
+}
+
+body.cls-mcl.cls-mcl-my-columbia-llm div.mcl-login-instructions-column ul li {
+  margin-bottom: 0;
+  line-height: 28px;
+}
+
+/*
+body.cls-mcl div.mcl-login-instructions-column p.login-instructions {
+	font: italic 20px Georgia, "Times New Roman", Times, serif;
+	color: #666666;
+}
+*/
+
+body.cls-mcl div.mcl-login-instructions-column a.button {
+  font-size: 21px;
+}
+
+body.cls-mcl.cls-mcl-my-columbia-llm div.mcl-login-instructions-column a.button {
+    font-size: 23px;
+}
+
+body.cls-mcl div.mcl-login-form-column {
+	background-color: #B3B3B3;
+    border: 1px solid #E6E6E6;
+    border-radius: 0 10px 10px 0;
+    float: right;
+    /* height: 400px; */
+    /* padding: 25px; */
+    width: 300px;
+}
+
+body.cls-mcl div.mcl-login-form-column div.mcl-get-started-now {
+  border-radius: 0 10px 0 0;
+  background-color: #186E9D;
+  padding: 25px;
+}
+
+body.cls-mcl div.mcl-login-form-column div.mcl-get-started-now div.mcl-get-started-now-btn {
+ 	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #186E9D;
+    border: 4px solid #ffffff;
+    color: #FFFFFF;
+    padding: 10px;
+    font: bold 30px Verdana, Arial, sans-serif;
+    text-align: center;
+}
+
+body.cls-mcl div.mcl-login-form-column div.mcl-get-started-now div.mcl-get-started-now-btn a {
+    color: #FFFFFF;
+}
+
+body.cls-mcl div.mcl-login-photo {
+  height: 215px;
+}
+
+body.cls-mcl div.mcl-login-form-column div.mcl-login-form-login {
+  padding: 15px 25px 25px;
+}
+
+/*
+body.cls-mcldiv.mcl-login-form-column div.passcdoe-login-form-login {
+	height:  355px;
+}
+*/
+
+body.cls-mcl div.mcl-login-form-column h3 {
+	font-size: 21px; color: #333333;
+}
+
+body.cls-mcl div.mcl-login-form-column h3.login-error {
+	margin-bottom: 5px;
+}
+
+body.cls-mcl div.mcl-login-form-column label {
+  font-weight: bold;
+	font-size: 13px;
+	color: #333333;
+}
+
+body.cls-mcl div.mcl-login-form-column div#edit-actions {
+  margin-bottom: 0 !important;
+  margin-top: 15px !important;
+}
+
+body.cls-mcl div.mcl-login-form-column label span.form-required {
+  display: none;
+}
+
+body.cls-mcl div.mcl-login-form-column span.error-msg {
+	color: #cc0000;
+}
+
+body.cls-mcl div.mcl-login-form-column input#edit-submit {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #333333;
+    border: 2px solid #999999;
+    color: #FFFFFF;
+    font: 15px Verdana, Arial, sans-serif;
+    padding: 1px 15px 3px;
+    margin-bottom: 12px;
+    height: 33px;
+}
+
+body.cls-mcl div.mcl-login-form-column input#edit-submit:active {
+    background-color: #186E9E;
+    color: #FFFFFF;
+}
+
+body.cls-mcl div.mcl-login-form-column input#edit-name,
+body.cls-mcl div.mcl-login-form-column input#edit-pass {
+	background-color: #FFFFFF;
+    border: 2px solid #999999;
+    border-radius:15px;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+    color: #666666;
+    display: block;
+    font: 16px Verdana,Arial,Helvetica,sans-serif;
+    height: 25px;
+    margin: 10px 0;
+    padding: 1px 10px 3px;
+    width: 221px;
+}
+
+body.cls-mcl div.mcl-login-form-column input#edit-name {
+  background-image: url(../images/bg-email-address.gif);
+  background-repeat: no-repeat;
+  background-position: 14px 10px;
+}
+
+body.cls-mcl div.mcl-login-form-column input#edit-pass {
+  background-image: url(../images/bg-password.gif);
+  background-repeat: no-repeat;
+  background-position: 14px 10px;
+}
+
+body.cls-mcl div.mcl-login-form-column input#edit-name.no-bg {
+  background-image: none;
+}
+
+body.cls-mcl div.mcl-login-form-column input#edit-pass.no-bg {
+  background-image: none;
+}
+
+body.cls-mcl div.mcl-login-form-column input#edit-name:focus,
+body.cls-mcl div.mcl-login-form-column input#edit-pass:focus {	
+	border: #186E9E 2px solid;
+}
+
+body.cls-mcl div.mcl-login-form-column p.having-trouble {
+	font-size: 11px;
+	margin-bottom: 0;
+}
+
+body.cls-mcl div.mcl-login-form-column p.having-trouble a {
+	color: #333333;
+}

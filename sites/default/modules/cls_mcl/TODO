@@ -1,0 +1,18 @@
+follow-up on school autocomplete (chosen should be included via libraries module, AJAX for performance)
+wordsmitting around school autocomplete "other" capability
+only show interests valid per GLS exclusions
+security question validation issue?
+expanded sub-menu for MCLLM left nav (to match mockup and MCLaw)
+Figure out how to deal with "Admissions" in context section title
+Configure and test forgot password
+Add social media icons (did we show quick links)?
+configure default course views (when no selections are made in interest)
+Training on how to use Jira Bonfire
+Schedule training for admin capabilities on Friday and Monday
+Have Christine and Meagan check all requirements and copy
+Meagan deal with any Mandrill issues that arise
+Full testing of profile update and interest update (and whether this affects the dashboard items)
+CSS issue on login page (right column is not long enough or left column is too tall)
+Check app status checker language on login page with GLS
+Add logged out context for MCLLM that just adds Twitter block and dashboard menu block, along with Graduate Legal Studies as part of section titles
+Finesse views and export back to code

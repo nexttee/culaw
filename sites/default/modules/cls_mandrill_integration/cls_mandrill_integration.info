@@ -1,0 +1,7 @@
+name = CLS Mandrill Integration
+description = Provides integration and testing capabilities with Mandrill, MailChimp's transactional email service.
+core = 7.x
+
+package = Columbia Law School
+
+dependencies[] = libraries (>=2.x)

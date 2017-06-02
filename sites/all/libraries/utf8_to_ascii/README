@@ -1,0 +1,10 @@
+UTF8 TO ASCII
+
+US-ASCII transliterations of Unicode text
+
+Ported Sean M. Burke's Text::Unidecode Perl module
+
+http://search.cpan.org/~sburke/Text-Unidecode-0.04/
+http://interglacial.com/~sburke/
+
+Right now hasn't been tested carefully.

@@ -1,0 +1,2929 @@
+<?php
+
+require_once('cls_mcl.validation.inc');
+
+/**
+* Obtains the realpath of the excel directory destination within sites/default/files.
+*/
+function _cls_mcl_excel_file_dir_realpath($file_name = '') {
+  $destination_wrapper = file_stream_wrapper_get_instance_by_uri('public://');
+  $public_dir_realpath = $destination_wrapper->realpath();
+  $mcl_excel_file_realpath = $public_dir_realpath . '/reports/gls';
+
+  if (!file_exists($mcl_excel_file_realpath)) {
+    mkdir($mcl_excel_file_realpath);
+    chmod($mcl_excel_file_realpath, 0777);
+  }
+
+  if (file_exists($mcl_excel_file_realpath)) {
+    return $mcl_excel_file_realpath . '/' . $file_name;
+  }
+  return $public_dir_realpath . '/' . $file_name;
+}
+
+/**
+* Implements hook_menu().
+*/
+function cls_mcl_menu() {
+  $items = array();
+
+  foreach (cls_get_site_instances() as $site_instance) {
+    $items['admin/config/system/year-change'] = array(
+      'title' => t('Application Year for GLS Depositors Report'),
+      'position' => 'right',
+      'description' => t('Set the Application Year for admitted LLM students enrollment reports.'),
+      'weight' => -30,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('cls_mcl_year_adjustment'),
+      'access arguments' => array('administer site configuration'),
+      'file' => 'cls_mcl.manual_year_change.inc',
+    );
+
+    $items[$site_instance['path']] = array(
+      'title' => $site_instance['title'],
+      'page callback' => 'cls_mcl_home_page',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => TRUE,
+      'file' => 'cls_mcl.home.inc',
+    );
+
+    $items[$site_instance['path'] . '/dashboard'] = array(
+      'title' => $site_instance['title'],
+      'page callback' => 'cls_mcl_dashboard_redirect',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => TRUE,
+      'file' => 'cls_mcl.dashboard.inc',
+    );
+
+    $items[$site_instance['path'] . '/password-recovery'] = array(
+      'title' => t('Password Recovery'),
+      'page callback' => 'cls_mcl_display_password_recovery',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_CALLBACK,
+      'access callback' => TRUE,
+      'file' => 'cls_mcl.password_recovery.inc',
+    );
+
+    $items[$site_instance['path'] . '/password-recovery/confirmation'] = array(
+      'title' => t('Password Reset Successfully'),
+      'page callback' => 'cls_mcl_display_password_recovery_confirmation',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => TRUE,
+      'file' => 'cls_mcl.password_recovery.inc',
+    );
+
+    $items[$site_instance['path'] . '/get-started'] = array(
+      'title' => t('Getting Started'),
+      'page callback' => 'cls_mcl_display_new_account_form',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => TRUE,
+      'file' => 'cls_mcl.new_account.inc',
+    );
+
+    $items[$site_instance['path'] . '/update-my-profile'] = array(
+      'title' => t('Update My Profile'),
+      'page callback' => 'cls_mcl_display_profile_update',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access arguments' => array('access My Columbia Law update my profile'),
+      'file' => 'cls_mcl.profile_update.inc',
+    );
+
+    $items[$site_instance['path'] . '/update-my-interests'] = array(
+      'title' => t('Update My Interests'),
+      'page callback' => 'cls_mcl_display_interests_update',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => 'cls_mcl_display_interests_update_access',
+      'file' => 'cls_mcl.profile_update.inc',
+    );
+
+    $items[$site_instance['path'] . '/change-my-password'] = array(
+      'title' => t('Change My Password'),
+      'page callback' => 'cls_mcl_display_password_change',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => 'cls_mcl_display_password_change_access',
+      'file' => 'cls_mcl.password_change.inc',
+    );
+
+    $items[$site_instance['path'] . '/password-changed-successfully'] = array(
+      'title' => t('Password Changed Successfully'),
+      'page callback' => 'cls_mcl_display_password_change_screen',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_CALLBACK,
+      'access callback' => 'cls_mcl_display_password_change_access',
+      'file' => 'cls_mcl.password_change.inc',
+    );
+
+    $items[$site_instance['path'] . '/update-security-question'] = array(
+      'title' => t('Update My Security Question'),
+      'page callback' => 'cls_mcl_display_security_question_update',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => 'cls_mcl_display_password_change_access',
+      'file' => 'cls_mcl.security_question_update.inc',
+    );
+
+    $items[$site_instance['path'] . '/account-updated-successfully'] = array(
+      'title' => t('Account Updated Successfully'),
+      'page callback' => 'cls_mcl_display_account_update_screen',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_CALLBACK,
+      'access callback' => 'cls_mcl_display_password_change_access',
+      'file' => 'cls_mcl.security_question_update.inc',
+    );
+
+    $items[$site_instance['path'] . '/cancel-my-account'] = array(
+      'title' => t('Cancel My Account'),
+      'page callback' => 'cls_mcl_display_cancel_account_page',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => 'cls_mcl_cancel_account_access',
+      'file' => 'cls_mcl.profile_update.inc',
+    );
+
+    $items[$site_instance['path'] . '/cancel-my-account/confirmation'] = array(
+      'title' => t('Account Cancellation Confirmation'),
+      'page callback' => 'cls_mcl_display_account_cancelled_screen',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_CALLBACK,
+      'access callback' => TRUE,
+      'file' => 'cls_mcl.profile_update.inc',
+    );
+
+     $items[$site_instance['path'] . '/account-settings'] = array(
+      'title' => t('Account Settings'),
+      'page callback' => 'cls_mcl_display_account_settings',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => 'cls_mcl_account_settings_access',
+      'file' => 'cls_mcl.account_settings.inc',
+    );
+
+    $items[$site_instance['path'] . '/account-settings/password'] = array(
+      'title' => t('Account Settings'),
+      'page callback' => 'cls_mcl_display_account_settings_password',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => 'cls_mcl_account_settings_access',
+      'file' => 'cls_mcl.account_settings.password.inc',
+    );
+
+    $items[$site_instance['path'] . '/account-settings/security-question'] = array(
+      'title' => t('Account Settings'),
+      'page callback' => 'cls_mcl_display_account_settings_security_question',
+      'page arguments' => array($site_instance['instance_id']),
+      'type' => MENU_SUGGESTED_ITEM,
+      'access callback' => 'cls_mcl_account_settings_access',
+      'file' => 'cls_mcl.account_settings.security_question.inc',
+    );
+
+  }
+
+  // My Columbia Law (J.D.)-specific paths
+
+  $items['admissions/jd/my-columbia-law/experience'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_welcome',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/first-year'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_first_year',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/first-year/electives'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_first_year_electives',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/first-year/joint-degrees'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_first_year_joint_degrees',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/first-year/moot-court'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_first_year_moot_court',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/first-year/student-orgs'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_first_year_student_orgs',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/second-third-years'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_second_third_year',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/second-third-years/centers-programs'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_second_third_year_centers',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/second-third-years/clinics-externships'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_second_third_year_clinics',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/second-third-years/journals'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_second_third_year_journals',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/second-third-years/pro-bono'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_second_third_year_pro_bono',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/experience/end'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_display_tour_end',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/check-application-status'] = array(
+    'title' => t('Check Application Status'),
+    'page callback' => 'cls_mcl_check_application_status',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.status_checker.inc',
+  );
+
+  $items['admissions/jd/apply/check-application-status'] = array(
+    'title' => t('Check Application Status'),
+    'page callback' => 'cls_mcl_check_application_status',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.status_checker.inc',
+  );
+
+  $items['admissions/jd/my-columbia-law/display-application-status'] = array(
+    'title' => t('Application Status'),
+    'page callback' => 'cls_mcl_display_applicant_status_data',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.status_checker.inc',
+  );
+
+  $items['admissions/jd/apply/display-application-status'] = array(
+    'title' => t('Application Status'),
+    'page callback' => 'cls_mcl_display_applicant_status_data',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.status_checker.inc',
+  );
+
+  // My Columbia LL.M.-specific paths
+
+  $experience_base_path = 'admissions/graduate-legal-studies/my-columbia-llm/tour';
+  $experience_base_path_with_slash = "$experience_base_path/";
+  $items[$experience_base_path] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_welcome_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'curriculum'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_curriculum_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'curriculum/program-of-study'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_curriculum_courses_study_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'curriculum/introductory-courses'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_curriculum_intro_courses_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'curriculum/cross-registration'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_curriculum_cross_reg_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'academic-experience'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_academic_experience_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'academic-experience/centers-programs'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_academic_experience_centers_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'academic-experience/clinics-externships'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_academic_experience_clinics_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'academic-experience/journals'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_academic_experience_journals_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'academic-experience/pro-bono'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_academic_experience_pro_bono_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'student-life'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_student_life_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'student-life/organizations'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_student_life_orgs_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'student-life/nyc'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_student_life_nyc_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'student-life/alumni'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_student_life_alumni_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items[$experience_base_path_with_slash . 'thanks'] = array(
+    'title' => t('Experience the Law School'),
+    'page callback' => 'cls_mcl_tour_llm_thanks_page',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.tour_llm.inc',
+  );
+
+  $items['admissions/graduate-legal-studies/my-columbia-llm/check-application-status'] = array(
+    'title' => t('Check Your Application Status'),
+    'page callback' => 'cls_mcl_llm_status_redirect',
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => 'cls_mcl_llm_status_access_callback',
+    'file' => 'cls_mcl.status_checker_llm.inc',
+  );
+
+  $items['admissions/graduate-legal-studies/admin/accepted-offers-report'] = array(
+    'title' => t('Accepted Offers Report'),
+    'page callback' => 'cls_mcl_display_accepted_offers_report',
+    'type' => MENU_CALLBACK,
+    'access callback' => 'cls_mcl_offers_report_access_callback',
+  );
+
+  $items['admissions/graduate-legal-studies/admin/declined-offers-report'] = array(
+    'title' => t('Declined Offers Report'),
+    'page callback' => 'cls_mcl_display_declined_offers_report',
+    'type' => MENU_CALLBACK,
+    'access callback' => 'cls_mcl_offers_report_access_callback',
+  );
+
+  // General paths (not specific to an instance)
+
+  $items['mcl/validate-birth-date'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_birth_date_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-lsac-account-number'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_lsac_account_number_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-lsac-account-number-for-new-account'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_lsac_account_number_for_new_account_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-lsac-account-number-for-updated-account'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_lsac_account_number_for_updated_account_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-name'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_name_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-name-non-required'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_name_non_required_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-email'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_email_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-security-answer'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_security_answer_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-security-answer-non-required'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_security_answer_non_required_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-zip-code'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_zip_code_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/validate-equality'] = array(
+    'title' => '',
+    'page callback' => 'cls_mcl_validate_equality_ajax',
+    'page arguments' => array(2),
+    'type' => MENU_SUGGESTED_ITEM,
+    'access callback' => TRUE,
+    'file' => 'cls_mcl.validation.inc',
+  );
+
+  $items['mcl/get-schools'] = array(
+    'title' => t('School Autocomplete Endpoint'),
+    'page callback' => 'cls_mcl_school_autocomplete',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['mcl/get-school-names'] = array(
+    'title' => t('School Autocomplete Endpoint'),
+    'page callback' => 'cls_mcl_school_names_autocomplete',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+   $items['mcl/get-schools/existing-profile/undergrad'] = array(
+     'title' => t('School Name Matching'),
+     'page callback' => 'cls_mcl_school_autocomplete_existing',
+     'access callback' => TRUE,
+     'type' => MENU_CALLBACK,
+   );
+
+   $items['mcl/get-schools/existing-profile/grad'] = array(
+     'title' => t('School Name Matching'),
+     'page callback' => 'cls_mcl_school_autocomplete_existing',
+     'access callback' => TRUE,
+     'type' => MENU_CALLBACK,
+   );
+
+  $items['mcl/get-countries'] = array(
+    'title' => t('Country Matching'),
+    'page callback' => 'cls_mcl_country_autocomplete',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['mcl/get-states'] = array(
+    'title' => 'State Matching',
+    'page callback' => 'cls_mcl_state_autocomplete',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['cls-mcl-interest-type/add'] = array(
+    'title' => t('Add CLS MCL Interest Type'),
+    'page callback' => 'cls_mcl_interest_type_add',
+    //'page arguments' => array(2),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('create', 'cls_mcl_interest_type', $type),
+    'file' => 'cls_mcl.admin.inc',
+    'type' => MENU_LOCAL_ACTION,
+    'tab_parent' => 'cls-mcl-interest-type',
+    'tab_root' => 'cls-mcl-interest-type',
+  );
+
+  $items['cls-mcl-interest-type/%cls_mcl_interest_type'] = array(
+    'title callback' => 'entity_label',
+    'title arguments' => array('cls_mcl_interest_type', 1),
+    'page callback' => 'cls_mcl_interest_type_view',
+    'page arguments' => array(1),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('view', 'cls_mcl_interest_type', 1),
+    'file' => 'cls_mcl.admin.inc',
+  );
+
+  $items['cls-mcl-interest-type/%cls_mcl_interest_type/view'] = array(
+    'title' => t('View'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  $items['cls-mcl-interest-type/%cls_mcl_interest_type/delete'] = array(
+    'title' => t('Delete CLS MCL Interest Type'),
+    'title callback' => 'cls_mcl_interest_type_label',
+    'title arguments' => array(1),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cls_mcl_interest_type_delete_form', 1),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('edit', 'cls_mcl_interest_type', 1),
+    'file' => 'cls_mcl.admin.inc',
+  );
+
+  $items['cls-mcl-interest-type/%cls_mcl_interest_type/edit'] = array(
+    'title' => t('Edit'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cls_mcl_interest_type_form', 1),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('edit', 'cls_mcl_interest_type', 1),
+    'file' => 'cls_mcl.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  $items['cls-mcl-journal/add'] = array(
+    'title' => t('Add CLS MCL Journal'),
+    'page callback' => 'cls_mcl_journal_add',
+    //'page arguments' => array(2),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('create', 'cls_mcl_journal', $type),
+    'file' => 'cls_mcl.admin.inc',
+    'type' => MENU_LOCAL_ACTION,
+    'tab_parent' => 'cls-mcl-journal',
+    'tab_root' => 'cls-mcl-journal',
+  );
+
+  $items['cls-mcl-journal/%cls_mcl_journal'] = array(
+    'title callback' => 'entity_label',
+    'title arguments' => array('cls_mcl_journal', 1),
+    'page callback' => 'cls_mcl_journal_view',
+    'page arguments' => array(1),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('view', 'cls_mcl_journal', 1),
+    'file' => 'cls_mcl.admin.inc',
+  );
+
+  $items['cls-mcl-journal/%cls_mcl_journal/view'] = array(
+    'title' => t('View'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  $items['cls-mcl-journal/%cls_mcl_journal/delete'] = array(
+    'title' => t('Delete CLS MCL Journal'),
+    'title callback' => 'cls_mcl_journal_label',
+    'title arguments' => array(1),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cls_mcl_journal_delete_form', 1),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('edit', 'cls_mcl_journal', 1),
+    'file' => 'cls_mcl.admin.inc',
+  );
+
+  $items['cls-mcl-journal/%cls_mcl_journal/edit'] = array(
+    'title' => t('Edit'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cls_mcl_journal_form', 1),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('edit', 'cls_mcl_journal', 1),
+    'access arguments' => array('administer My Columbia Law'),
+    'file' => 'cls_mcl.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  $items['cls-mcl-student-organization/add'] = array(
+    'title' => t('Add CLS MCL Student Organization'),
+    'page callback' => 'cls_mcl_student_organization_add',
+    //'page arguments' => array(2),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('create', 'cls_mcl_student_organization', $type),
+    'file' => 'cls_mcl.admin.inc',
+    'type' => MENU_LOCAL_ACTION,
+    'tab_parent' => 'cls-mcl-student-organization',
+    'tab_root' => 'cls-mcl-student-organization',
+  );
+
+  $items['cls-mcl-student-organization/%cls_mcl_student_organization'] = array(
+    'title callback' => 'entity_label',
+    'title arguments' => array('cls_mcl_student_organization', 1),
+    'page callback' => 'cls_mcl_student_organization_view',
+    'page arguments' => array(1),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('view', 'cls_mcl_student_organization', 1),
+    'file' => 'cls_mcl.admin.inc',
+  );
+
+  $items['cls-mcl-student-organization/%cls_mcl_student_organization/view'] = array(
+    'title' => t('View'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  $items['cls-mcl-student-organization/%cls_mcl_student_organization/delete'] = array(
+    'title' => t('Delete CLS MCL Student Organization'),
+    'title callback' => 'cls_mcl_student_organization_label',
+    'title arguments' => array(1),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cls_mcl_student_organization_delete_form', 1),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('edit', 'cls_mcl_student_organization', 1),
+    'file' => 'cls_mcl.admin.inc',
+  );
+
+  $items['cls-mcl-student-organization/%cls_mcl_student_organization/edit'] = array(
+    'title' => t('Edit'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cls_mcl_student_organization_form', 1),
+    'access arguments' => array('administer My Columbia Law'),
+    //'access callback' => 'entity_access',
+    //'access arguments' => array('edit', 'cls_mcl_student_organization', 1),
+    'file' => 'cls_mcl.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  $items['admissions/jd/admin/roles/bulk-update'] = array(
+    'title' => t('Update or cancel a batch of user accounts based on selected field (UID, name of LSAC number)'),
+    'page callback' => 'cls_mcl_student_role_bulk_update',
+    'access arguments' => array('administer My Columbia Law'),
+    'file' => 'cls_mcl.bulk_update.inc',
+    'type' => MENU_LOCAL_ACTION,
+  );
+
+  $items['admissions/jd/admin/update-mcl-accounts'] = array(
+    'title' => t('Change account type of users with "My Columbia Law User" role to "my_columbia_law"'),
+    'page callback' => 'cls_mcl_update_my_columbia_law_users',
+    'access callback' => 'cls_mcl_is_user_admin',
+    'type' => MENU_LOCAL_ACTION,
+  );
+
+  return $items;
+}
+
+function cls_mcl_display_accepted_offers_report() {
+	try {
+      if (($library = libraries_load('PHPExcel')) && !empty($library['loaded'])) {
+
+      	$objPHPExcel = new PHPExcel();
+
+	      $objPHPExcel->getProperties()->setCreator("Columbia Law School")
+				->setLastModifiedBy("Columbia Law School")
+				->setTitle("GLS Deposits Report")
+				->setSubject("GLS Deposits Report");
+
+		    $objPHPExcel->getActiveSheet()->setCellValue('A1', 'LSAC Number');
+		    $objPHPExcel->getActiveSheet()->setCellValue('B1', 'Last Name');
+  	    $objPHPExcel->getActiveSheet()->setCellValue('C1', 'First Name');
+  	    $objPHPExcel->getActiveSheet()->setCellValue('D1', 'Middle Name');
+  	    $objPHPExcel->getActiveSheet()->setCellValue('E1', 'Current Status');
+  	    $objPHPExcel->getActiveSheet()->setCellValue('F1', 'Decision Status');
+  	    $objPHPExcel->getActiveSheet()->setCellValue('G1', 'Offer Accepted');
+  	    $objPHPExcel->getActiveSheet()->setCellValue('H1', 'Decision Date');
+  	    $objPHPExcel->getActiveSheet()->setCellValue('I1', 'Amount');
+  	    $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Payment Date');
+
+        $result = db_query(
+          "select a.id, a.lsac_account_number, a.first_name, a.last_name, a.middle_name, a.current_status, a.decision_status, " .
+          "a.deposit_amount, a.deposit_waived, a.deposit2_amount, " .
+          "a.deposit2_waived, a.enrollment_offer_accepted, a.enrollment_decline_reason, a.enrollment_decision_date_formatted, " .
+          "d.response_code, d.response_description, d.amount, d.transaction_date_formatted " .
+          "from {cls_aces2_applicant} a " .
+          "left join {cls_aces2_deposit_transaction} d " .
+          "on d.lsac_account_number = a.lsac_account_number and (d.amount = a.deposit_amount or d.amount = a.deposit2_amount) " .
+          "where a.year_entering = :current_year and a.program_applied = 2 and a.decision_status IN ('Admit', 'Depositor') " .
+          "and a.enrollment_offer_accepted = 'Y' and (d.response_description IN ('ACCEPT','REVIEW') or d.lsac_account_number is null)" .
+          "order by a.enrollment_decision_date desc",
+          array(':current_year' => variable_get('cls_mcl_current_year', date("Y") - 1))
+        );
+
+        $counter = 2;
+
+        while ($record = $result->fetchAssoc()) {
+        	$objPHPExcel->getActiveSheet()->setCellValue('A'. $counter, $record['lsac_account_number']);
+        	$objPHPExcel->getActiveSheet()->setCellValue('B'. $counter, $record['last_name']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('C'. $counter, $record['first_name']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('D'. $counter, $record['middle_name']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('E'. $counter, $record['current_status']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('F'. $counter, $record['decision_status']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('G'. $counter, $record['enrollment_offer_accepted']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('H'. $counter, $record['enrollment_decision_date_formatted']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('I'. $counter, '$'.$record['amount']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('J'. $counter, $record['transaction_date_formatted']);
+	        $counter++;
+        }
+
+  		  $objWorksheet = new PHPExcel_Worksheet($objPHPExcel);
+  	    $objPHPExcel->addSheet($objWorksheet);
+  	    $objWorksheet->setTitle("GLS Deposits Report");
+
+  	    header('Content-Type: application/vnd.ms-excel');
+  	    header('Content-Disposition: attachment;filename="gls_deposits.xls"');
+  	    header('Cache-Control: max-age=0');
+
+  	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+  	    $objWriter->save('php://output');
+        $mcl_excel_file_realpath = _cls_mcl_excel_file_dir_realpath('gls_deposits.xls');
+  	    $objWriter->save($mcl_excel_file_realpath);
+        exit;
+      }
+    }
+    catch (Exception $e) {
+      return 'Caught exception: ' . $e->getMessage();
+    }
+}
+
+function cls_mcl_display_declined_offers_report() {
+	try {
+      if (($library = libraries_load('PHPExcel')) && !empty($library['loaded'])) {
+
+      	$objPHPExcel = new PHPExcel();
+
+  	    $objPHPExcel->getProperties()->setCreator("Columbia Law School")
+  						 ->setLastModifiedBy("Columbia Law School")
+  						 ->setTitle("GLS Declined Offers Report")
+  						 ->setSubject("GLS Declined Offers Report");
+
+    		$objPHPExcel->getActiveSheet()->setCellValue('A1', 'LSAC Number');
+    		$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Last Name');
+    	    $objPHPExcel->getActiveSheet()->setCellValue('C1', 'First Name');
+    	    $objPHPExcel->getActiveSheet()->setCellValue('D1', 'Middle Name');
+    	    $objPHPExcel->getActiveSheet()->setCellValue('E1', 'Current Status');
+    	    $objPHPExcel->getActiveSheet()->setCellValue('F1', 'Decision Status');
+    	    $objPHPExcel->getActiveSheet()->setCellValue('G1', 'Offer Accepted');
+    	    $objPHPExcel->getActiveSheet()->setCellValue('H1', 'Decline Reason');
+    	    $objPHPExcel->getActiveSheet()->setCellValue('I1', 'Decision Date');
+
+        $result = db_query(
+          "select a.id, a.lsac_account_number, a.first_name, a.last_name, a.middle_name, a.current_status, a.decision_status, " .
+          "a.enrollment_decline_reason, a.enrollment_decision_date_formatted " .
+          "from {cls_aces2_applicant} a " .
+          "where a.year_entering = :current_year and a.program_applied = 2 and a.decision_status IN ('Admit', 'Depositor') " .
+          "and a.enrollment_offer_accepted = 'N'" .
+          "order by a.enrollment_decision_date desc",
+          array(':current_year' => variable_get('cls_mcl_current_year', date("Y") - 1))
+        );
+
+        $counter = 2;
+
+        while ($record = $result->fetchAssoc()) {
+        	$objPHPExcel->getActiveSheet()->setCellValue('A'. $counter, $record['lsac_account_number']);
+        	$objPHPExcel->getActiveSheet()->setCellValue('B'. $counter, $record['last_name']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('C'. $counter, $record['first_name']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('D'. $counter, $record['middle_name']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('E'. $counter, $record['current_status']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('F'. $counter, $record['decision_status']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('G'. $counter, 'N');
+	        $objPHPExcel->getActiveSheet()->setCellValue('H'. $counter, $record['enrollment_decline_reason']);
+	        $objPHPExcel->getActiveSheet()->setCellValue('I'. $counter, $record['enrollment_decision_date_formatted']);
+	        $counter++;
+        }
+
+  		  $objWorksheet = new PHPExcel_Worksheet($objPHPExcel);
+  	    $objPHPExcel->addSheet($objWorksheet);
+  	    $objWorksheet->setTitle("GLS Declined Offers Report");
+
+  	    header('Content-Type: application/vnd.ms-excel');
+  	    header('Content-Disposition: attachment;filename="gls_declined_offers.xls"');
+  	    header('Cache-Control: max-age=0');
+
+  	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+  	    $objWriter->save('php://output');
+        $mcl_excel_file_realpath = _cls_mcl_excel_file_dir_realpath('gls_declined_offers.xls');
+  	    $objWriter->save($mcl_excel_file_realpath);
+        exit;
+      }
+    }
+    catch (Exception $e) {
+      return 'Caught exception: ' . $e->getMessage();
+    }
+}
+
+function cls_mcl_is_user_admin() {
+  global $user;
+  if (in_array('administrator', $user->roles)) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+function cls_mcl_update_my_columbia_law_users() {
+  $count = 0;
+  $roles_array = user_roles();
+  $mcl_rid = array_search('My Columbia Law User', $roles_array);
+  $results = db_select('users_roles', 'ur')
+    ->fields('ur', array('uid'))
+    ->condition('rid', $mcl_rid)
+    ->execute();
+  while ($record = $results->fetchAssoc()) {
+  	if (isset($record['uid']) && $record['uid']) {
+  	  $num_updated = db_merge('field_data_cls_mcl_account_type')
+        ->key(array(
+          'entity_id' => $record['uid'],
+          'entity_type' => 'user'
+        ))
+        ->insertFields(array(
+          'entity_type' => 'user',
+          'bundle' => 'user',
+          'deleted' => 0,
+          'entity_id' => $record['uid'],
+          'revision_id' => $record['uid'],
+          'language' => 'und',
+          'delta' => 0,
+          'cls_mcl_account_type_value' => "my_columbia_law",
+        ))
+        ->updateFields(array(
+          'cls_mcl_account_type_value' => "my_columbia_law",
+        ))
+        ->execute();
+
+      if ($num_updated) {
+        $count++;
+      }
+      /*$log_params = array('type' => 27, //successful account update
+                            'data' => array('uid' => $record['uid'],
+                                            'account_type' => "my_columbia_law"),
+                            'uid' => $record['uid'],
+                            'ip_address' => ip_address(),
+                            'created' => REQUEST_TIME,
+                            );
+      cls_mcl_create_audit_log($log_params);*/
+    }
+  }
+  echo $count . " My Columbia Law user account(s) have been updated";
+}
+
+/**
+* Displays login with guest passcode.
+*
+* @return $html - string containing login window layout
+*/
+function cls_mcl_init() {
+    global $user;
+    global $base_url;
+    $current_path = request_uri();
+    $current_path = ltrim($current_path, '/');
+    //Current path is checked to prevent circular redirection
+    $destination = cls_mcl_get_destination();
+
+    if (!$user->uid && $current_path != 'admissions/graduate-legal-studies/my-columbia-llm') {
+      if (in_array($destination, array('admissions/graduate-legal-studies/my-columbia-llm/check-application-status'))) {
+        //Exact match
+        if ($destination) {
+          setcookie("destination", $destination, 0, "/"); //Used for redirection after login
+        }
+        drupal_goto('admissions/graduate-legal-studies/my-columbia-llm');
+      }
+    }
+
+    foreach (cls_get_site_instances() as $site_instance) {
+
+        if (!$user->uid && $current_path != $site_instance['path']) {
+            if (in_array($destination, array($site_instance['path'] . '/update-my-profile',
+                $site_instance['path'] . '/cancel-my-account',
+                $site_instance['path'] . '/change-my-password',
+                $site_instance['path'] . '/update-security-question',
+                $site_instance['path'] . '/update-security-question',
+            ))
+            ) {
+                //Exact match
+                if ($destination) {
+                    setcookie("destination", $destination, 0, "/"); //Used for redirection after login
+                }
+                drupal_goto($site_instance['path']);
+            }
+        }
+
+    }
+}
+
+/**
+* Returns destination parameter from URL. If it is not present, returns current path.
+*/
+function cls_mcl_get_destination() {
+  $destination = filter_input(INPUT_GET, 'destination', FILTER_SANITIZE_STRING);
+  $q = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
+  $current_path = request_uri();
+  $current_path = ltrim($current_path, '/');
+  $current_path_arr = explode("?", $current_path);
+  $current_path = $current_path_arr[0];
+  $current_path = $destination ? $destination : ($current_path ? $current_path : $q);
+  if (in_array($current_path, array("admissions/jd/my-columbia-law","sso/login", "sso/login/select", "sso/passcode-login", "sso/cas/process-user"))) {
+    $current_path = "";
+  }
+  return $current_path;
+}
+
+/**
+ * JSON autocomplete callback for selecting the user's
+ * previously attended/currently attending educational institutions
+ *
+ * @todo After Memcache, Couchbase, or Redis is implemented, we need to
+ *   cache visible and all schools as
+ *   (@link https://github.com/fran6co/phptrie trie) objects. Tries
+ *   are the most performant solution to autocomplete problems. This
+ *   is especially important as the school list grows to tens of thousands
+ *   of educational institutions.
+ */
+function cls_mcl_school_autocomplete($instance_id = '', $string = '', $existing = FALSE) {
+  if (!empty($instance_id) && empty($string)) {
+    $string = $instance_id;
+    $instance_id = 'my_columbia_law';
+  }
+  $matches = array();
+  $site_instance = cls_get_site_instance($instance_id);
+  if (!empty($string) && !empty($site_instance['school_visibility_codes'])) {
+  	$query = db_select('cls_mcl_schools', 's')
+  	  ->fields('s', array('school_id', 'school_name'))
+  	  ->condition('school_name', '%' . db_like($string) . '%', 'LIKE');
+    if ($existing !== FALSE) {
+      $db_or = db_or()
+        ->condition('visible', $site_instance['school_visibility_codes'], 'IN')
+        ->condition('school_id', $existing);
+      $query->condition($db_or);
+    }
+    else {
+      $query->condition('visible', $site_instance['school_visibility_codes'], 'IN');
+    }
+    $query->range(0, 20);
+  	$result = $query->execute();
+  	$matches = $result->fetchAllKeyed(0,1);
+  }
+  drupal_json_output($matches);
+  drupal_exit();
+}
+
+function cls_mcl_school_names_autocomplete($instance_id = '', $string = '') {
+  if (!empty($instance_id) && empty($string)) {
+    $string = $instance_id;
+    $instance_id = 'my_columbia_law';
+  }
+  $matches = array();
+  $site_instance = cls_get_site_instance($instance_id);
+  if (!empty($string) && !empty($site_instance['school_visibility_codes'])) {
+  	$query = db_select('cls_mcl_schools', 's')
+  	  ->fields('s', array('school_name'))
+  	  ->condition('school_name', '%' . db_like($string) . '%', 'LIKE');
+    $query->condition('visible', $site_instance['school_visibility_codes'], 'IN');
+    $query->range(0, 20);
+  	$result = $query->execute();
+  	$matches = $result->fetchAllKeyed(0,0);
+  }
+  drupal_json_output($matches);
+  drupal_exit();
+}
+
+function cls_mcl_school_autocomplete_existing($string = '') {
+  $schoolId = FALSE;
+
+  global $user;
+  $edited_user = user_load($user->uid);
+  $instance_id = (isset($edited_user->cls_mcl_account_type['und'][0]['value']) && $edited_user->cls_mcl_account_type['und'][0]['value']) ? $edited_user->cls_mcl_account_type['und'][0]['value'] : "my_columbia_law";
+
+  if (isset($edited_user->cls_mcl_undergrad_institution['und'][0]['value']) && $edited_user->cls_mcl_undergrad_institution['und'][0]['value']) {
+    $schoolId = $edited_user->cls_mcl_undergrad_institution['und'][0]['value'];
+  }
+  if ((arg(3) == 'grad') && isset($edited_user->cls_mcl_grad_institution['und'][0]['value']) && $edited_user->cls_mcl_grad_institution['und'][0]['value']) {
+    $schoolId = $edited_user->cls_mcl_grad_institution['und'][0]['value'];
+  }
+
+  cls_mcl_school_autocomplete($instance_id, $string, $schoolId);
+}
+
+function cls_mcl_state_autocomplete($string = '') {
+
+  $matches = array();
+
+  if ($string) {
+
+    $items = db_query("SELECT state_id, state_code, state_name FROM {cls_mcl_states}");
+    $possible_values = array();
+    foreach ($items as $item) {
+      $possible_values[] = $item->state_name;
+    }
+
+    /**
+     * Filter matches.
+     */
+    foreach ($possible_values as $value) {
+      if (preg_match("/{$string}/i", $value)) {
+        $matches[$value] = $value;
+      }
+    }
+  }
+
+  $result = drupal_json_output($matches);
+
+  return $result;
+
+}
+
+function cls_mcl_country_autocomplete($string = '') {
+
+  $matches = array();
+
+  if ($string) {
+
+    $items = db_query("SELECT country_id, country_code, country_name FROM {cls_mcl_countries}");
+    $possible_values = array();
+    foreach ($items as $item) {
+      $possible_values[] = $item->country_name;
+    }
+
+    /**
+     * Filter matches.
+     */
+    foreach ($possible_values as $value) {
+      if (preg_match("/{$string}/i", $value)) {
+        $matches[$value] = $value;
+      }
+    }
+  }
+
+  $result = drupal_json_output($matches);
+
+  return $result;
+
+}
+
+/**
+ * Implements hook_permission().
+ */
+function cls_mcl_permission() {
+  return array(
+    'administer My Columbia Law' => array(
+      'title' => t('Administer My Columbia Law/LL.M. fields and user data'),
+    ),
+    'access My Columbia Law update my profile' => array(
+      'title' => t('Access My Columbia Law Update My Profile'),
+    ),
+    'access My Columbia Law account update pages' => array(
+      'title' => t('Access My Columbia Law account update pages'),
+    ),
+    'access My Columbia LL.M. update my profile' => array(
+      'title' => t('Access My Columbia LL.M. Update My Profile'),
+    ),
+    'access My Columbia LL.M. account update pages' => array(
+      'title' => t('Access My Columbia LL.M. account update pages'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function cls_mcl_theme($existing, $type, $theme, $path) {
+  global $base_url;
+  $mcl_home_url = base_path() . 'admissions/jd/my-columbia-law';
+  $mcl_llm_home_url = base_path() . 'admissions/graduate-legal-studies/my-columbia-llm';
+
+  return array(
+    'mcl_login' => array(
+      'variables' => array(
+        'instance_id' => NULL,
+        'instance_path' => NULL,
+        'title' => NULL,
+        'login_page_header' => NULL,
+        'login_photo_filename' => NULL,
+        'login_photo_caption' => NULL,
+        'login_form_header' => NULL,
+        'form' => NULL,
+      ),
+      'template' => 'templates/login',
+    ),
+    'mcl_login_my_columbia_law' => array(
+      'variables' => array(),
+      'template' => 'templates/includes/login_my_columbia_law',
+    ),
+    'mcl_login_my_columbia_llm' => array(
+      'variables' => array(),
+      'template' => 'templates/includes/login_my_columbia_llm',
+    ),
+    'cls_mcl_dashboard' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/dashboard',
+    ),
+    'cls_mcl_dashboard_top_my_columbia_law' => array(
+      'variables' => array(),
+      'template' => 'templates/includes/dashboard_top_my_columbia_law',
+    ),
+    'cls_mcl_dashboard_top_my_columbia_llm' => array(
+      'variables' => array(),
+      'template' => 'templates/includes/dashboard_top_my_columbia_llm',
+    ),
+    'cls_mcl_dashboard_bottom_my_columbia_law' => array(
+      'variables' => array(),
+      'template' => 'templates/includes/dashboard_bottom_my_columbia_law',
+    ),
+    'cls_mcl_dashboard_bottom_my_columbia_llm' => array(
+      'variables' => array(),
+      'template' => 'templates/includes/dashboard_bottom_my_columbia_llm',
+    ),
+    'new_account' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'form' => NULL,
+      ),
+      'template' => 'templates/new_account',
+    ),
+    'status_checker_form' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'form' => NULL,
+      ),
+      'template' => 'templates/status_checker_form',
+    ),
+    'status_checker_result' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/status_checker_result',
+    ),
+    'password_recovery' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/password_recovery',
+    ),
+    'tour_welcome' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_welcome',
+    ),
+    'tour_first_year' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_first_year',
+    ),
+    'tour_first_year_electives' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_first_year_electives',
+    ),
+    'tour_first_year_joint_degrees' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_first_year_joint_degrees',
+    ),
+    'tour_first_year_moot_court' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_first_year_moot_court',
+    ),
+    'tour_first_year_student_orgs' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_first_year_student_orgs',
+    ),
+    'tour_second_third_year' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_second_third_year',
+    ),
+    'tour_second_third_year_centers' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_second_third_year_centers',
+    ),
+    'tour_second_third_year_clinics' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_second_third_year_clinics',
+    ),
+    'tour_second_third_year_journals' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_second_third_year_journals',
+    ),
+    'tour_second_third_year_pro_bono' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_second_third_year_pro_bono',
+    ),
+    'tour_end' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_home_url,
+      ),
+      'template' => 'templates/tour_end',
+    ),
+    'tour_llm_welcome' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/welcome',
+    ),
+    'tour_llm_curriculum' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/curriculum',
+    ),
+    'tour_llm_curriculum_intro_courses' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/curriculum_intro_courses',
+    ),
+    'tour_llm_curriculum_courses_study' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/curriculum_courses_study',
+    ),
+    'tour_llm_curriculum_cross_reg' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/curriculum_cross_reg',
+    ),
+    'tour_llm_academic_experience' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/academic_experience',
+    ),
+    'tour_llm_academic_experience_centers' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/academic_experience_centers',
+    ),
+    'tour_llm_academic_experience_clinics' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/academic_experience_clinics',
+    ),
+    'tour_llm_academic_experience_journals' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/academic_experience_journals',
+    ),
+    'tour_llm_academic_experience_pro_bono' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/academic_experience_pro_bono',
+    ),
+    'tour_llm_student_life' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/student_life',
+    ),
+    'tour_llm_student_life_orgs' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/student_life_orgs',
+    ),
+    'tour_llm_student_life_nyc' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/student_life_nyc',
+    ),
+    'tour_llm_student_life_alumni' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/student_life_alumni',
+    ),
+    'tour_llm_thanks' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+        'mcl_home_url' => $mcl_llm_home_url,
+      ),
+      'template' => 'templates/tour_llm/thanks',
+    ),
+    'cls_mcl_password_recovery_confirmation' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/password_recovery_confirmation',
+    ),
+    'update_my_profile' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/update_my_profile',
+    ),
+    'cls_mcl_cancel_account' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/cancel_account',
+    ),
+    'password_change' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/password_change',
+    ),
+    'password_change_success' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/password_change_success',
+    ),
+    'security_question_update' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/security_question_update',
+    ),
+    'account_settings' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/account_settings',
+    ),
+    'account_settings_password' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/account_settings_password',
+    ),
+    'account_settings_security_question' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/account_settings_security_question',
+    ),
+    'account_update_success' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/account_update_success',
+    ),
+    'cls_mcl_cancel_account_confirmation' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/cancel_account_confirmation',
+    ),
+    'search_failure_email' => array(
+      'variables' => array(
+        'first_name' => '',
+        'last_name' => '',
+        'user_name' => '',
+      ),
+      'template' => 'templates/search_failure_email',
+    ),
+    'bulk_update' => array(
+      'variables' => array(
+        'base_url' => $base_url,
+      ),
+      'template' => 'templates/bulk_update',
+    ),
+
+  );
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function cls_mcl_form_alter(&$form, &$form_state, $form_id) {
+  global $user;
+  if ($form_id == "user_profile_form"){
+  	$edited_user_id = arg(1);
+  	//if(isset($user->uid) && $user->uid != $edited_user_id) {
+    if (!user_access('administer My Columbia Law')) {
+      $form['cls_mcl_remote_user_id']['#access'] = false;
+      $form['cls_mcl_birth_date']['#access'] = false;
+      $form['cls_mcl_country']['#access'] = false;
+      $form['cls_mcl_province']['#access'] = false;
+      $form['cls_mcl_state_province']['#access'] = false;
+      $form['cls_mcl_city']['#access'] = false;
+      $form['cls_mcl_zip_code']['#access'] = false;
+      $form['cls_mcl_lsac_account_number']['#access'] = false;
+      $form['cls_mcl_security_question']['#access'] = false;
+      $form['cls_mcl_security_answer']['#access'] = false;
+      $form['cls_mcl_undergrad_institution']['#access'] = false;
+      $form['cls_mcl_undergrad_inst_other']['#access'] = false;
+      $form['cls_mcl_undergrad_grad_year']['#access'] = false;
+      $form['cls_mcl_grad_institution']['#access'] = false;
+      $form['cls_mcl_grad_inst_other']['#access'] = false;
+      $form['cls_mcl_grad_graduation_year']['#access'] = false;
+      $form['cls_mcl_admissions_cycle']['#access'] = false;
+      $form['cls_mcl_academic_interests']['#access'] = false;
+  	}
+  	else {
+  	  $edited_user = user_load($edited_user_id);
+  	  $form['user_id'] = array(
+        '#type' => 'value',
+        '#value' => $edited_user_id
+      );
+  	  $instance_id = isset($edited_user->cls_mcl_account_type['und'][0]['value']) ? $edited_user->cls_mcl_account_type['und'][0]['value'] : "my_columbia_law";
+  	  $country_options = cls_mcl_get_country_options();
+  	  $form['cls_mcl_country']['und']['#options'] = array_merge(array('' => '- Select a value -'), $country_options);
+  	  $state_options = cls_mcl_get_state_options();
+      $form['cls_mcl_state_province']['und']['#options'] = array_merge(array('' => '- Select a value -'), $state_options);
+      $form['cls_mcl_birth_date']['und'][0]['value']['#required'] = FALSE;
+      $form['cls_mcl_lsac_account_number']['und'][0]['value']['#required'] = FALSE;
+      $form['cls_mcl_country']['und']['#required'] = FALSE;
+      $form['cls_mcl_state_province']['und']['#required'] = FALSE;
+      $form['cls_mcl_city']['und'][0]['value']['#required'] = FALSE;
+      $form['cls_mcl_zip_code']['und'][0]['value']['#required'] = FALSE;
+      $form['cls_mcl_security_question']['und'][0]['value']['#required'] = FALSE;
+      $form['cls_mcl_security_answer']['und'][0]['value']['#required'] = FALSE;
+      $form['cls_mcl_remote_user_id']['und'][0]['value']['#required'] = FALSE;
+      $academic_interests = cls_mcl_get_interest_options($instance_id);
+      $form['cls_mcl_academic_interests']['und'][0]['value']['#type'] = 'select';
+      $form['cls_mcl_academic_interests']['und'][0]['value']['#options'] = $academic_interests;
+      $form['cls_mcl_academic_interests']['und'][0]['value']['#size'] = 1;
+      $form['cls_mcl_academic_interests']['und'][1]['value']['#type'] = 'select';
+      $form['cls_mcl_academic_interests']['und'][1]['value']['#options'] = $academic_interests;
+      $form['cls_mcl_academic_interests']['und'][1]['value']['#size'] = 1;
+      $form['cls_mcl_academic_interests']['und'][2]['value']['#type'] = 'select';
+      $form['cls_mcl_academic_interests']['und'][2]['value']['#options'] = $academic_interests;
+      $form['cls_mcl_academic_interests']['und'][2]['value']['#size'] = 1;
+      $form['cls_mcl_academic_interests']['und'][3]['value']['#type'] = 'select';
+      $form['cls_mcl_academic_interests']['und'][3]['value']['#options'] = $academic_interests;
+      $form['cls_mcl_academic_interests']['und'][3]['value']['#size'] = 1;
+      $form['cls_mcl_academic_interests']['und'][4]['value']['#type'] = 'select';
+      $form['cls_mcl_academic_interests']['und'][4]['value']['#options'] = $academic_interests;
+      $form['cls_mcl_academic_interests']['und'][4]['value']['#size'] = 1;
+      $school_options = cls_mcl_get_school_options();
+      $undergrad_institution_default_value = 0;
+      $graduate_institution_default_value = 0;
+      if(isset($edited_user->cls_mcl_undergrad_institution['und'][0]['value']) && $edited_user->cls_mcl_undergrad_institution['und'][0]['value']){
+        if(isset($school_options[$edited_user->cls_mcl_undergrad_institution['und'][0]['value']])){
+          $undergrad_institution_default_value = $school_options[$edited_user->cls_mcl_undergrad_institution['und'][0]['value']];
+        }
+      }else if(isset($edited_user->cls_mcl_undergrad_inst_other['und'][0]['value'])){
+        $undergrad_institution_default_value = $edited_user->cls_mcl_undergrad_inst_other['und'][0]['value'];
+      }
+      if(isset($edited_user->cls_mcl_grad_institution['und'][0]['value']) && $edited_user->cls_mcl_grad_institution['und'][0]['value']){
+        if(isset($school_options[$edited_user->cls_mcl_grad_institution['und'][0]['value']])){
+          $graduate_institution_default_value = $school_options[$edited_user->cls_mcl_grad_institution['und'][0]['value']];
+        }
+      }else if(isset($edited_user->cls_mcl_grad_inst_other['und'][0]['value'])){
+        $graduate_institution_default_value = $edited_user->cls_mcl_grad_inst_other['und'][0]['value'];
+      }
+      $form['cls_mcl_undergrad_institution']['und'][0]['value']['#autocomplete_path'] = 'mcl/get-school-names';
+      $form['cls_mcl_undergrad_institution']['und'][0]['value']['#default_value'] = isset($undergrad_institution_default_value) ? $undergrad_institution_default_value : '';
+      $form['cls_mcl_grad_institution']['und'][0]['value']['#autocomplete_path'] = 'mcl/get-school-names';
+      $form['cls_mcl_grad_institution']['und'][0]['value']['#default_value'] = isset($graduate_institution_default_value) ? $graduate_institution_default_value : '';
+      $form['#submit'][] = '_cls_mcl_user_edit_form_submit';
+  	}
+  }
+}
+
+function _cls_mcl_user_edit_form_submit($form, &$form_state) {
+  $userinfo = array();
+  $school_options = cls_mcl_get_school_options();
+  if (isset($form_state['values']['cls_mcl_undergrad_institution']['und'][0]['value']) && $form_state['values']['cls_mcl_undergrad_institution']['und'][0]['value']) {
+    $userinfo['cls_mcl_undergrad_institution']['und'][0]['value'] = array_search(ucwords(strtolower($form_state['values']['cls_mcl_undergrad_institution']['und'][0]['value'])), $school_options);
+  }
+  if (isset($form_state['values']['cls_mcl_grad_institution']['und'][0]['value']) && $form_state['values']['cls_mcl_grad_institution']['und'][0]['value']) {
+    $userinfo['cls_mcl_grad_institution']['und'][0]['value'] = array_search(ucwords(strtolower($form_state['values']['cls_mcl_grad_institution']['und'][0]['value'])), $school_options);
+  }
+  $edited_user = user_load($form_state['values']['user_id']);
+  if ($edited_user) {
+    $userinfo['cls_mcl_undergrad_institution']['und'][0]['value'] = array_search(ucwords(strtolower($form_state['values']['cls_mcl_undergrad_institution']['und'][0]['value'])), $school_options);
+    $userinfo['cls_mcl_grad_institution']['und'][0]['value'] = array_search(ucwords(strtolower($form_state['values']['cls_mcl_grad_institution']['und'][0]['value'])), $school_options);
+    $edited_user = user_save($edited_user, $userinfo);
+  }
+}
+
+/**
+ * This function is a clone of the core user_check_password() function.
+ * It uses $stored_password string directly rather than the $account parameter,
+ * because it is checking the password at a point when the user account
+ * has not been created yet.
+ *
+ * @param $password - password string entered by user
+ * @param $stored_password - hashed password string stored in cls_mcl_remote_users table.
+ *
+ * @return $result - 1 if passwords match, 0 otherwise.
+ */
+function cls_mcl_check_password($password, $stored_password) {
+
+  require_once DRUPAL_ROOT . '/' . variable_get('password_inc', 'includes/password.inc');
+
+  if (substr($stored_password, 0, 2) == 'U$') {
+    // This may be an updated password from user_update_7000(). Such hashes
+    // have 'U' added as the first character and need an extra md5().
+    $stored_hash = substr($stored_password, 1);
+    $password = md5($password);
+  }
+  else {
+    $stored_hash = $stored_password;
+  }
+
+  $type = substr($stored_hash, 0, 3);
+  switch ($type) {
+    case '$S$':
+      // A normal Drupal 7 password using sha512.
+      $hash = _password_crypt('sha512', $password, $stored_hash);
+      break;
+    case '$H$':
+      // phpBB3 uses "$H$" for the same thing as "$P$".
+    case '$P$':
+      // A phpass password generated using md5.  This is an
+      // imported password or from an earlier Drupal version.
+      $hash = _password_crypt('md5', $password, $stored_hash);
+      break;
+    default:
+      return FALSE;
+  }
+  return ($hash && $stored_hash == $hash);
+}
+
+/**
+* Checks if the login and password used exist in cls_mcl_remote_users table.
+* If yes, creates a new Drupal user account and assigns form_state['uid']
+* to the new user's uid, enabling the new user to log in.
+*/
+function cls_mcl_check_remote_login($form, &$form_state){
+  global $user;
+  if(!isset($form_state['uid']) || !$form_state['uid']){//We only attempt to authenticate the user if he/she was not already authenticated
+    $remote_user_query = db_select('cls_mcl_remote_users', 'cmru');
+    $result = $remote_user_query
+      ->fields('cmru', array('remote_user_id', 'login', 'password', 'first_name', 'last_name', 'middle_name', 'security_question', 'security_answer', 'gender', 'birth_date', 'study_begin_year', 'lsac_account_number', 'interest_id', 'ssn', 'street_1', 'street_2', 'city', 'state_code', 'country_code', 'zip_code'))
+      ->condition('login', $form['name']['#value'])
+      ->execute();
+    if ($record = $result->fetchAssoc()) {
+      if($record['login'] && isset($record['password']) && cls_mcl_check_password(trim($form['pass']['#value']), $record['password'])){
+        //Create new Drupal user and set $form_state['uid'] to this user's uid
+        $original_user = $user;
+        $old_state = drupal_save_session();
+        drupal_save_session(FALSE);
+        //Become the admin
+        $user = user_load(1);
+        $userinfo = array(
+          'name' => $record['login'],
+          'pass' => user_password(),
+          'mail' => $record['login'],
+          'signature_format' => 'filtered_html',
+          'init' => $record['login'],
+          'status' => 1,
+        );
+
+        $instance_id = $form['instance_id']['#value'] ? $form['instance_id']['#value'] : "my_columbia_law";
+        $site_instance = cls_get_site_instance($instance_id);
+  	    $admitted_site_instance_id = $instance_id == "my_columbia_llm" ? "gls" : "jd";
+  	    $admitted_site_instance = cls_admissions_admitted_get_site_instance($admitted_site_instance_id);
+        $role_prospective = $admitted_site_instance['role_prospective'];
+        $role_deposited = $admitted_site_instance['role_deposited'];
+
+        $userinfo['cls_mcl_remote_user_id']['und'][0]['value'] = $record['remote_user_id'];
+        $userinfo['cls_user_first_name']['und'][0]['value'] = $record['first_name'];
+        $userinfo['cls_user_middle_name']['und'][0]['value'] = $record['middle_name'];
+        $userinfo['cls_user_last_name']['und'][0]['value'] = $record['last_name'];
+        $birth_date_arr = explode('\/', $record['birth_date']);
+        if (is_array($birth_date_arr) && $birth_date_arr[0] && $birth_date_arr[1] && $birth_date_arr[2]){
+          $userinfo['cls_mcl_birth_date']['und'][0]['value'] = $birth_date_arr[0] . "-" . $birth_date_arr[1] . "-" . $birth_date_arr[2];
+        }else{
+          $userinfo['cls_mcl_birth_date']['und'][0]['value'] = "";
+        }
+        $userinfo['cls_mcl_security_question']['und'][0]['value'] = $record['security_question'];
+        $userinfo['cls_mcl_security_answer']['und'][0]['value'] = $record['security_answer'];
+        $userinfo['cls_mcl_study_begin_year']['und'][0]['value'] = $record['study_begin_year'];
+        $userinfo['cls_mcl_admissions_cycle']['und'][0]['value'] = intval($record['study_begin_year']) + 3;
+        $userinfo['cls_mcl_lsac_account_number']['und'][0]['value'] = $record['lsac_account_number'];
+        $userinfo['cls_mcl_street_1']['und'][0]['value'] = $record['street_1'];
+        $userinfo['cls_mcl_street_2']['und'][0]['value'] = $record['street_2'];
+        $userinfo['cls_mcl_city']['und'][0]['value'] = $record['city'];
+        $userinfo['cls_mcl_state_code']['und'][0]['value'] = $record['state_code'];
+        $userinfo['cls_mcl_country_code']['und'][0]['value'] = $record['country_code'];
+        $userinfo['cls_mcl_zip_code']['und'][0]['value'] = $record['zip_code'];
+
+        $interest_query = db_select('cls_mcl_prospect_area', 'cmpa');
+        $interest_query->fields('cmpa', array('remote_user_id'));
+        $alias = $interest_query->innerJoin('cls_mcl_interest_type' ,'cmit', '%alias.old_mcl_id = cmpa.category_id');
+        $interest_query->addField($alias, 'id', 'new_interest_id');
+        $interest_query->condition('cmpa.remote_user_id', $record['remote_user_id']);
+        $result = $interest_query->execute();
+        $counter = 0;
+        while ($interest_record = $result->fetchAssoc()) {
+          $userinfo['cls_mcl_academic_interests']['und'][$counter]['value'] = $interest_record['new_interest_id'];
+          $counter++;
+          if ($counter == 5) {
+            break;
+          }
+        }
+
+        $remote_user_school_query = db_select('cls_mcl_remote_user_school', 'cmrus');
+        $result = $remote_user_school_query
+          ->fields('cmrus', array('remote_user_id', 'school_id', 'type', 'user_specified', 'degree', 'grad_date', 'major', 'minor', 'second_major'))
+          ->condition('remote_user_id', $record['remote_user_id'])
+          ->execute();
+        if ($school_record = $result->fetchAssoc()) {
+          if($school_record['type'] == 'U'){
+            if(isset($school_record['user_specified']) && !is_null($school_record['user_specified'])){
+              $userinfo['cls_mcl_undergrad_inst_other']['und'][0]['value'] = $school_record['user_specified'];
+              $userinfo['cls_mcl_undergrad_institution']['und'][0]['value'] = $school_record['school_id'];
+            }else{
+              $userinfo['cls_mcl_undergrad_institution']['und'][0]['value'] = $school_record['school_id'];
+            }
+            $userinfo['cls_mcl_undergrad_grad_year']['und'][0]['value'] = $school_record['grad_name'];
+          }else if($school_record['type'] == 'G') {
+            if(isset($school_record['user_specified']) && !is_null($school_record['user_specified'])){
+              $userinfo['cls_mcl_grad_inst_other']['und'][0]['value'] = $school_record['user_specified'];
+              $userinfo['cls_mcl_grad_institution']['und'][0]['value'] = $school_record['school_id'];
+            }else{
+              $userinfo['cls_mcl_grad_institution']['und'][0]['value'] = $school_record['school_id'];
+            }
+            $userinfo['cls_mcl_grad_graduation_year']['und'][0]['value'] = $school_record['grad_name'];
+          }
+        }
+
+        $loaded_user = user_load_by_name($record['login']);
+        if ($loaded_user){
+          $form_state['uid'] = $loaded_user->uid;
+        }else{
+          $new_user = user_save('', $userinfo);
+          if ($new_user && cls_aces2_applicant_load_by_program_email_status(1, $record['login'], "Deposit")) {
+            cls_common_user_add_role_by_name($role_deposited, $new_user->uid);
+          }
+          else if ($new_user) {
+            cls_common_user_add_role_by_name($role_prospective, $new_user->uid);
+          }
+          db_update('users')
+            ->fields(array('pass' => $record['password']))
+            ->condition('uid', $new_user->uid)
+            ->execute();
+          $form_state['uid'] = $new_user->uid;
+        }
+        drupal_save_session($old_state);
+      }else{
+          // We notify the form API that this field has failed validation.
+          form_set_error('mcl_login', t('We were unable to match your login credentials. Please try again.'));
+
+          $log_params = array('type' => 2, //failed login
+                              'data' => array('login' => $form['name']['#value']),
+                              'uid' => $user->uid,
+                              'ip_address' => ip_address(),
+                              'created' => REQUEST_TIME,
+                              );
+          cls_mcl_create_audit_log($log_params);
+      }
+    }
+    else {
+      // No record for this login was found in our database
+      form_set_error('mcl_login', t('We were unable to match your login credentials. Please try again.'));
+
+      $log_params = array('type' => 2, //failed login
+                          'data' => array('login' => $form['name']['#value']),
+                          'uid' => $user->uid,
+                          'ip_address' => ip_address(),
+                          'created' => REQUEST_TIME,
+                          );
+      cls_mcl_create_audit_log($log_params);
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function cls_mcl_entity_info() {
+  $return = array(
+    'cls_mcl_interest_type' => array(
+      'label' => t('CLS MCL Interest Type'),
+      'entity class' => 'CLSMCLInterestType',
+      'controller class' => 'CLSMCLInterestTypeController',
+      'base table' => 'cls_mcl_interest_type',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'bundles' => array('cls_mcl_interest_type' => array('label' => 'CLS MCL Interest Type', 'admin' => array('path' => 'cls-mcl-interest-types', 'real path' => 'cls-mcl-interest-types'))),
+      'load hook' => 'cls_mcl_interest_type_load',
+      'view modes' => array(
+        'full' => array(
+          'label' => t('Default'),
+          'custom settings' => FALSE,
+        ),
+      ),
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+      'module' => 'cls_mcl',
+      //'access callback' => 'cls_mcl_interest_type_access',
+    ),
+    'cls_mcl_journal' => array(
+      'label' => t('CLS MCL Journal'),
+      'entity class' => 'CLSMCLJournal',
+      'controller class' => 'CLSMCLJournalController',
+      'base table' => 'cls_mcl_journal',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'bundles' => array('cls_mcl_journal' => array('label' => 'CLS MCL Journal', 'admin' => array('path' => 'cls-mcl-journals', 'real path' => 'cls-mcl-journals'))),
+      'load hook' => 'cls_mcl_journal_load',
+      'view modes' => array(
+        'full' => array(
+          'label' => t('Default'),
+          'custom settings' => FALSE,
+        ),
+      ),
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+      'module' => 'cls_mcl',
+      //'access callback' => 'cls_mcl_journal_access',
+    ),
+    'cls_mcl_student_organization' => array(
+      'label' => t('CLS MCL Student Organization'),
+      'entity class' => 'CLSMCLStudentOrganization',
+      'controller class' => 'CLSMCLStudentOrganizationController',
+      'base table' => 'cls_mcl_student_organization',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'bundles' => array('cls_mcl_student_organization' => array('label' => 'CLS MCL Student Organization', 'admin' => array('path' => 'cls-mcl-student-organizations', 'real path' => 'cls-mcl-student-organizations'))),
+      'load hook' => 'cls_mcl_student_organization_load',
+      'view modes' => array(
+        'full' => array(
+          'label' => t('Default'),
+          'custom settings' => FALSE,
+        ),
+      ),
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+      'module' => 'cls_mcl',
+      //'access callback' => 'cls_mcl_student_organization_access',
+    ),
+    'cls_mcl_center' => array(
+      'label' => t('CLS MCL Center'),
+      'entity class' => 'CLSMCLCenter',
+      'controller class' => 'CLSMCLCenterController',
+      'base table' => 'cls_mcl_center',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'bundles' => array('cls_mcl_center' => array('label' => 'CLS MCL Center', 'admin' => array('path' => 'cls-mcl-centers', 'real path' => 'cls-mcl-centers'))),
+      'load hook' => 'cls_mcl_center_load',
+      'view modes' => array(
+        'full' => array(
+          'label' => t('Default'),
+          'custom settings' => FALSE,
+        ),
+      ),
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+      'module' => 'cls_mcl',
+      //'access callback' => 'cls_mcl_student_organization_access',
+    ),
+    'cls_mcl_faculty' => array(
+      'label' => t('CLS MCL Faculty'),
+      'entity class' => 'CLSMCLfaculty',
+      'controller class' => 'CLSMCLfacultyController',
+      'base table' => 'cls_mcl_faculty',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'bundles' => array('cls_mcl_faculty' => array('label' => 'CLS MCL Faculty', 'admin' => array('path' => 'cls-mcl-facultys', 'real path' => 'cls-mcl-facultys'))),
+      'load hook' => 'cls_mcl_faculty_load',
+      'view modes' => array(
+        'full' => array(
+          'label' => t('Default'),
+          'custom settings' => FALSE,
+        ),
+      ),
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+      'module' => 'cls_mcl',
+      //'access callback' => 'cls_mcl_faculty_access',
+    ),
+    'cls_mcl_course' => array(
+      'label' => t('CLS MCL Course'),
+      'entity class' => 'CLSMCLcourse',
+      'controller class' => 'CLSMCLcourseController',
+      'base table' => 'cls_courses_course',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'number',
+      ),
+      'bundles' => array('cls_mcl_course' => array('label' => 'CLS MCL Course', 'admin' => array('path' => 'cls-mcl-courses', 'real path' => 'cls-mcl-courses'))),
+      'load hook' => 'cls_mcl_course_load',
+      'view modes' => array(
+        'full' => array(
+          'label' => t('Default'),
+          'custom settings' => FALSE,
+        ),
+      ),
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+      'module' => 'cls_mcl',
+      //'access callback' => 'cls_mcl_course_access',
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function cls_mcl_entity_property_info_alter(&$info) {
+  $interest_type_properties = &$info['cls_mcl_interest_type']['properties'];
+  $interest_type_properties['created'] = array(
+    'label' => t("Date created"),
+    'type' => 'date',
+    'description' => t("The date the node was posted."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer nodes',
+    'schema field' => 'created',
+  );
+  $interest_type_properties['changed'] = array(
+    'label' => t("Date changed"),
+    'type' => 'date',
+    'schema field' => 'changed',
+    'description' => t("The date the node was most recently updated."),
+  );
+  $interest_type_properties['uid'] = array(
+    'label' => t("Author"),
+    'type' => 'user',
+    'description' => t("The author of the CLS MCL Interest Type."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer My Columbia Law',
+    'required' => TRUE,
+    'schema field' => 'uid',
+  );
+  $journal_properties = &$info['cls_mcl_journal']['properties'];
+  $journal_properties['created'] = array(
+    'label' => t("Date created"),
+    'type' => 'date',
+    'description' => t("The date the node was posted."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer nodes',
+    'schema field' => 'created',
+  );
+  $journal_properties['changed'] = array(
+    'label' => t("Date changed"),
+    'type' => 'date',
+    'schema field' => 'changed',
+    'description' => t("The date the node was most recently updated."),
+  );
+  $journal_properties['uid'] = array(
+    'label' => t("Author"),
+    'type' => 'user',
+    'description' => t("The author of the CLS MCL Journal."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer My Columbia Law',
+    'required' => TRUE,
+    'schema field' => 'uid',
+  );
+  $student_organization_properties = &$info['cls_mcl_student_organization']['properties'];
+  $student_organization_properties['created'] = array(
+    'label' => t("Date created"),
+    'type' => 'date',
+    'description' => t("The date the node was posted."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer nodes',
+    'schema field' => 'created',
+  );
+  $student_organization_properties['changed'] = array(
+    'label' => t("Date changed"),
+    'type' => 'date',
+    'schema field' => 'changed',
+    'description' => t("The date the node was most recently updated."),
+  );
+  $student_organization_properties['uid'] = array(
+    'label' => t("Author"),
+    'type' => 'user',
+    'description' => t("The author of the CLS MCL Student Organization."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer My Columbia Law',
+    'required' => TRUE,
+    'schema field' => 'uid',
+  );
+  $center_properties = &$info['cls_mcl_center']['properties'];
+  $center_properties['created'] = array(
+    'label' => t("Date created"),
+    'type' => 'date',
+    'description' => t("The date the node was posted."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer nodes',
+    'schema field' => 'created',
+  );
+  $center_properties['changed'] = array(
+    'label' => t("Date changed"),
+    'type' => 'date',
+    'schema field' => 'changed',
+    'description' => t("The date the node was most recently updated."),
+  );
+  $center_properties['uid'] = array(
+    'label' => t("Author"),
+    'type' => 'user',
+    'description' => t("The author of the CLS MCL Center."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer My Columbia Law',
+    'required' => TRUE,
+    'schema field' => 'uid',
+  );
+  $faculty_properties = &$info['cls_mcl_faculty']['properties'];
+  $faculty_properties['created'] = array(
+    'label' => t("Date created"),
+    'type' => 'date',
+    'description' => t("The date the node was posted."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer nodes',
+    'schema field' => 'created',
+  );
+  $faculty_properties['changed'] = array(
+    'label' => t("Date changed"),
+    'type' => 'date',
+    'schema field' => 'changed',
+    'description' => t("The date the node was most recently updated."),
+  );
+  $faculty_properties['uid'] = array(
+    'label' => t("Author"),
+    'type' => 'user',
+    'description' => t("The author of the CLS MCL Faculty."),
+    'setter callback' => 'entity_property_verbatim_set',
+    'setter permission' => 'administer My Columbia Law',
+    'required' => TRUE,
+    'schema field' => 'uid',
+  );
+  $course_properties = &$info['cls_mcl_course']['properties'];
+  $course_properties['offering_description'] = array(
+    'type' => 'text',
+    'label' => 'Offering description',
+    'schema field' => 'offering_description',
+    'description' => '',
+  );
+  $course_properties['faculty'] = array(
+    'type' => 'text',
+    'label' => 'Course Faculty',
+    'schema field' => 'faculty',
+    'description' => '',
+  );
+  $course_properties['years'] = array(
+    'type' => 'text',
+    'label' => 'Academic Years Offered',
+    'schema field' => 'years',
+    'description' => '',
+  );
+  $course_properties['categories'] = array(
+    'type' => 'text',
+    'label' => 'Course Categories',
+    'schema field' => 'categories',
+    'description' => '',
+  );
+}
+
+/**
+ * Load a cls_mcl_interest_type.
+ */
+function cls_mcl_interest_type_load($id, $reset = FALSE) {
+  $cls_mcl_interest_types = cls_mcl_interest_type_load_multiple(array($id), array(), $reset);
+  return reset($cls_mcl_interest_types);
+}
+
+/**
+ * Load multiple cls_mcl_interest_types based on certain conditions.
+ */
+function cls_mcl_interest_type_load_multiple($ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('cls_mcl_interest_type', $ids, $conditions, $reset);
+}
+
+/**
+ * Save cls_mcl_interest_type.
+ */
+function cls_mcl_interest_type_save($cls_mcl_interest_type) {
+  entity_save('cls_mcl_interest_type', $cls_mcl_interest_type);
+}
+
+/**
+ * Delete single cls_mcl_interest_type.
+ */
+function cls_mcl_interest_type_delete($cls_mcl_interest_type) {
+  entity_delete('cls_mcl_interest_type', entity_id('cls_mcl_interest_type' ,$cls_mcl_interest_type));
+}
+
+/**
+ * Delete multiple cls_mcl_interest_types.
+ */
+function cls_mcl_interest_type_delete_multiple($cls_mcl_interest_type_ids) {
+  entity_delete_multiple('cls_mcl_interest_type', $cls_mcl_interest_type_ids);
+}
+
+/**
+ * Load a cls_mcl_journal.
+ */
+function cls_mcl_journal_load($id, $reset = FALSE) {
+  $cls_mcl_journals = cls_mcl_journal_load_multiple(array($id), array(), $reset);
+  return reset($cls_mcl_journals);
+}
+
+/**
+ * Load multiple cls_mcl_journals based on certain conditions.
+ */
+function cls_mcl_journal_load_multiple($ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('cls_mcl_journal', $ids, $conditions, $reset);
+}
+
+/**
+ * Save cls_mcl_journal.
+ */
+function cls_mcl_journal_save($cls_mcl_journal) {
+  entity_save('cls_mcl_journal', $cls_mcl_journal);
+}
+
+/**
+ * Delete single cls_mcl_journal.
+ */
+function cls_mcl_journal_delete($cls_mcl_journal) {
+  entity_delete('cls_mcl_journal', entity_id('cls_mcl_journal' ,$cls_mcl_journal));
+}
+
+/**
+ * Delete multiple cls_mcl_journals.
+ */
+function cls_mcl_journal_delete_multiple($cls_mcl_journal_ids) {
+  entity_delete_multiple('cls_mcl_journal', $cls_mcl_journal_ids);
+}
+
+/**
+ * Load a cls_mcl_student_organization.
+ */
+function cls_mcl_student_organization_load($id, $reset = FALSE) {
+  $cls_mcl_student_organizations = cls_mcl_student_organization_load_multiple(array($id), array(), $reset);
+  return reset($cls_mcl_student_organizations);
+}
+
+/**
+ * Load multiple cls_mcl_student_organizations based on certain conditions.
+ */
+function cls_mcl_student_organization_load_multiple($ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('cls_mcl_student_organization', $ids, $conditions, $reset);
+}
+
+/**
+ * Save cls_mcl_student_organization.
+ */
+function cls_mcl_student_organization_save($cls_mcl_student_organization) {
+  entity_save('cls_mcl_student_organization', $cls_mcl_student_organization);
+}
+
+/**
+ * Delete single cls_mcl_student_organization.
+ */
+function cls_mcl_student_organization_delete($cls_mcl_student_organization) {
+  entity_delete('cls_mcl_student_organization', entity_id('cls_mcl_student_organization' ,$cls_mcl_student_organization));
+}
+
+/**
+ * Delete multiple cls_mcl_student_organizations.
+ */
+function cls_mcl_student_organization_delete_multiple($cls_mcl_student_organization_ids) {
+  entity_delete_multiple('cls_mcl_student_organization', $cls_mcl_student_organization_ids);
+}
+
+/**
+ * Load a cls_mcl_center.
+ */
+function cls_mcl_center_load($id, $reset = FALSE) {
+  $cls_mcl_centers = cls_mcl_center_load_multiple(array($id), array(), $reset);
+  return reset($cls_mcl_centers);
+}
+
+/**
+ * Load multiple cls_mcl_centers based on certain conditions.
+ */
+function cls_mcl_center_load_multiple($ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('cls_mcl_center', $ids, $conditions, $reset);
+}
+
+/**
+ * Save cls_mcl_center.
+ */
+function cls_mcl_center_save($cls_mcl_center) {
+  entity_save('cls_mcl_center', $cls_mcl_center);
+}
+
+/**
+ * Delete single cls_mcl_center.
+ */
+function cls_mcl_center_delete($cls_mcl_center) {
+  entity_delete('cls_mcl_center', entity_id('cls_mcl_center' ,$cls_mcl_center));
+}
+
+/**
+ * Delete multiple cls_mcl_centers.
+ */
+function cls_mcl_center_delete_multiple($cls_mcl_center_ids) {
+  entity_delete_multiple('cls_mcl_center', $cls_mcl_center_ids);
+}
+
+/**
+ * Load a cls_mcl_faculty.
+ */
+function cls_mcl_faculty_load($id, $reset = FALSE) {
+  $cls_mcl_facultys = cls_mcl_faculty_load_multiple(array($id), array(), $reset);
+  return reset($cls_mcl_facultys);
+}
+
+/**
+ * Load multiple cls_mcl_facultys based on certain conditions.
+ */
+function cls_mcl_faculty_load_multiple($ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('cls_mcl_faculty', $ids, $conditions, $reset);
+}
+
+/**
+ * Save cls_mcl_faculty.
+ */
+function cls_mcl_faculty_save($cls_mcl_faculty) {
+  entity_save('cls_mcl_faculty', $cls_mcl_faculty);
+}
+
+/**
+ * Delete single cls_mcl_faculty.
+ */
+function cls_mcl_faculty_delete($cls_mcl_faculty) {
+  entity_delete('cls_mcl_faculty', entity_id('cls_mcl_faculty' ,$cls_mcl_faculty));
+}
+
+/**
+ * Delete multiple cls_mcl_facultys.
+ */
+function cls_mcl_faculty_delete_multiple($cls_mcl_faculty_ids) {
+  entity_delete_multiple('cls_mcl_faculty', $cls_mcl_faculty_ids);
+}
+
+/**
+ * Load a cls_mcl_course.
+ */
+function cls_mcl_course_load($id, $reset = FALSE) {
+  $cls_mcl_courses = cls_mcl_course_load_multiple(array($id), array(), $reset);
+  return reset($cls_mcl_courses);
+}
+
+/**
+ * Load multiple cls_mcl_courses based on certain conditions.
+ */
+function cls_mcl_course_load_multiple($ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('cls_mcl_course', $ids, $conditions, $reset);
+}
+
+/**
+ * Save cls_mcl_course.
+ */
+function cls_mcl_course_save($cls_mcl_course) {
+  entity_save('cls_mcl_course', $cls_mcl_course);
+}
+
+/**
+ * Delete single cls_mcl_course.
+ */
+function cls_mcl_course_delete($cls_mcl_course) {
+  entity_delete('cls_mcl_course', entity_id('cls_mcl_course' ,$cls_mcl_course));
+}
+
+/**
+ * Delete multiple cls_mcl_courses.
+ */
+function cls_mcl_course_delete_multiple($cls_mcl_course_ids) {
+  entity_delete_multiple('cls_mcl_course', $cls_mcl_course_ids);
+}
+
+/**
+  * Implements hook_views_api().
+  */
+function cls_mcl_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'cls_mcl'),
+    'template path' => drupal_get_path('module', 'cls_mcl') . '/templates',
+  );
+}
+
+function cls_mcl_admin_paths() {
+  $paths = array(
+    'cls-mcl-centers' => TRUE,
+    'cls-mcl-centers/*' => TRUE,
+    'cls-mcl-center' => TRUE,
+    'cls-mcl-center/*' => TRUE,
+    'cls-mcl-facultys' => TRUE,
+    'cls-mcl-facultys/*' => TRUE,
+    'cls-mcl-faculty' => TRUE,
+    'cls-mcl-faculty/*' => TRUE,
+    'cls-mcl-interest-types' => TRUE,
+    'cls-mcl-interest-types/*' => TRUE,
+    'cls-mcl-interest-type' => TRUE,
+    'cls-mcl-interest-type/*' => TRUE,
+    'cls-mcl-journals' => TRUE,
+    'cls-mcl-journals/*' => TRUE,
+    'cls-mcl-journal' => TRUE,
+    'cls-mcl-journal/*' => TRUE,
+    'cls-mcl-student-organizations' => TRUE,
+    'cls-mcl-student-organizations/*' => TRUE,
+    'cls-mcl-student-organization' => TRUE,
+    'cls-mcl-student-organization/*' => TRUE,
+    'admissions/graduate-legal-studies/admin' => TRUE,
+    'admissions/graduate-legal-studies/admin/mcl-users' => TRUE,
+  );
+  return $paths;
+}
+
+/**
+  * Sends out an email when status check fails
+  * due to DOB missing in ACES2 database or name mismatch.
+  *
+  * @param array $params - search parameters used
+  * @param string $params['first_name'] - first name used in search
+  * @param string $params['last_name'] - last name used in search
+  * @param string $params['lsac_account_number'] - LSAC account number used in search
+  * @param string $params['birth_date'] - birth date used in search
+  * @param string $params['reason'] - Reason for failure: 'missing_dob' or 'name_mismatch'
+  *
+  * @return array $result - array returned by the Mandrill::call() function.
+*/
+function cls_mcl_send_search_failure_email($params) {
+  global $user;
+
+  $site_mail = variable_get('site_mail', 'webadmin@law.columbia.edu');
+  $recipient_email = variable_get('cls_mcl.jd_status_check.recipient_email', $site_mail);
+
+  if ($params['reason'] == 'missing_dob') {
+    $reason_str = 'DOB field in aces2_record table is NULL.';
+  } else if ($params['reason'] == 'name_mismatch') {
+    $reason_str = 'First/last name mismatch.';
+  }
+
+  $html = theme('search_failure_email', array(
+    'first_name' => $params['first_name'],
+    'last_name' => $params['last_name'],
+    'user_name' => isset($user->name)?$user->name:'Anonymous',
+    'lsac_account_number' => $params['lsac_account_number'],
+    'birth_date' => $params['birth_date'],
+    'reason' => $reason_str,
+  ));
+
+  $merge_variables = array(
+    'HTML_BODY' => $html,
+    'PREHEADER' => '',
+  );
+
+  $message_options = array(
+    'text' => '',
+    'subject' => 'J.D. Application Status Check Failure',
+    'from_email' => 'mcl-questions@law.columbia.edu',
+    'from_name' => 'Columbia Law School J.D. Application Status Checker',
+    'to_email' => $recipient_email,
+    'to_name' => 'Columbia Law School Admissions Webadmin',
+    'track_opens' => TRUE,
+    'track_clicks' => TRUE,
+    'auto_text' => TRUE,
+    'url_strip_qs' => TRUE,
+  );
+
+  $status = cls_mandrill_integration_send_template_email('basic-admitted', $message_options, $merge_variables, array());
+
+  return $status;
+
+}
+
+/**
+  * Creates an entry in the cls_mcl_audit_log table.
+  *
+  * @param $params - Array of parameters used to create
+  *                  a database row
+  * @param int $params['type'] - type of log
+  * @param int $params['data'] - array of data to be serialized and stored in the log
+  * @param int $params['uid'] - ID of user who performed the action
+  * @param string $params['ip_address'] - IP of user's computer
+  * @param int $params['created'] - timestamp of log creation
+  *
+  * @return $insert_id - ID of inserted row if insert was successful, FALSE otherwise.
+  */
+function cls_mcl_create_audit_log($params) {
+  global $user;
+  $audit_log_id = db_insert('cls_mcl_audit_log')
+      ->fields(array(
+               'type' => $params['type'],
+               'data' => is_array($params['data']) && !empty($params['data']) ? serialize($params['data']) : '',
+               'uid' => $params['uid'] ? $params['uid'] : $user->uid,
+               'ip_address' => $params['ip_address'] ? $params['ip_address'] : ip_address(),
+               'created' => $params['created'] ? $params['created'] : REQUEST_TIME,
+              ))
+              ->execute();
+  return $audit_log_id;
+}
+
+function cls_mcl_show_applicant_status() {
+  global $user;
+  //Get LSAC for current user account
+  //Get Applicant from aces2_record based on LSAC number
+  //Display Applicant's status
+
+  if ($loaded_user = user_load($user->uid)) {
+    $lsac = isset($loaded_user->cls_mcl_lsac_account_number['und'][0]['value']) ? $loaded_user->cls_mcl_lsac_account_number['und'][0]['value'] : "";
+    if ($lsac) {
+      $current_year = variable_get('cls_mcl.config.current_application_year', date("Y"));
+      if ($cls_aces2_applicant = cls_aces2_applicant_load_by_program_year_lsac('1', $current_year, $lsac)) {
+        $Applicant = $cls_aces2_applicant->getSessionSafeObject();
+        if (isset($Applicant->last_name)){
+          // Application completeness message is only displayed if applicant exists in database
+          // Load the status checker functions
+          module_load_include('inc', 'cls_mcl', 'cls_mcl.status_checker');
+          $application_complete = cls_mcl_get_applicant_status($Applicant);
+          return $application_complete ? "Application Complete" : "Application Incomplete";
+        }
+      }
+    }
+  }
+  return "";
+}
+
+function cls_mcl_get_school_options(){
+  $school_options = array();
+  $schools = db_select('cls_mcl_schools', 'cmsch')
+      ->fields('cmsch', array('school_id', 'school_name'))
+      ->orderBy('school_name', 'ASC')
+      ->execute();
+  while ($school_record = $schools->fetchAssoc()) {
+    $school_options[$school_record['school_id']] = ucwords(strtolower($school_record['school_name']));
+  }
+  return $school_options;
+}
+
+/**
+ * Returns array of security question options.
+ *
+ */
+function cls_mcl_get_security_question_options($instance_id){
+  if ($instance_id == "my_columbia_llm") {
+    return array("" => t("\xe2\x80\x94 Select a question \xe2\x80\x94"),
+               0 => t("What is your city of birth?"),
+               2 => t("What is your pet's name?"),
+               3 => t("What is the title of your favorite book?"));
+  }
+  else { // $instance_id == "my_columbia_law"
+    return array("" => t("\xe2\x80\x94 Select a question \xe2\x80\x94"),
+               0 => t("What is your city of birth?"),
+               1 => t("What is your mother's maiden name?"),
+               2 => t("What is your pet's name?"));
+  }
+}
+
+function cls_mcl_get_country_options() {
+  $country_options = array();
+  $countries = db_select('cls_mcl_countries', 'cmc')
+      ->fields('cmc', array('country_code', 'country_name'))
+      ->orderBy('country_name', 'ASC')
+      ->execute();
+  while ($country_record = $countries->fetchAssoc()) {
+    $country_options[$country_record['country_code']] = ucwords(strtolower($country_record['country_name']));
+  }
+  return $country_options;
+}
+
+function cls_mcl_get_state_options() {
+  $state_options = array();
+  $states = db_select('cls_mcl_states', 'cms')
+      ->fields('cms', array('state_code', 'state_name'))
+      ->orderBy('state_name', 'ASC')
+      ->execute();
+  while ($state_record = $states->fetchAssoc()) {
+    $state_options[$state_record['state_code']] = ucwords(strtolower($state_record['state_name']));
+  }
+  return $state_options;
+}
+
+function cls_mcl_get_interest_options($instance_id = 'my_columbia_law'){
+  $site_instance = cls_get_site_instance($instance_id);
+  $interest_options = array('' => '- Select an interest -');
+  $query = db_select('cls_mcl_interest_type', 'cmit')
+      ->fields('cmit', array('id', 'title'));
+  if (!empty($site_instance['interest_visibility_codes'])) {
+  	$query->condition('visible', $site_instance['interest_visibility_codes'], 'IN');
+  }
+  $query->orderBy('title', 'ASC');
+  $interests = $query->execute();
+  while ($interest_record = $interests->fetchAssoc()) {
+    $interest_options[$interest_record['id']] = $interest_record['title'];
+  }
+  return $interest_options;
+}
+
+function cls_mcl_views_query_alter(&$view, &$query) {
+  if ($view->name == 'cls_mcl_events') {
+    global $user;
+    $current_user = user_load($user->uid);
+    if (isset($current_user->cls_mcl_undergrad_institution['und'][0]['value']) && $current_user->cls_mcl_undergrad_institution['und'][0]['value'] !== '') {
+      // Get the keyword used for the search.
+      $text_query = intval($current_user->cls_mcl_undergrad_institution['und'][0]['value']);
+      // Add a new group to the query with an OR group operator.
+      $view->query->add_where(0, "field_data_cls_mcl_event_institutions.cls_mcl_event_institutions_value", $text_query);
+      // Get events for the immediate parent school too
+      $parent_school = db_select('cls_mcl_schools', 's')
+      ->fields('s', array('parent_id'))
+      ->condition('school_id', $text_query ,'=')
+      ->execute()
+      ->fetchField();
+      if ($parent_school !== FALSE) {
+        $view->query->add_where(0, "field_data_cls_mcl_event_institutions.cls_mcl_event_institutions_value", intval($parent_school));
+      }
+      $query->where[0]['type'] = 'OR';
+    }
+    if (isset($current_user->cls_mcl_grad_institution['und'][0]['value']) && $current_user->cls_mcl_grad_institution['und'][0]['value'] !== '') {
+      // Get the keyword used for the search.
+      $text_query = intval($current_user->cls_mcl_grad_institution['und'][0]['value']);
+      // Add a new group to the query with an OR group operator.
+      $view->query->add_where(0, "field_data_cls_mcl_event_institutions.cls_mcl_event_institutions_value", $text_query);
+      // Get events for the immediate parent school too
+      $parent_school = db_select('cls_mcl_schools', 's')
+      ->fields('s', array('parent_id'))
+      ->condition('school_id', $text_query ,'=')
+      ->execute()
+      ->fetchField();
+      if ($parent_school !== FALSE) {
+        $view->query->add_where(0, "field_data_cls_mcl_event_institutions.cls_mcl_event_institutions_value", intval($parent_school));
+      }
+      $query->where[0]['type'] = 'OR';
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_substitutions().
+ */
+function cls_mcl_views_query_substitutions() {
+  $view = views_get_current_view();
+
+  if(!isset($view)){ return false; }
+
+  // Build the array of replacement patterns, but only if arguments are set.
+  $replacements = array();
+  if (isset($view->args)) {
+    foreach($view->args as $index => $argument) {
+      // Shift all indices up one level, to sync with the outward-facing
+      // denumeration used in the Views interface.
+      $newindex = $index + 1;
+      $replacements["!$newindex"] = $argument;
+      $replacements["%$newindex"] = $argument;
+    }
+  }
+
+  return $replacements;
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function cls_mcl_views_data_alter(&$data) {
+  $data['cls_courses_course']['categories']['filter'] = array(
+    'handler' => 'cls_mcl_handler_filter_course_categories',
+  );
+  $data['cls_courses_course']['categories']['argument'] = array(
+    'handler' => 'cls_mcl_handler_argument_course_categories',
+  );
+  $data['cls_courses_course']['faculty']['field'] = array(
+    'handler' => 'cls_mcl_handler_field_course_instructors',
+  );
+  $data['cls_courses_course']['offering_description']['field'] = array(
+    'handler' => 'cls_mcl_handler_field_course_html_to_plain',
+  );
+}
+
+
+function cls_mcl_display_interests_update_access() {
+  global $user;
+  if ($user->uid > 0 && (user_access('access My Columbia Law update my profile') || user_access('access My Columbia LL.M. update my profile'))) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+function cls_mcl_cancel_account_access() {
+  global $user;
+  // Make sure that "authenticated user" and "My Columbia Law/LL.M. User" are the only roles the user has
+  if ($user->uid > 0 && in_array('My Columbia Law User', $user->roles) && sizeof($user->roles) == 2) {
+    return TRUE;
+  }
+  else if ($user->uid > 0 && in_array('My Columbia LL.M. User', $user->roles) && sizeof($user->roles) == 2) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+function cls_mcl_display_password_change_access() {
+  global $user;
+  if ($user->uid > 0 &&
+      user_access('access My Columbia Law account update pages')
+       || user_access('access My Columbia LL.M. account update pages')) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+function cls_mcl_account_settings_access() {
+	global $user;
+	// TODO: Check three security permissions, as specified in JIRA ticket #MCL-187
+	if ($user->uid > 0) {
+		return TRUE;
+	}
+}
+
+/*
+ * Access callback for depositor report menu items.
+ */
+function cls_mcl_offers_report_access_callback() {
+  global $user;
+
+  $allowed_roles = array(
+    'System Administrator',
+    'GLS Microsite Administrator',
+  );
+
+  $intersect = array_intersect($allowed_roles, $user->roles);
+  if (!empty($intersect)) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/*
+ * Access callback for LLM menu items.
+ */
+function cls_mcl_llm_status_access_callback() {
+  global $user;
+  if ($user->uid == 0) {
+    return FALSE;
+  }
+  if ($loaded_user = user_load($user->uid)) {
+    $lsac = isset($loaded_user->cls_mcl_lsac_account_number['und'][0]['value']) ? $loaded_user->cls_mcl_lsac_account_number['und'][0]['value'] : "";
+    if (!empty($lsac)) {
+      $current_year = variable_get('cls_mcl.config.current_application_year', date("Y"));
+      if ($cls_aces2_applicant = cls_aces2_applicant_load_by_program_year_lsac('2', $current_year, $lsac)) {
+        $Applicant = $cls_aces2_applicant->getSessionSafeObject();
+        if (isset($Applicant->last_name)){
+          return TRUE;
+        }
+      }
+      //if ($cls_aces2_applicant = cls_aces2_applicant_load_by_program_year_lsac('3', $current_year, $lsac)) {
+      //  $Applicant = $cls_aces2_applicant->getSessionSafeObject();
+      //  if (isset($Applicant->last_name)){
+      //    return TRUE;
+      //  }
+      //}
+    }
+  }
+  if (user_access('administer My Columbia Law')) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+
+function cls_get_site_instance($instance_id) {
+  return cls_get_site_instances($instance_id);
+}
+
+function cls_get_site_instances($instance_id = NULL) {
+  $academic_year_id = variable_get('cls_curriculum_guide_default_year');
+  $first_year_electives_url = '/courses/search-results?schoolYear='.$academic_year_id.'&categoryId=10';
+  $new_courses_url = '/courses/search-results?schoolYear='.$academic_year_id.'&tagId=10';
+
+  $site_instances = array(
+    'my_columbia_law' => array(
+      'instance_id' => 'my_columbia_law',
+      'machine_name' => 'my_columbia_law',
+      'title' => 'My Columbia Law',
+      'path' => 'admissions/jd/my-columbia-law',
+      'admitted_path' => 'admissions/jd/admitted',
+      'tour_path' => 'admissions/jd/my-columbia-law/experience',
+      'tour_title' => 'Experience the<br/>Law School',
+      'target_program_code' => 1,
+      'target_degree' => 'J.D.',
+      'login_page_header' => 'My Columbia Law',
+      'login_photo_uri' => 'login-orientation-photo.jpg',
+      'login_photo_caption' => 'Photo of students at J.D. Orientation.',
+      'login_form_header' => 'Welcome Back',
+      'help_email_subject' => '',
+      'help_email_to' => 'admissions@law.columbia.edu',
+      'help_email_cc' => 'mcl-questions@law.columbia.edu',
+      'admin_email_to' => 'admissions@law.columbia.edu',
+      'admin_email_cc' => 'mcl-questions@law.columbia.edu',
+      'mailchimp_api_key' => '',
+      'mandrill_api_key' => 'JMTN_cTFBHb6zdMAqQ7Dog',
+      'mandrill_template_slugs' => array(
+        'new_account' => 'new-account',
+        'account_cancellation' => 'account-cancellation',
+      ),
+      'office_name' => 'Admissions',
+      'dashboard_courses_custom_link_1_path' => $first_year_electives_url,
+      'dashboard_courses_custom_link_1_title' => 'Explore First-Year Electives',
+      'dashboard_courses_custom_link_2_path' => '/courses/search',
+      'dashboard_courses_custom_link_2_title' => 'Browse Courses',
+      'dashboard_faculty_custom_link_1_path' => '/faculty',
+      'dashboard_faculty_custom_link_1_title' => 'Browse the Faculty',
+      'dashboard_viewbook_path' => '/admissions/jd/learn/viewbook',
+      'dashboard_viewbook_title' => 'Read Our Viewbook',
+      'dashboard_status_checker_path' => base_path() . 'admissions/jd/my-columbia-law/check-application-status',
+      'dashboard_apply_path' => '/admissions/jd/apply',
+      'dashboard_visit_path' => '/admissions/jd/visit',
+      'school_visibility_codes' => array(1,3),
+      'interest_visibility_codes' => array(1,3),
+    ),
+    'my_columbia_llm' => array(
+      'instance_id' => 'my_columbia_llm',
+      'machine_name' => 'my_columbia_llm',
+      'title' => 'My Columbia LL.M.',
+      'path' => 'admissions/graduate-legal-studies/my-columbia-llm',
+      'admitted_path' => 'admissions/graduate-legal-studies/admitted',
+      'tour_path' => 'admissions/graduate-legal-studies/my-columbia-llm/tour',
+      'tour_title' => 'Take a tour of the Law School',
+      'target_program_code' => 2,
+      'target_degree' => 'LL.M.',
+      'login_page_header' => 'Welcome to My Columbia LL.M.',
+      'login_photo_uri' => '/get-started-llm.jpg',
+      'login_photo_caption' => 'Photo of students at LL.M. Orientation.',
+      'login_form_header' => 'Already Registered?',
+      'help_email_subject' => '',
+      'help_email_to' => 'gls@law.columbia.edu',
+      'help_email_cc' => 'mcl-questions@law.columbia.edu',
+      'admin_email_to' => 'gls@law.columbia.edu',
+      'admin_email_cc' => 'mcl-questions@law.columbia.edu',
+      'mailchimp_api_key' => '',
+      'mandrill_api_key' => 'XXPaTzFlJD8qqAOXfaXs_Q',
+      'mandrill_template_slugs' => array(
+        'new_account' => 'new-account-llm',
+        'account_cancellation' => 'account-cancellation-llm',
+      ),
+      'office_name' => 'Graduate Legal Studies',
+      'dashboard_courses_custom_link_1_path' => $new_courses_url,
+      'dashboard_courses_custom_link_1_title' => 'Browse New Courses',
+      'dashboard_courses_custom_link_2_path' => '/courses/search',
+      'dashboard_courses_custom_link_2_title' => 'Browse Courses',
+      'dashboard_faculty_custom_link_1_path' => '/faculty',
+      'dashboard_faculty_custom_link_1_title' => 'Browse the Faculty',
+      'dashboard_viewbook_path' => '/admissions/graduate-legal-studies/llm-program',
+      'dashboard_viewbook_title' => 'Learn more about the LL.M.&nbsp;Program',
+      'dashboard_status_checker_path' => 'https://aces2.lsac.org/YourStatus/membership/AppStatIdMe.aspx?guid=wrsdv0sVD%2F0%3D',
+      'dashboard_apply_path' => '/admissions/graduate-legal-studies/apply',
+      'dashboard_visit_path' => '/admissions/graduate-legal-studies/visiting-columbia-law-school',
+      'school_visibility_codes' => array(2,3),
+      'interest_visibility_codes' => array(2,3),
+    ),
+  );
+
+  //$site_instances = variable_get('cls_mcl.config.site_instances', site_instances);
+
+  if (!empty($instance_id) && !empty($site_instances[$instance_id])) {
+    return $site_instances[$instance_id];
+  }
+
+  return $site_instances;
+
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function cls_mcl_preprocess_html(&$variables) {
+  $site_instances_paths = array();
+  $site_instances = cls_get_site_instances();
+  foreach ($site_instances as $site_instance) {
+    if (request_path() != '' && stripos(request_path(), $site_instance['path']) !== FALSE) {
+      $variables['classes_array'][] = 'cls-mcl';
+      $variables['classes_array'][] = drupal_html_class('cls-mcl-' . $site_instance['machine_name']);
+    }
+  }
+}
+
+function cls_mcl_libraries_info() {
+  $libraries = array();
+
+  $libraries['select2'] = array(
+    'name' => 'Select2',
+    'vendor url' => 'https://github.com/ivaynberg/select2',
+    'download url' => 'https://github.com/downloads/ivaynberg/select2/select2-2.1.zip',
+    'files' => array(
+      'js' => array(
+        'select2.js'
+      ),
+      'css' => array(
+        'select2.css'
+      ),
+    ),
+    'variants' => array(
+      'minified' => array(
+        'js' => array(
+          'select2.min.js',
+        ),
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+function cls_mcl_field_formatter_info() {
+  return array(
+    'aces2_country_code_label_formatter' => array(
+      'label' => t('ACES2 Country Formatter'),
+      'field types' => array('text', 'text_long', 'text_with_summary', 'list_text'),
+    ),
+    'aces2_school_code_label_formatter' => array(
+      'label' => t('ACES2 School Formatter'),
+      'field types' => array('text', 'text_long', 'text_with_summary', 'list_text'),
+    ),
+  );
+}
+
+function cls_mcl_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'aces2_country_code_label_formatter':
+      foreach ($items as $delta => $item) {
+        $query = db_select('cls_mcl_countries', 'c');
+        $query->fields('c', array('country_name'));
+        $query->condition('c.country_code', $item['value']);
+        $country_name = $query->execute()->fetchField();
+        $label = !empty($country_name) ? $country_name : $item['value'];
+        $element[$delta] = array('#markup' => $label);
+      }
+      break;
+    case 'aces2_school_code_label_formatter':
+      foreach ($items as $delta => $item) {
+        $query = db_select('cls_mcl_schools', 's');
+        $query->fields('s', array('school_name'));
+        $query->condition('s.school_id', $item['value']);
+        $school_name = $query->execute()->fetchField();
+        $label = !empty($school_name) ? $school_name : $item['value'];
+        $element[$delta] = array('#markup' => $label);
+      }
+      break;
+  }
+
+  return $element;
+}

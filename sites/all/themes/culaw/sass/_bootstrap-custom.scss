@@ -1,0 +1,88 @@
+// custom variables and override bootstrap variables
+
+
+$white:																			#fff;
+$black:																			#000;
+$gray:																			#434346;
+$blue:																			#0096ea;
+$cerulean:																	#088ed6;
+$cerulean-light:														#0e93db;
+$bahama-blue:																#0a6da4;
+$deep-cerulean:															#0173ae;
+$eden:																			#124460;
+$eden-light:																#115163;
+$mine-shaft:																#252525;
+$mine-shaft-lighter:												#3b3b3b;
+$mine-shaft-darker:													#282828;
+$orange:																		#e46423;
+$aqua-haza:																	#f3f6f8;
+$silver-chalice:														#b2b2b2;
+$lochmara:																	#0684cb;
+$dodger-blue:																#09a4f8;
+$royal-heath:																#a22c64;
+$catskill-white:														#e9f1f5;
+$catskill-light:														#e4edf2;
+$olso-gray:																	#929698;
+$allports:																	#056da6;
+$matisse:																		#226499;
+$jelly-bean:																#2b6d9f;
+$st-tropaz:																	#256292;
+$fountaion-blue:														#5499bf;
+$venice-blue:																#0c6394;
+$half-baked:																#91bdd6;
+$curious-blue:															#3a95de;
+$picton-blue:																#19a0ec;
+$seegull:																		#75b5e8;
+$boston-blue:																#3e95ae;
+$botticelli:																#d4e3ec;
+
+
+// Scaffolding
+
+$body-bg:																		$white;
+$text-color:																$gray;
+$link-color:																$blue;
+$link-hover-decoration:											none;
+
+
+// Typography
+
+$font-family-sans-serif:										'Lato', Arial, Helvetica, sans-serif;
+$erriweather-font:													'Merriweather', Arial, Helvetica, sans-serif;
+$source-sans-font:													'Source Sans Pro', Arial, Helvetica, sans-serif;
+$font-size-base:														18px;
+$line-height-base:													1.5555;
+$font-size-h1:															46px;
+$font-size-h2:															40px;
+$font-size-h3:															30px;
+$font-size-h4:															22px;
+$headings-font-family:											$erriweather-font;
+$headings-font-weight:											400;
+
+
+// Buttons
+
+$btn-default-color:													$blue;
+$btn-default-border:												$blue;
+
+
+// Grid system
+
+$grid-gutter-width:													40px;
+$container-large-desktop:										(1160px + $grid-gutter-width);
+$screen-lg:																	1220px;
+
+
+// Navbar
+
+$navbar-default-color:											$white;
+$navbar-default-bg:													$cerulean;
+$navbar-default-link-color:									$white;
+
+// Breadcrumbs
+
+$breadcrumb-padding-vertical:								8px;
+$breadcrumb-padding-horizontal:							15px;
+$breadcrumb-bg:															transparent;
+$breadcrumb-color:													$white;
+$breadcrumb-active-color:										$blue;

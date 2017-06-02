@@ -1,0 +1,6 @@
+name = CLS Rest API
+description = Helper functions for CLS rest API using PHP-OAuth2
+package = Columbia Law School
+configure = admin/config/services/cls-rest-api
+
+core = 7.x

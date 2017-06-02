@@ -1,0 +1,1043 @@
+<?php
+
+/**
+ * @file
+ * Install file for the cls_aces2 module.
+ */
+
+/**
+* Implements hook_schema().
+*/
+function cls_aces2_schema() {
+
+  $schema['cls_aces2_applicant'] = array(
+    'description' => 'This table contains applicant information copied from ACES2.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Unique ID',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'program_applied' => array(
+        'description' => 'The program for which the applicant applied.',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'year_entering' => array(
+        'description' => 'The year in which the applicant would be entering into Columbia Law School.',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'lsac_account_number' => array(
+        'description' => 'The applicant\'s LSAC account number.',
+        'type' => 'varchar',
+        'length' => '9',
+        'not null' => FALSE,
+        'default' => '',
+      ),
+      'last_name' => array(
+        'description' => 'The applicant\'s last name.',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'first_name' => array(
+        'description' => 'The applicant\'s first name.',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'middle_name' => array(
+        'description' => 'The applicant\'s middle name.',
+        'type' => 'varchar',
+        'length' => '50',
+        'default' => '',
+      ),
+      'prefix' => array(
+        'description' => 'The applicant\'s prefix.',
+        'type' => 'varchar',
+        'length' => '5',
+        'default' => '',
+      ),
+      'suffix' => array(
+        'description' => 'The applicant\'s suffix.',
+        'type' => 'varchar',
+        'length' => '5',
+        'default' => '',
+      ),
+      'salutation' => array(
+        'description' => 'The applicant\'s salutation.',
+        'type' => 'varchar',
+        'length' => '15',
+        'default' => '',
+      ),
+      'birth_date' => array(
+        'description' => 'The applicant\'s birth date.',
+        'type' => 'varchar',
+        'length' => '15',
+        'default' => '',
+      ),
+      'gender' => array(
+        'description' => 'The applicant\'s gender.',
+        'type' => 'varchar',
+        'length' => '1',
+        'default' => '',
+      ),
+      'cuid' => array(
+        'description' => 'The applicant\'s CUID.',
+        'type' => 'varchar',
+        'length' => '30',
+        'default' => '',
+      ),
+      'email_primary' => array(
+        'description' => 'The applicant\'s primary email address',
+        'type' => 'varchar',
+        'length' => '60',
+      ),
+      'email_secondary' => array(
+        'description' => 'The applicant\'s secondary email address',
+        'type' => 'varchar',
+        'length' => '60',
+      ),
+      'cell_phone' => array(
+        'description' => 'The applicant\'s cell phone.',
+        'type' => 'varchar',
+        'length' => '10',
+      ),
+      'application_type' => array(
+        'description' => 'The applicant\'s application type.',
+        'type' => 'varchar',
+        'length' => '15',
+      ),
+      'application_status' => array(
+        'description' => 'The applicant\'s application status (i.e., 1st Time, Reapplicant, Previously Deferred, etc).',
+        'type' => 'varchar',
+        'length' => '40',
+      ),
+      'current_status' => array(
+        'description' => 'The applicant\'s current status (i.e., New Applicant, Clean, Incomple, etc.)',
+        'type' => 'varchar',
+        'length' => '50',
+      ),
+      'application_signed' => array(
+        'description' => 'A flag indicating whether or not the applicants signed his/her application.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'application_fee_received' => array(
+        'description' => 'A flag indicating whether or not the applicant\'s application fee was received.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'completed_date' => array(
+        'description' => 'The date when the applicant\'s application was marked completed.',
+        'type' => 'varchar',
+        'length' => '10',
+      ),
+      'decision_status' => array(
+        'description' => 'The applicant\'s decision status.',
+        'type' => 'varchar',
+        'length' => '15',
+      ),
+      'resume_on_file' => array(
+        'description' => 'A flag indicating whether or not the applicant\'s resume is on file.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'personal_statement_received' => array(
+        'description' => 'A flag indicating whether or not the applicant\'s personal statement was received.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'number_of_lors' => array(
+        'description' => 'The number of letters of recommendation received for the applicant.',
+        'type' => 'int',
+      ),        
+      'lsdas_received_date' => array(
+        'description' => 'The date when the applicant\'s LSDAS was received (spelling mistake intentionally kept to mirror ACES2.',
+        'type' => 'varchar',
+        'length' => '10',
+      ),
+      'dean_certification' => array(
+        'description' => 'Indicates if a dean\'s certification has been received for the applicant.',
+        'type' => 'varchar',
+        'length' => '40',
+      ),
+      'final_transcript' => array(
+        'description' => 'A flag indicating whether or not the applicant\'s final transcript was received.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'degree_applied' => array(
+        'description' => 'Degree the applicant is applying for.',
+        'type' => 'varchar',
+        'length' => '15',
+      ),
+      'deposit_deadline' => array(
+        'description' => 'Deposit fee deadline.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'deposit_deadline' => array(
+        'description' => 'UNIX timestamp when the first deposit is due.',
+        'type' => 'int',
+      ),
+      'deposit_deadline_formatted' => array(
+        'description' => 'The date when the first deposit is due, as formatted by the deposit portal.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'deposit_amount' => array(
+        'description' => 'Deposit fee amount.',
+        'type' => 'numeric',
+        'size' => 'normal',
+        'precision' => 10,
+        'scale' => 2,
+      ),
+      'deposit_waived' => array(
+        'description' => 'A flag indicating whether or not the applicant\'s deposit fee was waived.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'deposit2_deadline' => array(
+        'description' => 'UNIX timestamp when the second deposit is due.',
+        'type' => 'int',
+      ),
+      'deposit2_deadline_formatted' => array(
+        'description' => 'The date when the second deposit is due, as formatted by the deposit portal.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'deposit2_amount' => array(
+        'description' => 'Second deposit fee amount.',
+        'type' => 'numeric',
+        'size' => 'normal',
+        'precision' => 10,
+        'scale' => 2,
+      ),
+      'deposit2_waived' => array(
+        'description' => 'A flag indicating whether or not the applicant\'s second deposit fee was waived.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'enrollment_id' => array(
+        'description' => 'The enrollment ID in the deposit portal.',
+        'type' => 'int',
+      ),
+      'enrollment_offer_accepted' => array(
+        'description' => 'A flag indicating the admitted student\'s descision to accept or reject the enrollment offer.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'enrollment_decline_reason' => array(
+        'description' => 'The reason why the offer was rejected as indicated by the admitted student.',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'enrollment_decision_date' => array(
+        'description' => 'UNIX timestamp when the enrollment decision was registered.',
+        'type' => 'int',
+      ),
+      'enrollment_decision_date_formatted' => array(
+        'description' => 'The date when the enrollment decision was registered, as formatted by the deposit portal.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'current_school_code' => array(
+        'description' => '',
+        'type' => 'int',
+      ),
+      'previously_synced_school_code' => array(
+        'description' => '',
+        'type' => 'int',
+      ),
+      'current_school_degree_date' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '7',
+      ),
+      'previously_synced_school_degree_date' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '7',
+      ),
+      'current_zip_code' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '5',
+      ),
+      'previously_synced_zip_code' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '5',
+      ),
+      'current_country' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '3',
+      ),
+      'previously_synced_country' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '3',
+      ),
+      'export_modified_date' => array(
+        'description' => 'The date when the record was last synchronized with ACES2.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'created' => array(
+        'description' => 'UNIX timestamp when the Drupal record was first imported.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'UNIX timestamp when the Drupal record was last changed.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'The exportable status of the entity.',
+        'type' => 'int',
+      ),
+      'module' => array(
+        'description' => 'The name of the providing module if the entity has been defined in code.',
+        'type' => 'varchar',
+        'length' => '255',
+        'default' => 'cls_aces2',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'year_program_lsac' => array('year_entering', 'program_applied', 'lsac_account_number'),
+    ),
+    'indexes' => array(
+      'lsac_account_number' => array('lsac_account_number'),
+      'year_entering' => array('year_entering'),
+    ),
+    'foreign keys' => array(
+      'cls_aces2_program' => array(
+        'table' => 'cls_aces2_program',
+        'columns' => array('program_applied' => 'id'),
+      ),
+    ),
+  );
+
+  $schema['cls_aces2_program'] = array(
+    'description' => 'The table that contains application programs.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Unique cls_admissions_notification_type ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'machine_name' => array(
+        'description' => 'The unique machine name, or code, for the program.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'degree_code' => array(
+        'description' => 'The degree code associated with the program.',
+        'type' => 'varchar',
+        'length' => '10',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'title' => array(
+        'description' => 'The title of the program (may be an acronym).',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'responsible_admissions_office' => array(
+        'description' => 'The office responsible for admissions to the program.',
+        'type' => 'varchar',
+        'length' => '10',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'created' => array(
+        'description' => 'UNIX timestamp when the type was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'UNIX timestamp when the type was last changed.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'Boolean indicating whether the node is published (visible to non-administrators).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'module' => array(
+        'description' => 'The name of the providing module if the entity has been defined in code.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => 'cls_aces2',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'machine_name' => array('machine_name'),
+    ),
+  );
+
+  $schema['cls_aces2_deposit_transactions'] = array(
+    'description' => 'The table that contains deposit transactions from GLS_DEPOSIT_LOG (TRANSACTION_ID, LSAC_ACCOUNT, TRANSACTION_DATE, AMOUNT, RESPONSE_CODE, RESPONSE_DESCRIPTION).',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Unique cls_admissions_admitted_deposit_transactions ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'record_id' => array(
+        'description' => 'The deposit portal record ID (RECORD_ID).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'transaction_id' => array(
+        'description' => 'The deposit portal transaction ID (TRANSACTION_ID).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'year_entering' => array(
+        'description' => 'The year in which the applicant would be entering into Columbia Law School.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'program_applied' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Applied program.',
+        'default' => 1,
+      ),
+      'lsac_account_number' => array(
+        'type' => 'varchar',
+        'length' => 9,
+        'not null' => TRUE,
+        'description' => 'LSAC account number (LSAC_ACCOUNT).',
+      ),
+      'amount' => array(
+        'description' => 'The transaction amount (AMOUNT).',
+        'type' => 'numeric',
+        'size' => 'normal',
+        'not null' => TRUE,
+        'default' => 0,
+        'precision' => 10,
+        'scale' => 2,
+      ),
+      'response_code' => array(
+        'description' => 'The gateway response code (RESPONSE_CODE).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'response_description' => array(
+        'description' => 'The gateway response description (RESPONSE_DESCRIPTION).',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'transaction_date' => array(
+        'description' => 'UNIX timestamp when the transaction was recorded.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'transaction_date_formatted' => array(
+        'description' => 'The date when the transaction was recorded, as formatted ny the transaction portal (TRANSACTION_DATE).',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'created' => array(
+        'description' => 'UNIX timestamp when the type was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'UNIX timestamp when the type was last changed.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'Boolean indicating whether the node is published (visible to non-administrators).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'module' => array(
+        'description' => 'The name of the providing module if the entity has been defined in code.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => 'cls_aces2',
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+
+}
+
+/**
+* Adds two new fields to cls_aces2_applicant table.
+*/
+function cls_aces2_update_7001() {
+  $schema['cls_aces2_applicant'] = array(
+    'fields' => array(
+      'degree_applied' => array(
+        'type' => 'varchar',
+        'length' => 15,
+        'description' => 'Degree the applicant is applying for.',
+      ),
+      'deposit_deadline' => array(
+        'type' => 'varchar',
+        'length' => 10,
+        'description' => 'Deposit deadline.',
+      ),
+    ),
+  );
+
+  db_add_field('cls_aces2_applicant', 'degree_applied', $schema['cls_aces2_applicant']['fields']['degree_applied']);
+  db_add_field('cls_aces2_applicant', 'deposit_deadline', $schema['cls_aces2_applicant']['fields']['deposit_deadline']);
+
+  $result = t('Added two new fields to cls_aces2_applicant table.');
+  return $result;
+}
+
+/**
+* Changes the size of middle_name field in cls_aces2_applicant table.
+*/
+function cls_aces2_update_7002() {
+  $schema['cls_aces2_applicant'] = array(
+    'fields' => array(
+      'middle_name' => array(
+        'description' => 'The applicant\'s middle name.',
+        'type' => 'varchar',
+        'length' => '50',
+        'default' => '',
+      ),
+    ),
+  );
+
+  db_change_field('cls_aces2_applicant', 'middle_name', 'middle_name', $schema['cls_aces2_applicant']['fields']['middle_name']);
+
+  $result = t('Changed the size of middle_name field in cls_aces2_applicant table.');
+  return $result;
+}
+
+/**
+* Changes the sizes of first_name and last_name fields in cls_aces2_applicant table.
+*/
+function cls_aces2_update_7003() {
+  $schema['cls_aces2_applicant'] = array(
+    'fields' => array(
+      'last_name' => array(
+        'description' => 'The applicant\'s last name.',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'first_name' => array(
+        'description' => 'The applicant\'s first name.',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+  );
+
+  db_change_field('cls_aces2_applicant', 'last_name', 'last_name', $schema['cls_aces2_applicant']['fields']['last_name']);
+  db_change_field('cls_aces2_applicant', 'first_name', 'first_name', $schema['cls_aces2_applicant']['fields']['first_name']);
+
+  $result = t('Changed the size of first_name and last_name fields in cls_aces2_applicant table.');
+  return $result;
+}
+
+/**
+* Create the database table for CLS ACES2 programs.
+*/
+function cls_aces2_update_7004() {
+
+    $schema['cls_aces2_program'] = array(
+    'description' => 'The table that contains application programs.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Unique cls_admissions_notification_type ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'machine_name' => array(
+        'description' => 'The unique machine name, or code, for the program.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'degree_code' => array(
+        'description' => 'The degree code associated with the program.',
+        'type' => 'varchar',
+        'length' => '10',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'title' => array(
+        'description' => 'The title of the program (may be an acronym).',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'responsible_admissions_office' => array(
+        'description' => 'The office responsible for admissions to the program.',
+        'type' => 'varchar',
+        'length' => '10',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'created' => array(
+        'description' => 'UNIX timestamp when the type was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'UNIX timestamp when the type was last changed.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'Boolean indicating whether the node is published (visible to non-administrators).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'module' => array(
+        'description' => 'The name of the providing module if the entity has been defined in code.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => 'cls_aces2',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'machine_name' => array('machine_name'),
+    ),
+  );
+
+  db_create_table('cls_aces2_program', $schema['cls_aces2_program']);
+  
+}
+
+/**
+* Insert records for programs currently supported in Drupal.
+*/
+function cls_aces2_update_7005() {
+  $values = array(
+    array(
+      'id' => 1,
+      'machine_name' => 'jd',
+      'degree_code' => 'JD',
+      'title' => 'J.D.',
+      'responsible_admissions_office' => 'jd',
+      'created' => REQUEST_TIME,
+      'changed' => REQUEST_TIME,
+      'status' => 1,
+      'module' => 'cls_aces2',
+    ),
+    array(
+      'id' => 2,
+      'machine_name' => 'llm',
+      'degree_code' => 'LLM',
+      'title' => 'LL.M.',
+      'responsible_admissions_office' => 'gls',
+      'created' => REQUEST_TIME,
+      'changed' => REQUEST_TIME,
+      'status' => 1,
+      'module' => 'cls_aces2',
+    ),
+    array(
+      'id' => 3,
+      'machine_name' => 'jsd',
+      'degree_code' => 'JSD',
+      'title' => 'J.S.D.',
+      'responsible_admissions_office' => 'gls',
+      'created' => REQUEST_TIME,
+      'changed' => REQUEST_TIME,
+      'status' => 1,
+      'module' => 'cls_aces2',
+    ),
+  );
+  $query = db_insert('cls_aces2_program')->fields(array('id', 'machine_name', 'degree_code', 'title', 'responsible_admissions_office', 'created', 'changed', 'status', 'module'));
+  foreach ($values as $record) {
+    $query->values($record);
+  }
+  $query->execute();
+}
+
+/**
+* Create foregin keys between applicants and programs.
+*/
+function cls_aces2_update_7006() {
+  // Make real foreign keys.
+/*
+  db_query('
+    ALTER TABLE {cls_aces2_applicant}
+    ADD CONSTRAINT {cls_aces2_program}
+    FOREIGN KEY (program_applied) REFERENCES {cls_aces2_program} (id)
+  ');
+*/
+}
+
+/**
+* Changes the size of deposit_deadline field in cls_aces2_applicant
+* table to allow for including a specific time.
+*/
+function cls_aces2_update_7007() {
+  $schema['cls_aces2_applicant'] = array(
+    'fields' => array(
+      'deposit_deadline' => array(
+        'description' => 'Deposit fee deadline.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+    ),
+  );
+
+  db_change_field('cls_aces2_applicant', 'deposit_deadline', 'deposit_deadline', $schema['cls_aces2_applicant']['fields']['deposit_deadline']);
+
+  $result = t('Changed the size of deposit_deadline field in cls_aces2_applicant table to allow for including a specific time.');
+  return $result;
+}
+
+/**
+* Adds six new fields to cls_aces2_applicant table to accomodate
+* two deposits for GLS and new cell phone field cls_aces2_applicant table.
+*/
+function cls_aces2_update_7008() {
+  $schema['cls_aces2_applicant'] = array(
+    'fields' => array(
+      'cell_phone' => array(
+        'description' => 'The applicant\'s cell phone.',
+        'type' => 'varchar',
+        'length' => '10',
+      ),
+      'deposit_amount' => array(
+        'description' => 'Deposit fee amount.',
+        'type' => 'numeric',
+        'size' => 'normal',
+        'precision' => 10,
+        'scale' => 2,
+      ),
+      'deposit_waived' => array(
+        'description' => 'A flag indicating whether or not the applicant\'s deposit fee was waived.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'deposit2_deadline' => array(
+        'description' => 'Second deposit fee deadline.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'deposit2_amount' => array(
+        'description' => 'Second deposit fee amount.',
+        'type' => 'numeric',
+        'size' => 'normal',
+        'precision' => 10,
+        'scale' => 2,
+      ),
+      'deposit2_waived' => array(
+        'description' => 'A flag indicating whether or not the applicant\'s second deposit fee was waived.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+    ),
+  );
+
+  db_add_field('cls_aces2_applicant', 'cell_phone', $schema['cls_aces2_applicant']['fields']['cell_phone']);
+  db_add_field('cls_aces2_applicant', 'deposit_amount', $schema['cls_aces2_applicant']['fields']['deposit_amount']);
+  db_add_field('cls_aces2_applicant', 'deposit_waived', $schema['cls_aces2_applicant']['fields']['deposit_waived']);
+  db_add_field('cls_aces2_applicant', 'deposit2_deadline', $schema['cls_aces2_applicant']['fields']['deposit2_deadline']);
+  db_add_field('cls_aces2_applicant', 'deposit2_amount', $schema['cls_aces2_applicant']['fields']['deposit2_amount']);
+  db_add_field('cls_aces2_applicant', 'deposit2_waived', $schema['cls_aces2_applicant']['fields']['cell_phone']);
+
+  $result = t('Added six new fields to cls_aces2_applicant table to accomodate two deposits for GLS and new cell phone field.');
+  return $result;
+}
+
+/**
+* Adds data integrity to past data imported/updated before
+* a minor logic overhaul.
+*/
+function cls_aces2_update_7009() {
+
+  $jd_updated = db_update('cls_aces2_applicant')
+    ->fields(array(
+      'degree_applied' => 'JD',
+    ))
+    ->condition('program_applied', 1)
+    ->execute();
+
+  $jsd_updated = db_update('cls_aces2_applicant')
+    ->fields(array(
+      'program_applied' => 3,
+    ))
+    ->condition('degree_applied', 'JSD')
+    ->execute();
+
+}
+
+/**
+* Adds a deposit transactions table.
+*/
+function cls_aces2_update_7010() {
+
+  $schema['cls_aces2_deposit_transaction'] = array(
+    'description' => 'The table that contains deposit transactions from GLS_DEPOSIT_LOG (TRANSACTION_ID, LSAC_ACCOUNT, TRANSACTION_DATE, AMOUNT, RESPONSE_CODE, RESPONSE_DESCRIPTION).',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: Unique cls_admissions_admitted_deposit_transactions ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'transaction_id' => array(
+        'description' => 'The deposit portal transaction ID (TRANSACTION_ID).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'year_entering' => array(
+        'description' => 'The year in which the applicant would be entering into Columbia Law School.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'program_applied' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Applied program.',
+        'default' => 1,
+      ),
+      'lsac_account_number' => array(
+        'type' => 'varchar',
+        'length' => 9,
+        'not null' => TRUE,
+        'description' => 'LSAC account number (LSAC_ACCOUNT).',
+      ),
+      'amount' => array(
+        'description' => 'The transaction amount (AMOUNT).',
+        'type' => 'numeric',
+        'size' => 'normal',
+        'not null' => TRUE,
+        'default' => 0,
+        'precision' => 10,
+        'scale' => 2,
+      ),
+      'response_code' => array(
+        'description' => 'The gateway response code (RESPONSE_CODE).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'response_description' => array(
+        'description' => 'The gateway response description (RESPONSE_DESCRIPTION).',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'transaction_date' => array(
+        'description' => 'UNIX timestamp when the transaction was recorded.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'transaction_date_formatted' => array(
+        'description' => 'The date when the transaction was recorded, as formatted ny the transaction portal (TRANSACTION_DATE).',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'created' => array(
+        'description' => 'UNIX timestamp when the type was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'UNIX timestamp when the type was last changed.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'Boolean indicating whether the node is published (visible to non-administrators).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'module' => array(
+        'description' => 'The name of the providing module if the entity has been defined in code.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => 'cls_aces2',
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  db_create_table('cls_aces2_deposit_transaction', $schema['cls_aces2_deposit_transaction']);
+
+}
+
+/**
+* Adds five new fields to cls_aces2_applicant for storing enrollment decision data.
+*/
+function cls_aces2_update_7011() {
+  $schema['cls_aces2_applicant'] = array(
+    'fields' => array(
+      'enrollment_id' => array(
+        'description' => 'The enrollment ID in the deposit portal.',
+        'type' => 'int',
+      ),
+      'enrollment_offer_accepted' => array(
+        'description' => 'A flag indicating the admitted student\'s descision to accept or reject the enrollment offer.',
+        'type' => 'varchar',
+        'length' => '1',
+      ),
+      'enrollment_decline_reason' => array(
+        'description' => 'The reason why the offer was rejected as indicated by the admitted student.',
+        'type' => 'varchar',
+        'length' => '255',
+      ),
+      'enrollment_decision_date' => array(
+        'description' => 'UNIX timestamp when the enrollment decision was registered.',
+        'type' => 'int',
+      ),
+      'enrollment_decision_date_formatted' => array(
+        'description' => 'The date when the enrollment decision was registered, as formatted by the deposit portal.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+    ),
+  );
+
+  db_add_field('cls_aces2_applicant', 'enrollment_id', $schema['cls_aces2_applicant']['fields']['enrollment_id']);
+  db_add_field('cls_aces2_applicant', 'enrollment_offer_accepted', $schema['cls_aces2_applicant']['fields']['enrollment_offer_accepted']);
+  db_add_field('cls_aces2_applicant', 'enrollment_decline_reason', $schema['cls_aces2_applicant']['fields']['enrollment_decline_reason']);
+  db_add_field('cls_aces2_applicant', 'enrollment_decision_date', $schema['cls_aces2_applicant']['fields']['enrollment_decision_date']);
+  db_add_field('cls_aces2_applicant', 'enrollment_decision_date_formatted', $schema['cls_aces2_applicant']['fields']['enrollment_decision_date_formatted']);
+
+}
+
+/**
+* Updates the deposit deadline fields.
+*/
+function cls_aces2_update_7012() {
+  $schema['cls_aces2_applicant'] = array(
+    'fields' => array(
+      'deposit_deadline' => array(
+        'description' => 'UNIX timestamp when the first deposit is due.',
+        'type' => 'int',
+      ),
+      'deposit_deadline_formatted' => array(
+        'description' => 'The date when the first deposit is due, as formatted by the deposit portal.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+      'deposit2_deadline' => array(
+        'description' => 'UNIX timestamp when the second deposit is due.',
+        'type' => 'int',
+      ),
+      'deposit2_deadline_formatted' => array(
+        'description' => 'The date when the second deposit is due, as formatted by the deposit portal.',
+        'type' => 'varchar',
+        'length' => '25',
+      ),
+    ),
+  );
+
+  db_change_field('cls_aces2_applicant', 'deposit_deadline', 'deposit_deadline_formatted', $schema['cls_aces2_applicant']['fields']['deposit_deadline_formatted']);
+  db_change_field('cls_aces2_applicant', 'deposit2_deadline', 'deposit2_deadline_formatted', $schema['cls_aces2_applicant']['fields']['deposit2_deadline_formatted']);
+  db_add_field('cls_aces2_applicant', 'deposit_deadline', $schema['cls_aces2_applicant']['fields']['deposit_deadline']);
+  db_add_field('cls_aces2_applicant', 'deposit2_deadline', $schema['cls_aces2_applicant']['fields']['deposit2_deadline']);
+}
+
+/**
+* Adds one new field to cls_aces2_deposit_transaction table.
+*/
+function cls_aces2_update_7013() {
+  $schema['cls_aces2_deposit_transaction'] = array(
+    'fields' => array(
+      'record_id' => array(
+        'description' => 'The deposit portal record ID (RECORD_ID).',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+  );
+
+  db_add_field('cls_aces2_deposit_transaction', 'record_id', $schema['cls_aces2_deposit_transaction']['fields']['record_id']);
+  $result = t('Added one new field to cls_aces2_deposit_transaction table.');
+  return $result;
+}
+
+/**
+* Changes the format of enrollment_decline_reason field to text.
+*/
+function cls_aces2_update_7014() {
+  $schema['cls_aces2_applicant'] = array(
+    'fields' => array(
+      'enrollment_decline_reason' => array(
+        'description' => 'The reason why the offer was rejected as indicated by the admitted student.',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+    ),
+  );
+
+  db_change_field('cls_aces2_applicant', 'enrollment_decline_reason', 'enrollment_decline_reason', $schema['cls_aces2_applicant']['fields']['enrollment_decline_reason']);
+  $result = t('Changed the format of enrollment_decline_reason field in cls_aces2_applicant table.');
+  return $result;
+}
+
+/**
+ * Implements hook_install().
+ */
+function cls_aces2_install() {
+
+  variable_set('cls_aces2.sync.current_year_entering', 2013);
+
+  // Create native database foreign keys to match the schema definition
+/*
+  db_query('
+    ALTER TABLE {cls_aces2_applicant}
+    ADD CONSTRAINT {cls_aces2_program}
+    FOREIGN KEY (program_applied) REFERENCES {cls_aces2_program} (id)
+  ');
+*/
+  
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function cls_aces2_uninstall() {
+
+  variable_del('cls_aces2.sync.current_year_entering');
+
+  // Remove native database foreign keys
+/*
+  db_query('
+    ALTER TABLE {cls_aces2_applicant}
+    DROP CONSTRAINT IF EXISTS {cls_aces2_program}
+  ');
+*/
+  
+}

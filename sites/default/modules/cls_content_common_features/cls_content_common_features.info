@@ -1,0 +1,16 @@
+name = CLS Content Common Features
+description = Provides field bases and taxonomy vocabularies used by multiple content types.
+core = 7.x
+package = CLS Features
+dependencies[] = features
+dependencies[] = list
+dependencies[] = taxonomy
+features[features_api][] = api:2
+features[field_base][] = field_group_owner
+features[field_base][] = field_limit_access
+features[field_base][] = field_permission_flags
+features[field_base][] = field_world_edit
+features[field_base][] = field_world_link
+features[field_base][] = field_world_read
+features[taxonomy][] = cls_groups
+mtime = 1458158802

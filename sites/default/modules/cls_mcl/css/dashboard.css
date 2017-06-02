@@ -1,0 +1,375 @@
+.mcl-tabs {
+        background: none;
+        border: none;
+      }
+
+      .mcl-tabs ul.ui-tabs-nav {
+        padding: 0;
+      }
+
+      .mcl-tabs ul.ui-widget-header {
+        background: none;
+        border: none;
+      }
+
+      .mcl-tabs div.ui-tabs-panel {
+        border-width: 1px;
+        border: 2px solid #999999;
+        padding: 0;
+      }
+
+      .mcl-tabs ul.ui-tabs-nav li.ui-state-default {
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .mcl-tabs ul.ui-tabs-nav li.tab-btn-custom a {
+        margin-top: 5px;
+        color: #186E9D;
+      }
+
+      .mcl-tabs .ui-tabs-nav .ui-state-active,
+      .mcl-tabs .ui-widget-content .ui-state-active,
+      .mcl-tabs .ui-widget-header .ui-state-active {
+        border-left: 2px solid #999999 !important;
+        border-right: 2px solid #999999 !important;
+        border-top: 2px solid #999999 !important;
+      }
+
+      .mcl-tabs .ui-tabs-nav li.ui-tabs-selected {
+        margin-bottom: -1px !important;
+      }
+
+div#my-courses-tabs div#tabs-1 .jcarousel-skin-tango .jcarousel-container-horizontal {
+  padding: 15px 40px 10px;
+}
+
+div#my-courses-tabs div#tabs-1 .jcarousel-skin-tango .jcarousel-prev-horizontal,
+div#my-courses-tabs div#tabs-1 .jcarousel-skin-tango .jcarousel-next-horizontal {
+  top: 120px;
+}
+
+div#my-faculty-tabs div#tabs-4 .jcarousel-skin-tango .jcarousel-item {
+    width: 260px;
+    /* height: 100px; */
+}
+
+div#my-faculty-tabs div#tabs-4 .jcarousel-skin-tango .jcarousel-prev-horizontal,
+div#my-faculty-tabs div#tabs-4 .jcarousel-skin-tango .jcarousel-next-horizontal {
+  top: 55px;
+}
+
+div#my-faculty-tabs div#tabs-4 .jcarousel-skin-tango .jcarousel-container-horizontal {
+  padding: 20px 40px 10px;
+}
+
+
+
+      li.mcl-dashboard-course-item div.mcl-dashboard-course-item-name {
+        font-size: 16px;
+        font-weight: normal;
+      }
+
+      li.mcl-dashboard-course-item div.mcl-dashboard-course-item-faculty {
+        font-size: 12px;
+        font-weight: normal;
+      }
+
+      li.mcl-dashboard-course-item div.mcl-dashboard-course-item-description {
+        font-size: 11px;
+        font-weight: normal;
+        color: #666666;
+        margin: 11px 0;
+      }
+
+      li.mcl-dashboard-course-item div.mcl-dashboard-course-item-learn-more {
+        font-size: 11px;
+        font-weight: normal;
+      }
+
+      li.mcl-dashboard-course-browse-all {
+        padding-top: 70px;
+        font-size: 24px !important;
+        text-align: center;
+      }
+
+li.mcl-dashboard-faculty-item {margin-bottom: 20px;}
+li.mcl-dashboard-faculty-item div.mcl-dashboard-faculty-image {float: left; margin-right: 15px; margin-bottom: 15px;}
+li.mcl-dashboard-faculty-item div.mcl-dashboard-faculty-name {font-size: 16px}
+li.mcl-dashboard-faculty-item div.mcl-dashboard-faculty-title {font-style: italic; font-size: 11px}
+li.mcl-dashboard-faculty-item div.mcl-dashboard-faculty-view-profile {margin-top: 10px}
+li.mcl-dashboard-faculty-view-all {
+          padding-top:40px;
+        font-size: 24px !important;
+        text-align: center;
+}
+
+li.mcl-dashboard-center-item {
+        font-size: 16px !important;
+        height: 105px;
+}
+
+/*
+li.mcl-dashboard-journal-item {
+        font-size: 16px !important;
+        height: 105px;
+}
+*/
+
+.view-cls-mcl-dashboard-journals li.jcarousel-item {
+  font-size: 16px !important;
+  height: 105px;
+  width: 160px !important;
+        position: relative;
+}
+.view-cls-mcl-dashboard-journals div.outer-item {
+  height: 105px;
+  width: 170px;
+  position: absolute;
+  display: table;
+}
+.view-cls-mcl-dashboard-journals div.inner-item {
+  height: 105px;
+  width: 170px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.view-cls-mcl-dashboard-student-organizations li.jcarousel-item {
+  font-size: 16px !important;
+  height: 105px;
+  width: 160px !important;
+        position: relative;
+}
+.view-cls-mcl-dashboard-student-organizations div.outer-item {
+  height: 105px;
+  width: 170px;
+  position: absolute;
+  display: table;
+}
+.view-cls-mcl-dashboard-student-organizations div.inner-item {
+  height: 105px;
+  width: 170px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.view-cls-mcl-dashboard-centers li.jcarousel-item {
+  font-size: 16px !important;
+  height: 105px;
+  width: 160px !important;
+        position: relative;
+}
+.view-cls-mcl-dashboard-centers div.outer-item {
+  height: 105px;
+  width: 170px;
+  position: absolute;
+  display: table;
+}
+.view-cls-mcl-dashboard-centers div.inner-item {
+  height: 105px;
+  width: 170px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+
+.view-cls-mcl-dashboard-faculty .jcarousel-item,
+.view-cls-mcl-dashboard-faculty-all .jcarousel-item {
+  width: 275px !important;
+}
+
+.view-cls-mcl-dashboard-faculty .views-field.views-field-image,
+.view-cls-mcl-dashboard-faculty-all .views-field.views-field-image {
+    float: left;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+.view-cls-mcl-dashboard-faculty .views-field.views-field-nothing-2,
+.view-cls-mcl-dashboard-faculty-all .views-field.views-field-nothing-2 {
+    font-size: 16px;
+    text-align: left;
+}
+.view-cls-mcl-dashboard-faculty .views-field.views-field-title,
+.view-cls-mcl-dashboard-faculty-all .views-field.views-field-title {
+    font-size: 11px;
+    font-style: italic;
+    text-align: left;
+    margin-left: 83px;
+}
+.view-cls-mcl-dashboard-faculty .views-field.views-field-nothing,
+.view-cls-mcl-dashboard-faculty-all .views-field.views-field-nothing {
+    margin-top: 10px;
+    text-align: left;
+    margin-left: 83px;
+}
+
+
+.view-cls-mcl-dashboard-courses .views-field.views-field-name,
+.view-cls-mcl-dashboard-courses-foundation .views-field.views-field-name {
+    font-size: 16px;
+    text-align: left;
+}
+
+.view-cls-mcl-dashboard-courses .views-field.views-field-faculty-names,
+.view-cls-mcl-dashboard-courses .views-field.views-field-faculty,
+.view-cls-mcl-dashboard-courses-foundation .views-field.views-field-faculty-names {
+    font-size: 11px;
+    text-align: left;
+}
+
+.view-cls-mcl-dashboard-courses .views-field.views-field-description,
+.view-cls-mcl-dashboard-courses .views-field.views-field-offering-description,
+.view-cls-mcl-dashboard-courses-foundation .views-field.views-field-description {
+    color: #666666;
+    font-size: 11px;
+    margin: 10px 0;
+    text-align: left;
+}
+
+.view-cls-mcl-dashboard-courses .views-field.views-field-nothing,
+.view-cls-mcl-dashboard-courses .views-field.views-field-number,
+.view-cls-mcl-dashboard-courses-foundation .views-field.views-field-nothing {
+    font-size: 11px;
+    text-align: left;
+}
+
+.jcarousel-skin-default .jcarousel-next-disabled, .jcarousel-skin-default .jcarousel-prev-disabled {
+    display: block !important;
+}
+
+
+
+.jcarousel-skin-default .jcarousel-next-horizontal {
+  margin-right: -5px !important;
+}
+
+.jcarousel-skin-default .jcarousel-prev-horizontal {
+  margin-left: -5px !important;
+}
+
+/*
+.view-cls-mcl-dashboard-courses .jcarousel-skin-default .jcarousel-next-horizontal,
+.view-cls-mcl-dashboard-courses .jcarousel-skin-default .jcarousel-prev-horizontal,
+.view-cls-mcl-dashboard-courses-foundation .jcarousel-skin-default .jcarousel-next-horizontal,
+.view-cls-mcl-dashboard-courses-foundation .jcarousel-skin-default .jcarousel-prev-horizontal {
+  top: 100px !important;
+}
+*/
+
+
+/*
+li.mcl-dashboard-student-org-item {
+        font-size: 16px !important;
+        height: 105px;
+}
+*/
+
+      div.my-courses-section,
+      div.my-faculty-section,
+      div.my-other-areas-section {
+        margin-bottom: 20px;
+      }
+
+
+      .dashboard-button a {
+          border: 2px solid #186E9E;
+          display: block;
+          height: 100px;
+          margin-top: 10px;
+          padding: 15px;
+          text-decoration: none;
+      }
+      .dashboard-button a:hover, .dashboard-button a.white:hover, .dashboard-button a.blue:hover {
+          background: none repeat scroll 0 0 #666666;
+          border: 2px solid #666666;
+          text-decoration: none;
+      }
+      .dashboard-button a span {
+          display: block;
+      }
+      .dashboard-button a span.header {
+          font: bold 18px/24px Verdana,Arial,Helvetica,sans-serif;
+          margin: -6px 0 10px;
+          padding: 0;
+      }
+      .dashboard-button a span.description {
+          font: italic 11px Georgia,'Times New Roman',Times,serif;
+      }
+      .dashboard-button a.white {
+          background-color: #FFFFFF;
+      }
+      .dashboard-button a.white span.header {
+          color: #186E9E;
+      }
+      .dashboard-button a.white:hover span.header {
+          color: #FFFFFF;
+      }
+      .dashboard-button a.white span.description {
+          color: #4D4D4D;
+      }
+      .dashboard-button a.white:hover span.description {
+          color: #FFFFFF;
+      }
+      .dashboard-button a.blue {
+          background-color: #186E9E;
+      }
+      .dashboard-button a.blue span.header {
+          color: #FFFFFF;
+      }
+      .dashboard-button a.blue:hover span.header {
+          color: #FFFFFF;
+      }
+      .dashboard-button a.blue span.description {
+          color: #FFFFFF;
+      }
+      .dashboard-button a.blue:hover span.description {
+          color: #FFFFFF;
+      }
+      li#explore-electives-list-item,
+      li#browse-courses-list-item,
+      li#browse-the-faculty-list-item {
+        border: none;
+        background: none;
+      }
+      li#explore-electives-list-item:hover,
+      li#browse-courses-list-item:hover,
+      li#browse-the-faculty-list-item:hover {
+        border: none;
+        background: none;
+      }
+
+      body div.messages {display: none;}
+      body.page-admissions-jd-my-columbia-law div.messages {display: block;}
+
+div.calendar-item div.icon {
+    float: left;
+    margin-bottom: 50px;
+    margin-right: 10px;
+    width: 50px;
+}
+div.calendar-item div.icon div.month {
+    background-color: #FF8F00;
+    border: 1px solid #FF8F00;
+    color: #FFFFFF;
+    font: 10px Verdana,Arial,sans-serif;
+    text-align: center;
+}
+div.calendar-item div.icon div.day {
+    border-bottom: 1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    color: #666666;
+    font: bold 21px Verdana,Arial,sans-serif;
+    height: 30px;
+    padding-top: 3px;
+    text-align: center;
+}
+
+h6.event-time {
+  margin-left: 60px !important;
+}
+
+p.event-more-information {
+ margin-left: 60px !important;
+}

@@ -1,0 +1,2071 @@
+<?php
+
+/**
+ * @file
+ * Install file for the cls_mcl module.
+ */
+
+/**
+* Implements hook_enable().
+*/
+function cls_mcl_enable() {
+  $destination_wrapper = file_stream_wrapper_get_instance_by_uri('public://');
+  $public_dir_realpath = $destination_wrapper->realpath();
+  $mcl_excel_file_realpath = $public_dir_realpath . '/reports/gls';
+
+  if (!file_exists($mcl_excel_file_realpath)) {
+    mkdir($mcl_excel_file_realpath);
+    chmod($mcl_excel_file_realpath, 0777);
+  }
+}
+
+/**
+* Implements hook_schema().
+*/
+function cls_mcl_schema() {
+  $schema['cls_mcl_remote_users'] = array(
+    'description' => "Stores data for My Columbia Law site users from Oracle database. These users will be imported upon first login.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'remote_user_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User ID from Oracle database.',
+      ),
+      'login' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'description' => 'Login.',
+      ),
+      'password' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'description' => 'Password.',
+      ),
+      'first_name' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+        'description' => 'First Name.',
+      ),
+      'last_name' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+        'description' => 'Last Name.',
+      ),
+      'middle_name' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => FALSE,
+        'description' => 'Middle Name.',
+      ),
+      'birth_date' => array(
+        'type' => 'varchar',
+        'length' => 10,
+        'not null' => FALSE,
+        'description' => 'Date of Birth',
+      ),
+      'lsac_account_number' => array(
+        'type' => 'varchar',
+        'length' => 9,
+        'not null' => FALSE,
+        'description' => 'LSAC Account No.',
+      ),
+      'country_code' => array(
+        'type' => 'varchar',
+        'length' => 3,
+        'not null' => FALSE,
+        'description' => 'Country Code',
+      ),
+      'state_code' => array(
+        'type' => 'varchar',
+        'length' => 2,
+        'not null' => FALSE,
+        'description' => 'State',
+      ),
+      'city' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => FALSE,
+        'description' => 'City',
+      ),
+      'zip_code' => array(
+        'type' => 'varchar',
+        'length' => 10,
+        'not null' => FALSE,
+        'description' => 'Zip Code',
+      ),
+      'street_1' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => FALSE,
+        'description' => 'Street Address 1',
+      ),
+      'street_2' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => FALSE,
+        'description' => 'Street Address 2',
+      ),
+      'security_question' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'description' => 'Security Question',
+      ),
+      'security_answer' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'description' => 'Security Answer',
+      ),
+      'gender' => array(
+        'type' => 'varchar',
+        'length' => 1,
+        'not null' => TRUE,
+        'description' => 'Gender',
+      ),
+      'study_begin_year' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'description' => 'Study Begin Year.',
+      ),
+      'ssn' => array(
+        'type' => 'varchar',
+        'length' => 9,
+        'not null' => FALSE,
+        'description' => 'SSN.',
+      ),
+      'interest_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'description' => 'Interest ID.',
+      ),
+      'account_status' => array(
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => FALSE,
+        'description' => 'Account Status.',
+      ),
+      'account_created' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Account Created.',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_remote_user_school'] = array(
+    'description' => "Stores data about schools remote users from the Oracle database have attended.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'remote_user_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User ID from remote database.',
+      ),
+      'school_id' => array(
+        'type' => 'varchar',
+        'length' => 4,
+        'not null' => TRUE,
+        'description' => 'School ID.',
+      ),
+      'type' => array(
+        'type' => 'varchar',
+        'length' => 3,
+        'not null' => TRUE,
+        'description' => 'School type.',
+      ),
+      'user_specified' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Is this school user-specified?',
+      ),
+      'degree' => array(
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => FALSE,
+        'description' => 'Degree.',
+      ),
+      'grad_date' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Graduation date.',
+      ),
+      'major' => array(
+        'type' => 'varchar',
+        'length' => 3,
+        'not null' => FALSE,
+        'description' => 'Major.',
+      ),
+      'minor' => array(
+        'type' => 'varchar',
+        'length' => 3,
+        'not null' => FALSE,
+        'description' => 'Minor.',
+      ),
+      'second_major' => array(
+        'type' => 'varchar',
+        'length' => 3,
+        'not null' => FALSE,
+        'description' => 'Second major.',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_countries'] = array(
+    'description' => "Stores data about countries from Oracle database.",
+    'fields' => array(
+      'country_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'country_code' => array(
+        'type' => 'varchar',
+        'length' => 3,
+        'not null' => TRUE,
+        'description' => 'Country Code.',
+      ),
+      'country_name' => array(
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE,
+        'description' => 'Country Name.',
+      ),
+    ),
+    'primary key' => array('country_id'),
+  );
+  $schema['cls_mcl_states'] = array(
+    'description' => "Stores data about states/provinces from Oracle database.",
+    'fields' => array(
+      'state_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'state_code' => array(
+        'type' => 'varchar',
+        'length' => 2,
+        'not null' => TRUE,
+        'description' => 'State Code.',
+      ),
+      'state_name' => array(
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE,
+        'description' => 'State Name.',
+      ),
+    ),
+    'primary key' => array('state_id'),
+  );
+  $schema['cls_mcl_schools'] = array(
+    'description' => "Stores data about schools from Oracle database.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'school_id' => array(
+        'type' => 'varchar',
+        'length' => 15,
+        'not null' => TRUE,
+        'description' => 'School ID.',
+      ),
+      'school_name' => array(
+        'type' => 'varchar',
+        'length' => 55,
+        'not null' => TRUE,
+        'description' => 'School Name.',
+      ),
+      'parent_id' => array(
+        'type' => 'varchar',
+        'length' => 15,
+        'not null' => FALSE,
+        'description' => 'Parent School ID.',
+      ),
+      'visible' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+        'description' => 'Visibility.',
+      ),
+    ),
+    'indexes' => array(
+      'school_name' => array('school_name'),
+      'school_name_visible' => array('school_name', 'visible'),
+      'school_id' => array('school_id'),
+      'parent_id' => array('parent_id'),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_major'] = array(
+    'description' => "Stores data about majors from Oracle database.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'major' => array(
+        'type' => 'char',
+        'length' => 3,
+        'not null' => TRUE,
+        'description' => 'Major Code.',
+      ),
+      'major_desc' => array(
+        'type' => 'varchar',
+        'length' => 35,
+        'not null' => FALSE,
+        'description' => 'Major Description.',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_interest'] = array(
+    'description' => "Stores a list of user interest options from Oracle database.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'interest_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Interest ID.',
+      ),
+      'interest_description' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Description.',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_curriculum_area'] = array(
+    'description' => "Stores a list of users' curriculum areas from Oracle database.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'category_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Category ID.',
+      ),
+      'category_name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Category Name.',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_career'] = array(
+    'description' => "Stores a list of remote users' career areas from Oracle database.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'career_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Career ID.',
+      ),
+      'description' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => FALSE,
+        'description' => 'Career Description.',
+      ),
+      'specify_flag' => array(
+        'type' => 'char',
+        'length' => 1,
+        'not null' => FALSE,
+        'description' => 'Is this a user-specified career?',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_aspect'] = array(
+    'description' => "Stores a list of users' prospect aspects from Oracle database.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'aspect_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Aspect ID.',
+      ),
+      'description' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Aspect Description.',
+      ),
+      'specify_flag' => array(
+        'type' => 'char',
+        'length' => 1,
+        'not null' => FALSE,
+        'description' => 'Is this a user-specified aspect?',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_prospect_area'] = array(
+    'description' => "Stores remote users' prospect area selections.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'remote_user_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User ID in remote database.',
+      ),
+      'category_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Category ID in cls_mcl_curriculum_area table.',
+      ),
+      'user_specified' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Name of user-specified prospect area.',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_prospect_career'] = array(
+    'description' => "Stores remote users' prospect career selections.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'remote_user_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User ID in remote database.',
+      ),
+      'career_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Career ID in cls_mcl_career table.',
+      ),
+      'user_specified' => array(
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => FALSE,
+        'description' => 'Name of user-specified prospect career.',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+  $schema['cls_mcl_prospect_aspect'] = array(
+    'description' => "Stores remote users' prospect aspect selections.",
+    'fields' => array(
+      'record_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'remote_user_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'User ID in remote database.',
+      ),
+      'aspect_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Aspect ID in cls_mcl_aspect table.',
+      ),
+      'user_specified' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Name of user-specified prospect aspect.',
+      ),
+    ),
+    'primary key' => array('record_id'),
+  );
+
+  $schema['cls_mcl_interest_type'] = array(
+    'description' => 'Stores information about all defined CLS MCL interest types.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'title' => array(
+        'description' => 'The name of the interest type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'rtsb_id' => array(
+        'description' => 'The corresponding Curriculum Guide category id in RTSB (if any).',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'old_mcl_id' => array(
+        'description' => 'The corresponding id of the prospect area in the old My Columbia Law system (if any).',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'visible' => array(
+        'description' => 'Visibility.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+
+  $schema['cls_mcl_journal'] = array(
+    'description' => 'Stores information about all defined CLS MCL journals.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'title' => array(
+        'description' => 'The name of the journal.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the journal.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+  
+  $schema['cls_mcl_student_organization'] = array(
+    'description' => 'Stores information about all defined CLS MCL student organizations.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'title' => array(
+        'description' => 'The name of the student organization.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the student organization.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+
+  $schema['cls_mcl_center'] = array(
+    'description' => 'Stores information about all defined CLS MCL centers/programs.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'title' => array(
+        'description' => 'The name of the center.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the center.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+
+  $schema['cls_mcl_faculty'] = array(
+    'description' => 'Stores information about all synchronized faculty.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'first_name' => array(
+        'description' => 'The first name of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'middle_name' => array(
+        'description' => 'The middle name of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'last_name' => array(
+        'description' => 'The last name of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'suffix' => array(
+        'description' => 'The suffix of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'title' => array(
+        'description' => 'The title of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'image' => array(
+        'description' => 'The photo image URL of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+
+  $schema['cls_courses_course'] = array(
+    'description' => 'Stores action information.',
+    'fields' => array(
+      'number' => array(
+        'description' => 'Primary Key: Unique actions ID.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'name' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'section_name' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'types' => array(
+        'description' => 'The object that that action acts on (node, user, comment, system or custom types.)',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+        'default' => '',
+      ),
+      'offering_description' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'section_description' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'faculty' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'years' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'terms' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'level' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '225',
+        'not null' => FALSE,
+      ),
+      'categories' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'featured' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+        'default' => '0',
+      ),
+      'image_url' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'featured_color' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'related_courses' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'point_range' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'new' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'hide_from_browse' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'weight' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('number'),
+  );
+
+  $schema['cls_mcl_audit_log'] = array(
+    'description' => 'Stores CLS MCL audit log entries.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'type' => array(
+        'description' => 'The audit log entry type.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'data' => array(
+        'type' => 'blob',
+        'not null' => FALSE,
+        'size' => 'big',
+        'serialize' => TRUE,
+        'description' => 'A serialized array of name value pairs that are related to the audit log entry.',
+      ),
+      'uid' => array(
+        'description' => 'ID of the current Drupal user.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'ip_address' => array(
+        'description' => 'IP address of user.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+
+/**
+ * Implements hook_install().
+ *
+ * @see node_type_set_defaults()
+ * @see field_info_instance()
+ * @see field_update_instance()
+ * @see field_create_field()
+ * @see field_create_instance()
+ */
+function cls_mcl_install() {
+  $t = get_t();
+
+  // Create all the fields we are adding to our content type.
+  foreach (_cls_mcl_installed_fields() as $field) {
+    field_create_field($field);
+  }
+
+  // Create all the instances for our fields.
+  foreach (_cls_mcl_installed_instances() as $instance) {
+    $instance['entity_type'] = 'user';
+    $instance['bundle'] = 'user';
+    field_create_instance($instance);
+  }
+  
+  variable_set('current_application_year', date("Y"));
+  
+  // Install MCL events node type.
+
+  // Define the node type as an array.
+  $cls_mcl_event = array(
+    'type' => 'cls_mcl_event',
+    'name' => st('CLS MCL Event'),
+    'base' => 'node_content',
+    'description' => st('A My Columbia Law event.'),
+    'body_label' => st('Event Description'),
+    'promote' => 0,
+    'status' => 1,
+    'comment' => 0,
+  );
+
+  // Set defaults not dealt with above.
+  $content_type = node_type_set_defaults($cls_mcl_event);
+
+  // Add the body field to the content type.
+  node_add_body_field($content_type);
+
+  // Save the content type
+  node_type_save($content_type);
+
+  // Create all the fields we are adding to our content type.
+  foreach (_cls_mcl_event_installed_fields() as $field) {
+    field_create_field($field);
+  }
+
+  // Create all the instances for our fields.
+  foreach (_cls_mcl_event_installed_instances() as $instance) {
+    // $instance['entity_type'] = 'node';
+    // $instance['bundle'] = $cls_hri_library['type'];
+    field_create_instance($instance);
+  }
+
+  // Create all the fields we are adding to our content type.
+  foreach (_cls_mcl_cms_cat_id_installed_fields() as $field) {
+    field_create_field($field);
+  }
+
+  // Create all the instances for our fields.
+  foreach (_cls_mcl_cms_cat_id_installed_instances() as $instance) {
+    // $instance['entity_type'] = 'node';
+    // $instance['bundle'] = $cls_hri_library['type'];
+    field_create_instance($instance);
+  }
+
+}
+
+/**
+ * Return a structured array defining the fields created by this content type.
+ *
+ * This is packaged in a function so it can be used in both
+ * cls_mcl_install() and cls_mcl_uninstall().
+ */
+function _cls_mcl_installed_fields() {
+  $t = get_t();
+  return array(
+    'cls_mcl_remote_user_id' => array(
+        'field_name'  => 'cls_mcl_remote_user_id',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_birth_date' => array(
+        'field_name'  => 'cls_mcl_birth_date',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_lsac_account_number' => array(
+        'field_name'  => 'cls_mcl_lsac_account_number',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_country' => array(
+        'field_name'  => 'cls_mcl_country',
+        'cardinality' => 1,
+        'type'        => 'list_text',
+    ),
+    'cls_mcl_state_province' => array(
+        'field_name'  => 'cls_mcl_state_province',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_city' => array(
+        'field_name'  => 'cls_mcl_city',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_zip_code' => array(
+        'field_name'  => 'cls_mcl_zip_code',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_undergrad_institution' => array(
+        'field_name'  => 'cls_mcl_undergrad_institution',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_undergrad_inst_other' => array(
+        'field_name'  => 'cls_mcl_undergrad_inst_other',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_undergrad_grad_year' => array(
+        'field_name'  => 'cls_mcl_undergrad_grad_year',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_grad_institution' => array(
+        'field_name'  => 'cls_mcl_grad_institution',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_grad_inst_other' => array(
+        'field_name'  => 'cls_mcl_grad_inst_other',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_grad_graduation_year' => array(
+        'field_name'  => 'cls_mcl_grad_graduation_year',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_admissions_cycle' => array(
+        'field_name'  => 'cls_mcl_admissions_cycle',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),
+    'cls_mcl_academic_interests' => array(
+        'field_name'  => 'cls_mcl_academic_interests',
+        'cardinality' => 5,
+        'type'        => 'text',
+    ),
+    'cls_mcl_student_org_interests' => array(
+        'field_name'  => 'cls_mcl_student_org_interests',
+        'cardinality' => 0,
+        'type'        => 'text',
+    ),
+    'cls_mcl_security_question' => array(
+        'field_name' => 'cls_mcl_security_question',
+        'type'       => 'text',
+        'cardinality' => 1,
+    ),
+    'cls_mcl_security_answer' => array(
+        'field_name' => 'cls_mcl_security_answer',
+        'type'       => 'text',
+        'cardinality' => 1,
+    ),
+    'cls_mcl_account_type' => array(
+        'field_name'  => 'cls_mcl_account_type',
+        'cardinality' => 1,
+        'type'        => 'text',
+    ),   
+  );
+}
+
+/**
+ * Return a structured array defining the instances for this content type.
+ *
+ * The instance lets Drupal know which widget to use to allow the user to enter
+ * data and how to react in different view modes.  We are going to display a
+ * page that uses a custom "cls_mcl_list" view mode.  We will set a
+ * cardinality of three allowing our content type to give the user three color
+ * fields.
+ *
+ * This is provided as a function so that it can be used in both hook_install()
+ * and hook_uninstall().
+ */
+function _cls_mcl_installed_instances() {
+  $t = get_t();
+  return array(
+    'cls_mcl_remote_user_id' => array(
+        'field_name'  => 'cls_mcl_remote_user_id',
+        'label' => $t('Remote User ID'),
+        'required' => TRUE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_birth_date' => array(
+        'field_name'  => 'cls_mcl_birth_date',
+        'label' => $t('Date of Birth'),
+        'required' => TRUE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_lsac_account_number' => array(
+        'field_name'  => 'cls_mcl_lsac_account_number',
+        'label' => $t('LSAC Account No.'),
+        'required' => TRUE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_country' => array(
+        'field_name'  => 'cls_mcl_country',
+        'label' => $t('Country'),
+        'required' => TRUE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_state_province' => array(
+        'field_name'  => 'cls_mcl_state_province',
+        'label' => $t('State, Territory or Province'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_city' => array(
+        'field_name'  => 'cls_mcl_city',
+        'label' => $t('City'),
+        'required' => TRUE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_zip_code' => array(
+        'field_name'  => 'cls_mcl_zip_code',
+        'label' => $t('Zip Code'),
+        'required' => TRUE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_undergrad_institution' => array(
+        'field_name'  => 'cls_mcl_undergrad_institution',
+        'label' => $t('Undergraduate School Institution'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_undergrad_inst_other' => array(
+        'field_name'  => 'cls_mcl_undergrad_inst_other',
+       'label' => $t('Undergraduate School Institution - Other'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_undergrad_grad_year' => array(
+        'field_name'  => 'cls_mcl_undergrad_grad_year',
+        'label' => $t('Undergraduate School Graduation Year'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_grad_institution' => array(
+        'field_name'  => 'cls_mcl_grad_institution',
+        'label' => $t('Graduate School Institution'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_grad_inst_other' => array(
+        'field_name'  => 'cls_mcl_grad_inst_other',
+        'label' => $t('Graduate School Institution - Other'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_grad_graduation_year' => array(
+        'field_name'  => 'cls_mcl_grad_graduation_year',
+        'label' => $t('Graduate School Graduation Year'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_admissions_cycle' => array(
+        'field_name'  => 'cls_mcl_admissions_cycle',
+        'label' => $t('Admissions Cycle'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_academic_interests' => array(
+        'field_name'  => 'cls_mcl_academic_interests',
+        'label' => $t('Academic Interests'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_student_org_interests' => array(
+        'field_name'  => 'cls_mcl_student_org_interests',
+        'label' => $t('Student Organization Interests'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_security_question' => array(
+        'field_name' => 'cls_mcl_security_question',
+        'label' => $t('Security Question'),
+        'required' => TRUE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_security_answer' => array(
+        'field_name' => 'cls_mcl_security_answer',
+        'label' => $t('Security Answer'),
+        'required' => TRUE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),
+    'cls_mcl_account_type' => array(
+        'field_name' => 'cls_mcl_account_type',
+        'label' => $t('Account Type'),
+        'required' => FALSE,
+        'display' => array('default' => array('type' => 'hidden')),
+    ),      
+  );
+}
+
+/**
+ * Return a structured array defining the fields created by this content type.
+ *
+ * This is packaged in a function so it can be used in both
+ * cls_mcl_install() and cls_mcl_uninstall().
+ */
+function _cls_mcl_event_installed_fields() {
+  $t = get_t();
+  return array(
+    'cls_mcl_event_location' => array(
+      'field_name' => 'cls_mcl_event_location',
+      'cardinality' => 1,
+      'type' => 'location',
+      'settings' => array(
+        'location_settings' => array(
+          'form' => array(
+            'fields' => array(
+              'name' => array(
+                'collect' => '1',
+                'default' => '',
+                'weight' => '2',
+              ),
+              'street' => array(
+                'collect' => '1',
+                'default' => '',
+                'weight' => '4',
+              ),
+              'additional' => array(
+                'collect' => '1',
+                'default' => '',
+                'weight' => '6',
+              ),
+              'city' => array(
+                'collect' => '0',
+                'default' => '',
+                'weight' => '8',
+              ),
+              'province' => array(
+                'collect' => '1',
+                'widget' => 'autocomplete',
+                'default' => '',
+                'weight' => '10',
+              ),
+              'postal_code' => array(
+                'collect' => '1',
+                'default' => '',
+                'weight' => '12',
+              ),
+              'country' => array(
+                'collect' => '1',
+                'default' => 'us',
+                'weight' => '14',
+              ),
+              'locpick' => array(
+                'collect' => '0',
+                'weight' => '20',
+              ),
+            ),
+          ),
+          'display' => array(
+            'hide' => array(
+              'name' => 0,
+              'street' => 0,
+              'additional' => 0,
+              'city' => 0,
+              'province' => 0,
+              'postal_code' => 0,
+              'country' => 0,
+              'locpick' => 0,
+              'province_name' => 0,
+              'country_name' => 0,
+              'map_link' => 0,
+              'coords' => 0,
+            ),
+          ),
+        'gmap_macro' => '[gmap ]',
+        'gmap_marker' => 'drupal',
+        ),
+      ),
+    ),
+
+    'cls_mcl_event_institutions' => array(
+        'field_name' => 'cls_mcl_event_institutions',
+        'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+        'type' => 'list_integer',
+    ),
+
+    'cls_mcl_event_datetime' => array(
+        'field_name'  => 'cls_mcl_event_datetime',
+        'cardinality' => 1,
+        'type' => 'datetime',
+      'settings' => array(
+        'granularity' => array(
+          'month' => 'month',
+          'day' => 'day',
+          'hour' => 'hour',
+          'minute' => 'minute',
+          'year' => 'year',
+          'second' => 0,
+        ),
+        'tz_handling' => 'site',
+        'timezone_db' => 'UTC',
+        'cache_enabled' => 0,
+        'cache_count' => '4',
+        'todate' => 'required',
+      ),
+    ),   
+  );
+}
+
+/**
+ * Return a structured array defining the instances for this content type.
+ *
+ * The instance lets Drupal know which widget to use to allow the user to enter
+ * data and how to react in different view modes.  We are going to display a
+ * page that uses a custom "cls_mcl_list" view mode.  We will set a
+ * cardinality of three allowing our content type to give the user three color
+ * fields.
+ *
+ * This is provided as a function so that it can be used in both hook_install()
+ * and hook_uninstall().
+ */
+function _cls_mcl_event_installed_instances() {
+  $t = get_t();
+  return array(
+    'cls_mcl_event_datetime' => array(
+      'field_name'  => 'cls_mcl_event_datetime',
+      'entity_type' => 'node',
+      'bundle' => 'cls_mcl_event',
+      'label' => $t('Start and End Dates'),
+      'required' => TRUE,
+        'widget' => array(
+          'weight' => '30',
+          'type' => 'date_text',
+          'module' => 'date',
+          'active' => 1,
+          'settings' => array(
+            'input_format' => 'm/d/Y - g:i:sa',
+            'input_format_custom' => '',
+            'year_range' => '-3:+3',
+            //'increment' => 15,
+            'text_parts' => array(),
+          ),
+        ),
+        'settings' => array(
+          'default_value' => 'now',
+          'default_value_code' => '',
+          'default_value2' => 'same',
+          'default_value_code2' => '',
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'above',
+            'type' => 'date_default',
+            'settings' => array(
+              'format_type' => 'long',
+              'multiple_number' => '',
+              'multiple_from' => '',
+              'multiple_to' => '',
+              'fromto' => 'both',
+            ),
+            'module' => 'date',
+            'weight' => 2,
+          ),
+        ),
+    ),
+    'cls_mcl_event_location' => array(
+      'field_name'  => 'cls_mcl_event_location',
+      'entity_type' => 'node',
+      'bundle' => 'cls_mcl_event',
+      'label' => $t('Location'),
+      'required' => FALSE,
+      'widget' => array(
+        'weight' => '32',
+        'type' => 'location',
+        'module' => 'location_cck',
+      ),
+      'display' => array('default' => array('type' => 'location_default')),
+    ),
+    'cls_mcl_event_institutions' => array(
+      'field_name'  => 'cls_mcl_event_institutions',
+      'entity_type' => 'node',
+      'bundle' => 'cls_mcl_event',
+      'label' => $t('Related Institutions'),
+      'required' => FALSE,
+      'widget' => array(
+        'weight' => '34',
+        'type' => 'options_select',
+        'module' => 'options',
+      ),
+      'display' => array('default' => array('type' => 'list_default')),
+    ),
+  );
+}
+
+function _cls_mcl_cms_cat_id_installed_fields() {
+  $t = get_t();
+  return array(
+    'cls_mcl_cms_cat_ids' => array(
+        'field_name' => 'cls_mcl_cms_cat_ids',
+        'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+        'type' => 'text',
+    ),  
+  );
+}
+
+function _cls_mcl_cms_cat_id_installed_instances() {
+  $t = get_t();
+  return array(
+    'cls_mcl_cms_course_cat_ids' => array(
+        'field_name' => 'cls_mcl_cms_cat_ids',
+        'label' => $t('CMS Category IDs'),
+        'required' => FALSE,
+        'entity_type' => 'cls_mcl_course',
+        'bundle' => 'cls_mcl_course',
+    ),
+    'cls_mcl_cms_faculty_cat_ids' => array(
+        'field_name' => 'cls_mcl_cms_cat_ids',
+        'label' => $t('CMS Category IDs'),
+        'required' => FALSE,
+        'entity_type' => 'cls_mcl_faculty',
+        'bundle' => 'cls_mcl_faculty',
+    ),
+  );
+}
+
+
+
+/**
+* Create database tables for new entities: cls_mcl_interest_types,
+* cls_mcl_journals, and cls_mcl_student_organizations.
+*/
+function cls_mcl_update_7001() {
+
+  $schema['cls_mcl_interest_type'] = array(
+    'description' => 'Stores information about all defined CLS MCL interest types.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'title' => array(
+        'description' => 'The name of the interest type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'rtsb_id' => array(
+        'description' => 'The corresponding Curriculum Guide category id in RTSB (if any).',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'old_mcl_id' => array(
+        'description' => 'The corresponding id of the prospect area in the old My Columbia Law system (if any).',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+
+  $schema['cls_mcl_journal'] = array(
+    'description' => 'Stores information about all defined CLS MCL journals.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'title' => array(
+        'description' => 'The name of the journal.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the journal.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+  
+  $schema['cls_mcl_student_organization'] = array(
+    'description' => 'Stores information about all defined CLS MCL student organizations.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'title' => array(
+        'description' => 'The name of the student organization.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the student organization.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+
+  db_create_table('cls_mcl_interest_type', $schema['cls_mcl_interest_type']);
+  db_create_table('cls_mcl_journal', $schema['cls_mcl_journal']);
+  db_create_table('cls_mcl_student_organization', $schema['cls_mcl_student_organization']);
+}
+
+/**
+* Create the database table for audit log entries.
+*/
+function cls_mcl_update_7002() {
+
+  $schema['cls_mcl_audit_log'] = array(
+    'description' => 'Stores CLS MCL audit log entries.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'type' => array(
+        'description' => 'The audit log entry type.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'data' => array(
+        'type' => 'blob',
+        'not null' => FALSE,
+        'size' => 'big',
+        'serialize' => TRUE,
+        'description' => 'A serialized array of name value pairs that are related to the audit log entry.',
+      ),
+      'uid' => array(
+        'description' => 'ID of the current Drupal user.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'ip_address' => array(
+        'description' => 'IP address of user.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  db_create_table('cls_mcl_audit_log', $schema['cls_mcl_audit_log']);
+  
+}
+
+/**
+* Create CLS MCL event content type.
+*/
+function cls_mcl_update_7003() {
+
+  // Install MCL events node type.
+
+  // Define the node type as an array.
+  $cls_mcl_event = array(
+    'type' => 'cls_mcl_event',
+    'name' => st('CLS MCL Event'),
+    'base' => 'node_content',
+    'description' => st('A My Columbia Law event.'),
+    'body_label' => st('Event Description'),
+    'promote' => 0,
+    'status' => 1,
+    'comment' => 0,
+  );
+
+  // Set defaults not dealt with above.
+  $content_type = node_type_set_defaults($cls_mcl_event);
+
+  // Add the body field to the content type.
+  node_add_body_field($content_type);
+
+  // Save the content type
+  node_type_save($content_type);
+
+  // Create all the fields we are adding to our content type.
+  foreach (_cls_mcl_event_installed_fields() as $field) {
+    field_create_field($field);
+  }
+
+  // Create all the instances for our fields.
+  foreach (_cls_mcl_event_installed_instances() as $instance) {
+    // $instance['entity_type'] = 'node';
+    // $instance['bundle'] = $cls_hri_library['type'];
+    field_create_instance($instance);
+  }
+  
+}
+
+/**
+* Create the database table for CLS MCL center entities.
+*/
+function cls_mcl_update_7004() {
+
+  $schema['cls_mcl_center'] = array(
+    'description' => 'Stores information about all defined CLS MCL centers/programs.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'title' => array(
+        'description' => 'The name of the center.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the center.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+
+  db_create_table('cls_mcl_center', $schema['cls_mcl_center']);
+  
+}
+
+/**
+* Create the database tables for faculty and course entities.
+*/
+function cls_mcl_update_7005() {
+
+  $schema['cls_mcl_faculty'] = array(
+    'description' => 'Stores information about all synchronized faculty.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'first_name' => array(
+        'description' => 'The first name of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'middle_name' => array(
+        'description' => 'The middle name of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'last_name' => array(
+        'description' => 'The last name of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'suffix' => array(
+        'description' => 'The suffix of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'title' => array(
+        'description' => 'The title of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'image' => array(
+        'description' => 'The photo image URL of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the faculty member.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+
+  $schema['cls_mcl_course'] = array(
+    'description' => 'Stores information about all synchronized courses.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key.',
+      ),
+      'number' => array(
+        'description' => 'The course number.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'The course name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'faculty_names' => array(
+        'description' => 'The names of the course faculty.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'description' => array(
+        'description' => 'The course description.',
+        'type' => 'text',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'level' => array(
+        'description' => 'The course curriculum level.',
+        'type' => 'varchar',
+        'length' => 1,
+        'not null' => FALSE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the course.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'uid' => array(
+        'description' => 'ID of Drupal user creator.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'changed' => array(
+        'description' => 'Change date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'Creation date and time',
+        'type' => 'int',
+        'not null' => FALSE,
+      ),
+    ) + entity_exportable_schema_fields(),
+    'primary key' => array('id'),
+  );
+
+  db_create_table('cls_mcl_faculty', $schema['cls_mcl_faculty']);
+  db_create_table('cls_mcl_course', $schema['cls_mcl_course']);
+  
+}
+
+/**
+* Add and install CMS category id field onto course
+* and faculty entities.
+*/
+function cls_mcl_update_7006() {
+
+  // Create all the fields we are adding to our content type.
+  foreach (_cls_mcl_cms_cat_id_installed_fields() as $field) {
+    field_create_field($field);
+  }
+
+  // Create all the instances for our fields.
+  foreach (_cls_mcl_cms_cat_id_installed_instances() as $instance) {
+    // $instance['entity_type'] = 'node';
+    // $instance['bundle'] = $cls_hri_library['type'];
+    field_create_instance($instance);
+  }
+  
+}
+
+/**
+* Create current application year variable.
+*/
+function cls_mcl_update_7007() {
+  variable_set('current_application_year', date("Y"));
+}
+
+/**
+* Adds two new fields to cls_mcl_schools table.
+*/
+function cls_mcl_update_7008() {
+  $schema['cls_mcl_schools'] = array(
+    'fields' => array(
+      'parent_id' => array(
+        'type' => 'varchar',
+        'length' => 4,
+        'not null' => FALSE,
+        'description' => 'Parent School ID.',
+      ),
+      'visible' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+        'description' => 'Visibility.',
+      ),
+    ),
+  );
+
+  db_add_field('cls_mcl_schools', 'parent_id', $schema['cls_mcl_schools']['fields']['parent_id']);
+  db_add_field('cls_mcl_schools', 'visible', $schema['cls_mcl_schools']['fields']['visible']);
+
+  $result = t('Added two new fields to cls_mcl_schools table.');
+  return $result;
+}
+
+/**
+* Adds school_name index to cls_mcl_schools table.
+*/
+function cls_mcl_update_7009() {
+  db_add_index('cls_mcl_schools', 'school_name', array('school_name', 'visible'));
+  $result = t('Added index on school_name, visible fields to cls_mcl_schools table.');
+  return $result;
+}
+
+/**
+* Renames compound index on school_name, visible fields to school_name_visible.
+* Adds simple index on school_name field.
+*/
+function cls_mcl_update_7010() {
+  db_drop_index('cls_mcl_schools', 'school_name');
+  db_add_index('cls_mcl_schools', 'school_name', array('school_name'));
+  db_add_index('cls_mcl_schools', 'school_name_visible', array('school_name', 'visible'));
+  $result = t('Renamed index on school_name, visible fields in cls_mcl_schools table. Added simple index on school_name field.');
+  return $result;
+}
+
+/**
+* Adds account_type field and instance to user object.
+*/
+function cls_mcl_update_7011() {
+  $account_type_field = array(
+                            'field_name'  => 'cls_mcl_account_type',
+                            'cardinality' => 1,
+                            'type' => 'text',
+                            );
+  field_create_field($account_type_field);
+  $account_type_instance = array(
+                               'field_name' => 'cls_mcl_account_type',
+                               'label' => t('Account Type'),
+                               'required' => FALSE,
+                               'display' => array('default' => array('type' => 'hidden')),
+                               'entity_type' => 'user',
+                               'bundle' => 'user',
+                               );
+  field_create_instance($account_type_instance);
+}
+
+/**
+* Adds visible field to cls_mcl_interest_type table.
+*/
+function cls_mcl_update_7012() {
+  $schema['cls_mcl_interest_type'] = array(
+    'fields' => array(
+      'visible' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+        'description' => 'Visibility.',
+      ),
+    ),
+  );
+
+  db_add_field('cls_mcl_interest_type', 'visible', $schema['cls_mcl_interest_type']['fields']['visible']);
+
+  $result = t('Added new field to cls_mcl_interest_type table.');
+  return $result;
+}
+
+/**
+ * Changes the school ID and parent (school) ID columns to store more than four
+ * characters, now up to 15, in order to store schools IDs from LSAC's
+ * international school list.
+ */
+function cls_mcl_update_7013() {
+  db_change_field('cls_mcl_schools', 'school_id', 'school_id',
+      array('type' => 'varchar', 'length' => 15, 'not null' => TRUE, 'description' => 'School ID.',), array());
+  db_change_field('cls_mcl_schools', 'parent_id', 'parent_id',
+      array('type' => 'varchar', 'length' => 15, 'not null' => TRUE, 'description' => 'Parent School ID.',), array());
+  db_add_index('cls_mcl_schools', 'school_id', array('school_id'));
+  db_add_index('cls_mcl_schools', 'parent_id', array('parent_id'));
+  $result = t('Changed the school ID and parent (school) ID columns to store more than four characters (now up to 15).');
+  return $result;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function cls_mcl_uninstall() {
+  // Loop over each of the fields defined by this module and delete
+  // all instances of the field, their data, and the field itself.
+  foreach (array_keys(_cls_mcl_installed_fields()) as $field) {
+    field_delete_field($field);
+  }
+
+  variable_del('current_application_year');
+
+  foreach (array_keys(_cls_mcl_event_installed_fields()) as $field) {
+    field_delete_field($field);
+  }
+
+  // Create all the fields we are adding to our content type.
+  foreach (_cls_mcl_cms_cat_id_installed_fields() as $field) {
+    field_delete_field($field);
+  }
+
+  // Loop over any remaining field instances attached to the cls_mcl
+  // content type (such as the body field) and delete them individually.
+  $instances = field_info_instances('node', 'cls_mcl');
+  foreach ($instances as $instance_name => $instance) {
+    field_delete_instance($instance);
+  }
+
+  // Delete our content type
+  // http://api.drupal.org/api/function/node_type_delete/7
+  node_type_delete('cls_mcl_event');
+
+  // Purge all field information
+  field_purge_batch(1000);
+
+}

@@ -1,0 +1,717 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function cls_aces2_menu() {
+  $items = array();
+
+  // Applicant menu items
+
+  $items['admissions/admin/applicants/%cls_aces2_applicant'] = array(
+    'title callback' => 'entity_label',
+    'title arguments' => array('cls_aces2_applicant', 3),
+    'page callback' => 'cls_aces2_applicant_view',
+    'page arguments' => array(3),
+    'access arguments' => array('manage cls_aces2 applicants'),
+    'file' => 'cls_aces2.admin.inc',
+  );
+
+  $items['admissions/admin/applicants/%cls_aces2_applicant/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  $items['admissions/admin/applicants/sync'] = array(
+    'title' => 'Sync Applicants',
+    'page callback' => 'cls_aces2_sync_page',
+    'type' => MENU_LOCAL_TASK,
+    'access arguments' => array('manage cls_aces2 applicants'),
+    'file' => 'cls_aces2.admin.inc',
+  );
+  $items['admissions/admin/applicants/sync/test'] = array(
+    'title' => 'Sync Applicants (Test)',
+    'page callback' => 'cls_aces2_applicant_test',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('manage cls_aces2 applicants'),
+    'file' => 'cls_aces2.admin.inc',
+  );
+
+  $items['aces2/applicant-test'] = array(
+    'title' => 'Test',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cls_aces2_simple_test'),
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('manage cls_aces2 applicants'),
+  );
+
+  $items['aces2/transactions/update-date'] = array(
+    'title' => 'Aces2 Transactions Update Date',
+    'page callback' => 'cls_aces2_transactions_update_date',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('administer site configuration'),
+  );
+
+  return $items;
+}
+
+function cls_aces2_transactions_update_date(){
+  date_default_timezone_set('America/New_York');
+
+  $transactions = db_select('cls_aces2_deposit_transaction', 't')
+                    ->fields('t')
+                    ->execute();
+
+  foreach($transactions as $record){
+    $date = $record->transaction_date_formatted;
+    $id = $record->id;
+
+    if(isset($id) && isset($date)){
+      if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$date)){
+        $new_date = date("Y-m-d H:i:s", strtotime($date));
+      }else{
+        $new_date = date('Y-m-d H:i:s', $date/1000);
+      }
+
+      db_update('cls_aces2_deposit_transaction')
+        ->expression('transaction_date_formatted', ':date', array(':date' => $new_date))
+        ->condition('id', $id)
+        ->execute();
+
+      print 'record with id: ' . $id. ' updated. </br>';
+    }
+  }
+}
+
+function cls_aces2_simple_test($form, &$form_state) {
+
+  //$aces2_applicants = cls_aces2_applicant_load_by_program_year_lsac('1', '2013', 'L99999999');
+  //print_r($aces2_applicants);
+
+  $query = new EntityFieldQuery();
+
+  $query->entityCondition('entity_type', 'cls_aces2_applicant')
+  ->propertyCondition('program_applied', 1)
+  ->propertyCondition('year_entering', 2013)
+  ->propertyCondition('lsac_account_number', 'L99999999')
+  ->addMetaData('account', user_load(1)); // Run the query as user 1.
+
+  $result = $query->execute();
+
+  //print_r($result['cls_aces2_applicant']);
+
+  if (!empty($result) && isset($result['cls_aces2_applicant'])) {
+    //drupal_goto('applicant-found');
+    //drupal_goto($result['cls_aces2_applicant']->lsac_account_number);
+    $ids = array_keys($result['cls_aces2_applicant']);
+    //   if (is_array($ids)) {
+    //     drupal_goto('applicants-found');
+    //   }
+    $cls_aces2_applicants = entity_load('cls_aces2_applicant', $ids);
+    if ($cls_aces2_applicants) {
+      drupal_goto('applicants-loaded');
+    }
+    //    $cls_aces2_applicants = cls_aces2_applicant_load_multiple($result['cls_aces2_applicant']->id, array(), FALSE);
+    //    if ($cls_aces2_applicants) {
+    //      drupal_goto('applicant-loaded');
+    //    }
+    //$cls_aces2_applicants = entity_load('cls_aces2_applicant', array(1), array(), FALSE);
+  }
+  //print_r($cls_aces2_applicants);
+
+  //
+  //  if (!empty($result) && isset($result['cls_aces2_applicant'])) {
+  //    $cls_aces2_applicants = cls_aces2_applicant_load_multiple(array_keys($result['cls_aces2_applicant']), array(), $reset);
+  //  }
+
+
+
+  $form['title'] = array('#markup' => "AAAAAAAAAA",
+    '#prefix' => "<h4>",
+    '#suffix' => "</h4>");
+  return $form;
+
+}
+
+/**
+ * Implements hook_permission().
+ */
+function cls_aces2_permission() {
+  return array(
+    'manage cls_aces2 applicants' => array(
+      'title' => t('Manage Admissions Applicants (ACES2)')
+    ),
+  );
+}
+
+function cls_aces2_applicant_access($op, $cls_aces2_applicant = NULL, $account = NULL) {
+  if (user_access('manage cls_aces2 applicants', $account)) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function cls_aces2_entity_info() {
+
+  $return = array(
+
+    // cls_aces2_applicant entity
+    'cls_aces2_applicant' => array(
+      'label' => t('Applicant'),
+      'entity class' => 'CLSACES2Applicant',
+      'controller class' => 'CLSACES2ApplicantController',
+      'base table' => 'cls_aces2_applicant',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'id',
+      ),
+      'bundles' => array(
+        'cls_aces2_applicant' => array(
+          'label' => 'Applicant', 'admin' => array(
+            'path' => 'admissions/admin/applicants',
+            'real path' => 'admissions/admin/applicants'
+          )
+        )
+      ),
+      'load hook' => 'cls_aces2_applicant_load',
+      'view modes' => array(
+        'full' => array(
+          'label' => t('Default'),
+          'custom settings' => FALSE,
+        ),
+      ),
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+      'module' => 'cls_aces2',
+      'access callback' => 'cls_aces2_applicant_access',
+    ),
+
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function cls_aces2_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'cls_aces2'),
+  );
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function cls_aces2_views_data_alter(&$data) {
+
+  $field = field_info_field('cls_mcl_lsac_account_number');
+  $field_data_table_name = _field_sql_storage_tablename($field);
+  $lsac_account_number_entity_id_field_name = _field_sql_storage_columnname('cls_mcl_lsac_account_number', 'entity_id');
+  $lsac_account_number_field_name = _field_sql_storage_columnname('cls_mcl_lsac_account_number', 'cls_mcl_lsac_account_number_value');
+
+  $data['users']['cls_mcl_lsac_account_number'] = array(
+    'relationship' => array(
+      'label' => t('ACES2 Applicant'),
+      'title' => t('ACES2 Applicant'),
+      'help' => t('Relates an applicant recorded in ACES2 with a My Columbia Law/LL.M. user.'),
+      'base' => 'cls_aces2_applicant', // Table we're joining to.
+      'base field' => 'lsac_account_number', // Field on the joined table.
+      'field' => 'uid', // Real field name on the 'user' table.
+      'relationship table' => $field_data_table_name,
+      'relationship field' => 'cls_mcl_lsac_account_number_value',
+      'handler' => 'cls_aces2_applicant_views_handler_relationship',
+    ),
+  );
+
+  $data['cls_admissions_notification_log']['lsac_account_number'] = array(
+    'relationship' => array(
+      'label' => t('ACES2 Applicant'),
+      'title' => t('ACES2 Applicant'),
+      'help' => t('Relates an applicant recorded in ACES2 with an admissions notification log entry.'),
+      'base' => 'cls_aces2_applicant', // Table we're joining to.
+      'base field' => 'lsac_account_number', // Field on the joined table.
+      'field' => 'lsac_account_number', // Real field name on the 'cls_admissions_notification_log' table.
+      'relationship table' => 'cls_admissions_notification_log',
+      'relationship field' => 'lsac_account_number',
+      'handler' => 'cls_aces2_applicant_views_handler_relationship',
+    ),
+  );
+
+  $data['cls_admissions_notification_exclusion']['lsac_account_number'] = array(
+    'relationship' => array(
+      'label' => t('ACES2 Applicant'),
+      'title' => t('ACES2 Applicant'),
+      'help' => t('Relates an applicant recorded in ACES2 with an admissions notification exclusion entry.'),
+      'base' => 'cls_aces2_applicant', // Table we're joining to.
+      'base field' => 'lsac_account_number', // Field on the joined table.
+      'field' => 'lsac_account_number', // Real field name on the 'cls_admissions_notification_log' table.
+      'relationship table' => 'cls_admissions_notification_exclusion',
+      'relationship field' => 'lsac_account_number',
+      'handler' => 'cls_aces2_applicant_views_handler_relationship',
+    ),
+  );
+
+  $data['cls_aces2_applicant']['pin'] = array(
+    'relationship' => array(
+      'label' => t('Admitted Student PIN'),
+      'title' => t('Admitted Student PIN'),
+      'help' => t('Relates an applicant recorded in ACES2 with an admissions notification exclusion entry.'),
+      'base' => 'cls_admissions_admitted_pin', // Table we're joining to.
+      'base field' => 'lsac_account_number', // Field on the joined table.
+      'field' => 'lsac_account_number', // Real field name on the 'cls_admissions_notification_log' table.
+      'relationship table' => 'cls_aces2_applicant',
+      'relationship field' => 'lsac_account_number',
+      'handler' => 'cls_aces2_applicant_pin_views_handler_relationship',
+    ),
+  );
+
+  $data['cls_aces2_applicant']['first_name_at'] = array(
+    'title' => t("First Name (Auto-transliterated)"),
+    'help' => t("An automatically transliterated version of the applicant's first name."),
+    'field' => array(
+      'real field' => 'first_name',
+      'handler' => 'cls_aces2_views_handler_transliterated_field',
+      'click sortable' => '0',
+      'float' => '',
+    ),
+    'sort' => array(
+      'real field' => 'first_name',
+      'handler' => 'views_handler_sort',
+    ),
+    'filter' => array(
+      'real field' => 'first_name',
+      'handler' => 'views_handler_filter_text',
+    ),
+    'argument' => array(
+      'real field' => 'first_name',
+      'handler' => 'views_handler_argument_text',
+    ),
+  );
+
+  $data['cls_aces2_applicant']['middle_name_at'] = array(
+    'title' => t("Middle Name (Auto-transliterated)"),
+    'help' => t("An automatically transliterated version of the applicant's middle name."),
+    'field' => array(
+      'real field' => 'middle_name',
+      'handler' => 'cls_aces2_views_handler_transliterated_field',
+      'click sortable' => '0',
+      'float' => '',
+    ),
+    'sort' => array(
+      'real field' => 'middle_name',
+      'handler' => 'views_handler_sort',
+    ),
+    'filter' => array(
+      'real field' => 'middle_name',
+      'handler' => 'views_handler_filter_text',
+    ),
+    'argument' => array(
+      'real field' => 'middle_name',
+      'handler' => 'views_handler_argument_text',
+    ),
+  );
+
+  $data['cls_aces2_applicant']['last_name_at'] = array(
+    'title' => t("Last Name (Auto-transliterated)"),
+    'help' => t("An automatically transliterated version of the applicant's last name."),
+    'field' => array(
+      'real field' => 'last_name',
+      'handler' => 'cls_aces2_views_handler_transliterated_field',
+      'click sortable' => '0',
+      'float' => '',
+    ),
+    'sort' => array(
+      'real field' => 'last_name',
+      'handler' => 'views_handler_sort',
+    ),
+    'filter' => array(
+      'real field' => 'last_name',
+      'handler' => 'views_handler_filter_text',
+    ),
+    'argument' => array(
+      'real field' => 'last_name',
+      'handler' => 'views_handler_argument_text',
+    ),
+  );
+
+  $data['cls_aces2_applicant']['salutation_at'] = array(
+    'title' => t("Salutation (Auto-transliterated)"),
+    'help' => t("An automatically transliterated version of the applicant's salutation."),
+    'field' => array(
+      'real field' => 'salutation',
+      'handler' => 'cls_aces2_views_handler_transliterated_field',
+      'click sortable' => '0',
+      'float' => '',
+    ),
+    'sort' => array(
+      'real field' => 'salutation',
+      'handler' => 'views_handler_sort',
+    ),
+    'filter' => array(
+      'real field' => 'salutation',
+      'handler' => 'views_handler_filter_text',
+    ),
+    'argument' => array(
+      'real field' => 'salutation',
+      'handler' => 'views_handler_argument_text',
+    ),
+  );
+
+}
+
+/**
+ * Implements hook_cronapi().
+ */
+function cls_aces2_cronapi($op, $function = NULL) {
+  switch($op) {
+  case 'list':
+    return array(
+      'cls_aces2_sync_cronjob' => 'CLS ACES2 Sync Handler',
+    );
+
+  case 'rule':
+    switch($function) {
+    case 'cls_aces2_sync_cronjob': return '0 20 * * *';
+    }
+    break;
+
+  case 'execute':
+    switch($function) {
+    case 'cls_aces2_sync_cronjob':
+      CLSACES2SyncController::cron();
+      break;
+    }
+    break;
+
+  case 'settings':
+    switch ($function) {
+      // 'cls_aces2_sync_cronjob' disabled by default
+    case 'cls_aces2_sync_cronjob': return array('enabled' => FALSE);
+    }
+
+  case 'configure':
+    switch ($function) {
+    case 'cls_aces2_sync_cronjob': return 'admissions/jd/admin/aces2';
+    }
+  }
+}
+
+/**
+ * Implements hook_nagios_info().
+ */
+/*function cls_aces2_nagios_info() {
+  return array(
+    'name'   => 'CLS ACES2 Integration',
+    'id'     => 'cls_aces',
+  );
+}*/
+
+/**
+ * Implements hook_nagios().
+ */
+/*function cls_aces2_nagios () {
+  $text = t('Remote ACES2 data is available and up-to-date.');
+  $status = NAGIOS_STATUS_OK;
+
+  $warn = FALSE;
+  $critical = FALSE;
+  $data_out_of_date = FALSE;
+
+  $cls_aces2_connection = new CLSACES2Connection('Test Connection');
+  $connection = $cls_aces2_connection->connection;
+
+  if (!$connection) {
+    $critical = TRUE;
+  }
+
+  $query_aces2_record = "SELECT COUNT(*) AS RECORD_COUNT FROM adolineadmin.ACES2_RECORD";
+  $statement_aces2_record = oci_parse($connection, $query_aces2_record);
+  oci_execute($statement_aces2_record);
+  $count_aces2_record = oci_fetch_object($statement_aces2_record);
+  if (!is_object($count_aces2_record) || !isset($count_aces2_record->RECORD_COUNT)) {
+    $critical = TRUE;
+  }
+  else if (is_object($count_aces2_record) && isset($count_aces2_record->RECORD_COUNT) && $count_aces2_record->RECORD_COUNT <= 0) {
+    $warn = TRUE;
+  }
+
+  $query_aces2_education = "SELECT COUNT(*) AS RECORD_COUNT FROM adolineadmin.ACES2_EDUCATION";
+  $statement_aces2_education = oci_parse($connection, $query_aces2_education);
+  oci_execute($statement_aces2_education);
+  $count_aces2_education = oci_fetch_object($statement_aces2_education);
+  if (!is_object($count_aces2_education) || !isset($count_aces2_education->RECORD_COUNT)) {
+    $critical = TRUE;
+  }
+  else if (is_object($count_aces2_education) && isset($count_aces2_education->RECORD_COUNT) && $count_aces2_education->RECORD_COUNT <= 0) {
+    $warn = TRUE;
+  }
+
+  $query_aces2_address = "SELECT COUNT(*) AS RECORD_COUNT FROM adolineadmin.ACES2_ADDRESS";
+  $statement_aces2_address = oci_parse($connection, $query_aces2_address);
+  oci_execute($statement_aces2_address);
+  $count_aces2_address = oci_fetch_object($statement_aces2_address);
+  if (!is_object($count_aces2_address) || !isset($count_aces2_address->RECORD_COUNT)) {
+    $critical = TRUE;
+  }
+  else if (is_object($count_aces2_address) && isset($count_aces2_address->RECORD_COUNT) && $count_aces2_address->RECORD_COUNT <= 0) {
+    $warn = TRUE;
+  }
+
+  $query_aces2_recommender= "SELECT COUNT(*) AS RECORD_COUNT FROM adolineadmin.ACES2_RECOMMENDER";
+  $statement_aces2_recommender = oci_parse($connection, $query_aces2_recommender);
+  oci_execute($statement_aces2_recommender);
+  $count_aces2_recommender = oci_fetch_object($statement_aces2_recommender);
+  if (!is_object($count_aces2_recommender) || !isset($count_aces2_recommender->RECORD_COUNT)) {
+    $critical = TRUE;
+  }
+  else if (is_object($count_aces2_recommender) && isset($count_aces2_recommender->RECORD_COUNT) && $count_aces2_recommender->RECORD_COUNT <= 0) {
+    $warn = TRUE;
+  }
+
+  $query_aces2_school = "SELECT COUNT(*) AS RECORD_COUNT FROM adolineadmin.ACES2_SCHOOL";
+  $statement_aces2_school = oci_parse($connection, $query_aces2_school);
+  oci_execute($statement_aces2_school);
+  $count_aces2_school = oci_fetch_object($statement_aces2_school);
+  if (!is_object($count_aces2_school) || !isset($count_aces2_school->RECORD_COUNT)) {
+    $critical = TRUE;
+  }
+  else if (is_object($count_aces2_school) && isset($count_aces2_school->RECORD_COUNT) && $count_aces2_school->RECORD_COUNT <= 0) {
+    $warn = TRUE;
+  }
+
+  $query_oa_complete = "SELECT COUNT(*) AS RECORD_COUNT FROM adolineadmin.OA_COMPLETE";
+  $statement_oa_complete = oci_parse($connection, $query_oa_complete);
+  oci_execute($statement_oa_complete);
+  $count_oa_complete = oci_fetch_object($statement_oa_complete);
+  if (!is_object($count_oa_complete) || !isset($count_oa_complete->RECORD_COUNT)) {
+    $critical = TRUE;
+  }
+  else if (is_object($count_oa_complete) && isset($count_oa_complete->RECORD_COUNT) && $count_oa_complete->RECORD_COUNT <= 0) {
+    $warn = TRUE;
+  }
+
+  //$query_aces2_up_to_date = "SELECT MAX(ROUND((MODIFIED_DATE - to_date('01-JAN-1970','DD-MON-YYYY')) * (86400), 0)) as LAST_SYNC_DATE FROM adolineadmin.ACES2_RECORD";
+  //$statement_aces2_up_to_date = oci_parse($connection, $query_aces2_up_to_date);
+  //oci_execute($statement_aces2_up_to_date);
+  //$count_aces2_up_to_date = oci_fetch_object($statement_aces2_up_to_date);
+  //if (isset($count_aces2_up_to_date->LAST_SYNC_DATE) && REQUEST_TIME > (intval($count_aces2_up_to_date->LAST_SYNC_DATE) + 108000)) {
+  //  $data_out_of_date = TRUE;
+  //}
+
+  if ($critical == TRUE) {
+    $text = t('Remote ACES2 data connection/access issue.');
+    $status = NAGIOS_STATUS_CRITICAL;
+  }
+  else if ($data_out_of_date == TRUE && $warn == TRUE) {
+    $text = t('Remote ACES2 data is out of date and some tables are empty.');
+    $status = NAGIOS_STATUS_CRITICAL;
+  }
+  else if ($data_out_of_date == TRUE && $warn == FALSE) {
+    $text = t('Remote ACES2 data is out of date.');
+    $status = NAGIOS_STATUS_CRITICAL;
+  }
+  else if ($warn == TRUE) {
+    $text = t('Remote ACES2 data is available but some tables are empty.');
+    $status = NAGIOS_STATUS_WARNING;
+  }
+
+return array(
+  'ACES2' => array(
+    'status' => $status,
+    'type'   => 'state',
+    'text'   => $text,
+    ),
+  );
+}*/
+
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function cls_aces2_entity_property_info_alter(&$info) {
+
+  // cls_aces2_applicant entity properties
+  $cls_aces2_applicant_properties = &$info['cls_aces2_applicant']['properties'];
+  $cls_aces2_applicant_properties['created'] = array(
+    'label' => t("Date imported"),
+    'type' => 'date',
+    'description' => t("The date the applicant was imported."),
+    //'setter callback' => 'entity_property_verbatim_set',
+    //'setter permission' => 'administer J.D. application notifications',
+    'schema field' => 'created',
+  );
+  $cls_aces2_applicant_properties['changed'] = array(
+    'label' => t("Date changed"),
+    'type' => 'date',
+    'schema field' => 'changed',
+    'description' => t("The date the applicant was most recently updated."),
+  );
+
+}
+
+function cls_aces2_field_info_alter(&$field_info) {
+  if (module_exists('text')) {
+    $field_info['cls_mcl_lsac_account_number']['property_callbacks'][] = 'cls_mcl_lsac_account_number_property_callback';
+  }
+}
+
+function cls_mcl_lsac_account_number_property_callback(&$info, $entity_type, $field, $instance, $field_type) {
+
+  $property = &$info[$entity_type]['bundles'][$instance['bundle']]['properties'][$field['field_name']];
+
+  $property['getter callback'] = 'entity_metadata_field_verbatim_get';
+  $property['setter callback'] = 'entity_metadata_field_verbatim_set';
+  unset($property['query callback']);
+
+  $property['type'] = 'text';
+  $property['property info'] = array(
+    'cls_aces2_applicant' => array(
+      'type' => 'cls_aces2_applicant',
+      'label' => t('Applicant'),
+      'schema field' => 'lsac_account_number',
+    ),
+  );
+
+}
+
+/**
+ * Implements hook_admin_paths().
+ */
+function cls_aces2_admin_paths() {
+  $paths = array(
+    'admissions/admin/applicants' => TRUE,
+    'admissions/admin/applicants/*' => TRUE,
+  );
+  return $paths;
+}
+
+/**
+ * Load a cls_aces2_applicant by ID.
+ */
+function cls_aces2_applicant_load($id, $reset = FALSE) {
+  $cls_aces2_applicants = cls_aces2_applicant_load_multiple(array($id), array(), $reset);
+  return reset($cls_aces2_applicants);
+}
+
+/**
+ * Load a cls_aces2_applicant by program, entering year, and LSAC account number.
+ */
+function cls_aces2_applicant_load_by_program_year_lsac($program_applied, $year_entering, $lsac_account_number, $reset = FALSE) {
+  $query = new EntityFieldQuery();
+
+  $query->entityCondition('entity_type', 'cls_aces2_applicant')
+  ->propertyCondition('program_applied', $program_applied)
+  ->propertyCondition('year_entering', $year_entering)
+  ->propertyCondition('lsac_account_number', $lsac_account_number)
+  ->addMetaData('account', user_load(1)); // Run the query as user 1.
+
+  $result = $query->execute();
+
+  if (!empty($result) && isset($result['cls_aces2_applicant'])) {
+    $cls_aces2_applicants = cls_aces2_applicant_load_multiple(array_keys($result['cls_aces2_applicant']), array(), $reset);
+  }
+
+  return reset($cls_aces2_applicants);
+}
+
+/**
+ * Load a cls_aces2_applicant by status check criteria.
+ */
+function cls_aces2_applicant_load_by_status_checker_criteria($program_applied, $year_entering, $lsac_account_number, $first_name, $last_name, $birth_date, $reset = FALSE) {
+  $query = new EntityFieldQuery();
+
+  $query->entityCondition('entity_type', 'cls_aces2_applicant')
+  ->propertyCondition('program_applied', $program_applied)
+  ->propertyCondition('year_entering', $year_entering)
+  ->propertyCondition('lsac_account_number', $lsac_account_number)
+  ->propertyCondition('first_name', $first_name)
+  ->propertyCondition('last_name', $last_name)
+  ->propertyCondition('birth_date', $birth_date)
+  ->addMetaData('account', user_load(1)); // Run the query as user 1.
+
+  $result = $query->execute();
+
+  $cls_aces2_applicants = array();
+
+  if (!empty($result) && isset($result['cls_aces2_applicant'])) {
+    $cls_aces2_applicants = cls_aces2_applicant_load_multiple(array_keys($result['cls_aces2_applicant']), array(), $reset);
+  }
+
+  return reset($cls_aces2_applicants);
+}
+
+/**
+ * Load a cls_aces2_applicant by program, email and status.
+ */
+function cls_aces2_applicant_load_by_program_email_status($program_applied, $email, $status) {
+  $query = db_select('cls_aces2_applicant', 'a')
+  ->fields('a', array('id'))
+  ->condition('current_status', $status)
+  ->condition('program_applied', $program_applied);
+  $db_or = db_or();
+  $db_or->condition('email_primary', $email)
+  ->condition('email_secondary', $email);
+  $query->condition($db_or);
+  $result = $query->execute();
+
+  if ($record = $result->fetchAssoc()) {
+    $cls_aces2_applicants = cls_aces2_applicant_load_multiple(array($record['id']), array(), FALSE);
+    return reset($cls_aces2_applicants);
+  }
+  return FALSE;
+}
+
+/**
+ * Load an array of applicants by program type and status.
+ */
+function cls_aces2_applicant_load_by_program_status($program_applied, $status) {
+  $query = new EntityFieldQuery();
+
+  $query->entityCondition('entity_type', 'cls_aces2_applicant')
+  ->propertyCondition('program_applied', $program_applied)
+  ->propertyCondition('current_status', $status)
+  ->addMetaData('account', user_load(1)); // Run the query as user 1.
+
+  $result = $query->execute();
+
+  $cls_aces2_applicants = array();
+
+  if (!empty($result) && isset($result['cls_aces2_applicant'])) {
+    $cls_aces2_applicants = cls_aces2_applicant_load_multiple(array_keys($result['cls_aces2_applicant']), array(), FALSE);
+  }
+
+  return $cls_aces2_applicants;
+}
+
+/**
+ * Load multiple cls_aces2_applicants by IDs based on certain conditions.
+ */
+function cls_aces2_applicant_load_multiple($ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('cls_aces2_applicant', $ids, $conditions, $reset);
+}
+
+/**
+ * Save cls_aces2_applicant by ID.
+ */
+function cls_aces2_applicant_save($cls_aces2_applicant) {
+  entity_save('cls_aces2_applicant', $cls_aces2_applicant);
+}
+
+/**
+ * Delete single cls_aces2_applicant by ID.
+ */
+function cls_aces2_applicant_delete($cls_aces2_applicant) {
+  entity_delete('cls_aces2_applicant', entity_id('cls_aces2_applicant', $cls_aces2_applicant));
+}
+
+/**
+ * Delete multiple cls_aces2_applicants by IDs.
+ */
+function cls_aces2_applicant_delete_multiple($cls_aces2_applicant_ids) {
+  entity_delete_multiple('cls_aces2_applicant', $cls_aces2_applicant_ids);
+}

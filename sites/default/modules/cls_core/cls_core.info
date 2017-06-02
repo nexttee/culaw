@@ -1,0 +1,13 @@
+name = CLS Core
+description = This module provides global code, hook_update operations, API configurations, etc.
+package = Columbia Law School Custom Core Modules
+core = 7.x
+
+dependencies[] = field_group
+dependencies[] = multiple_selects
+dependencies[] = paragraphs
+dependencies[] = cls_migrate_rt
+dependencies[] = cls_calendar
+dependencies[] = cls_news_articles
+dependencies[] = cls_rest_api
+dependencies[] = cls_curriculum_guide

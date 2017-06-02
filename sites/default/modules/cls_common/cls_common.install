@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * Implements hook_requirements.
+ */
+function cls_common_requirements($phase) {
+  if ($phase == 'runtime') {
+
+    $requirements = array();
+
+    $msg_description_missing = 'The @name library is required by the CLS Common Functionality (cls_common) module';
+
+    $t = get_t();
+
+    $info = libraries_detect('php-pushover');
+    if (empty($info['installed'])) {
+      $severity = REQUIREMENT_ERROR;
+      $value = $t('Not Detected. Please (<a href="!url">Download</a>) and install', array('!url' => $info['download url']));
+      $description = $t('The php-pushover library is required for the cls_common module');
+    }
+    else {
+      $severity = REQUIREMENT_OK;
+      $value = $t('Installed (<a href="!url">More Information</a>)', array('!url' => $info['download url']));
+      $description = NULL;
+    }
+
+    $requirements['cls_common_php_pushover'] = array(
+      'title' => $t('php-pushover Library'),
+      'value' => $value,
+      'description' => $description,
+      'severity' => $severity,
+    );
+
+    $info = libraries_detect('PHPExcel');
+    if (empty($info['installed'])) {
+      $severity = REQUIREMENT_ERROR;
+      $value = $t('Not Detected. Please (<a href="!url">Download</a>) and install', array('!url' => $info['download url']));
+      $description = $t('The PHPExcel library is required for the cls_common module');
+    }
+    else {
+      $severity = REQUIREMENT_OK;
+      $value = $t('Installed (<a href="!url">More Information</a>)', array('!url' => $info['download url']));
+      $description = NULL;
+    }
+
+    $requirements['cls_common_phpexcel'] = array(
+      'title' => $t('PHPExcel Library'),
+      'value' => $value,
+      'description' => $description,
+      'severity' => $severity,
+    );
+
+    return $requirements;
+  }
+}

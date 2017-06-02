@@ -1,0 +1,20 @@
+name = CLS ACES2 Integration
+description = Provides integration with ACES2.
+package = Columbia Law School
+
+dependencies[] = cls_oracle_integration
+dependencies[] = entity
+dependencies[] = transliteration
+dependencies[] = ultimate_cron
+dependencies[] = cls_rest_api
+dependencies[] = cls_common
+
+core = 7.x
+
+files[] = classes/cls_aces2.applicant.controller.inc
+files[] = classes/cls_aces2.sync.controller.inc
+files[] = views/cls_aces2_applicant_views_handler_relationship.inc
+files[] = views/cls_aces2_applicant_pin_views_handler_relationship.inc
+files[] = views/cls_aces2_views_handler_transliterated_field.inc
+
+version = "7.x-1.x-dev"

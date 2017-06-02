@@ -1,0 +1,84 @@
+body input.form-submit {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #333333;
+    border: 2px solid #999999;
+    color: #FFFFFF;
+    font: 15px Verdana, Arial, sans-serif;
+    padding: 1px 10px 3px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+body #edit-user-cancel-method, #cancel-account-title, #select-method-text, #warning-text, #edit-cancel {
+  font: 12px Verdana, Arial, sans-serif;
+}
+
+body #edit-cancel {
+  margin-left: 50px;
+}
+
+body #select-method-text, #warning-text {
+  float: left;
+}
+
+body #warning-text-separator {
+  clear: both;
+}
+
+body #cancel-account-title {
+  font-weight: bold;
+}
+
+body .option {
+  font: 12px Verdana, Arial, sans-serif;
+}
+
+body div#cls-mcl-cancel-account-serverside-errors {
+    color: #cc0000;
+    font-size: 8pt;
+    background-image: none;
+    margin: 0 0 0 20px;
+    background-color: #ffffff;
+}
+
+#edit-password {
+  background-color: #FFF;
+  border: 2px solid #999;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  color: #666;
+  display: block;
+  font: 14px/12px Verdana,Arial,Helvetica,sans-serif;
+  height: 25px;
+  margin: 10px 0;
+  padding: 1px 10px 3px;
+  width: 240px;
+  background-image: url(../images/bg-password.gif);
+  background-repeat: no-repeat;
+  background-position: 14px 10px;
+}
+
+#edit-password.no-bg {
+  background-image: none;
+}
+
+
+#edit-password:focus {
+	border: #186E9E 2px solid;
+}
+
+#edit-submit {
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  background-color: #6E0F0F;
+  border: 2px solid #999;
+  color: #FFF;
+  font: 15px Verdana,Arial,sans-serif;
+  padding: 1px 10px 3px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}

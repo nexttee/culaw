@@ -1,0 +1,319 @@
+<?php
+/**
+ * @file
+ * Code for the CLS Events Calendar feature.
+ */
+
+const EVENT_ADDTHIS_BLOCK_NAME = 'events_addthis_block';
+const EVENT_BLOCK_WIDGET_TYPE_KEY = 'events_addthis_block_widget_type';
+const EVENT_BLOCK_WIDGET_SETTINGS_KEY = 'events_addthis_block_widget_settings';
+
+include_once 'cls_events_calendar.features.inc';
+
+/**
+ * Implements hook_block_info().
+ */
+function cls_events_calendar_block_info() {
+  $blocks['law_school_events_link'] = array(
+    'info' => t('Law School Events Calendar Link Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['law_school_events_link_bottom'] = array(
+    'info' => t('Law School Events Calendar Link Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['events_addthis_print_block'] = array(
+    'info' => t('Events Page AddThis Print Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['events_addthis_social_block'] = array(
+    'info' => t('Events Page AddThis Social Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['events_add_to_calendar'] = array(
+    'info' => t('Law School Events - Add to Calendar Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['events_date_location_block'] = array(
+    'info' => t('Law School Events - Date,Location field Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['events_calendar_date_block'] = array(
+    'info' => t('Law School Events - Custom Date field Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cls_events_calendar_block_view($delta = '') {
+  if ($delta == 'law_school_events_link' || $delta == 'law_school_events_link_bottom') {
+    $block['subject'] = '';
+    $block['content'] = l(variable_get('calendar_link_text'), variable_get('calendar_link_url'));
+  }
+  if ($delta == 'events_addthis_print_block') {
+
+    $widget_type = variable_get('events_addthis_block_widget_type', 'twitter');
+    $widget_settings = variable_get('events_addthis_block_widget_settings', 'twitter');
+
+    $block_options = array(
+      '#block' => 'events_addthis_block',
+      '#display' => array(
+        'settings' => $widget_settings,
+      )
+    );
+
+    $markup = AddThis::getInstance()->getDisplayMarkup($widget_type, $block_options);
+    return array(
+      'subject' => t('Print This Page'),
+      'content' => $markup,
+    );
+  }
+  if ($delta == 'events_addthis_social_block') {
+
+    $widget_type = variable_get('events_addthis_block_social_widget_type', 'facebook,twitter');
+    $widget_settings = variable_get('events_addthis_block_social_widget_settings', 'facebook,twitter');
+
+    $block_options = array(
+      '#block' => 'events_addthis_social_block',
+      '#display' => array(
+        'settings' => $widget_settings,
+      )
+    );
+
+    $markup = AddThis::getInstance()->getDisplayMarkup($widget_type, $block_options);
+    return array(
+      'subject' => t('Share'),
+      'content' => $markup,
+    );
+  }
+  if ($delta == 'events_add_to_calendar') {
+    $event_node = menu_get_object('node', 1);
+    // Build URLs
+    $base_url = 'node/' . $event_node->nid . '/' . 'field_event_date' . '/' . 'default';
+    $ics_url = $base_url . '/addtocal.ics';
+    $google_url = $base_url . '/addtocal-google';
+    $yahoo_url = $base_url . '/addtocal-yahoo';
+
+    $items = array(
+      l(t('iCalendar'), $ics_url, array('attributes' => array('class' => 'icalendar'))),
+      l(t('Google'), $google_url, array('attributes' => array('target' => '_blank', 'class' => 'google'))),
+      l(t('Outlook'), $ics_url, array('attributes' => array('class' => 'outlook'))),
+      l(t('Yahoo'), $yahoo_url, array('attributes' => array('target' => '_blank', 'class' => 'yahoo'))),
+    );
+    $block['content'] = theme('item_list', array(
+        'items' => $items,
+        'type' => 'ul',
+        '#attributes' => array(
+          'class' => array('add_to_cal_menu'),
+        ),
+      )
+    );
+  }
+  if ($delta == 'events_date_location_block') {
+    $event_node = menu_get_object('node', 1);
+    $date = field_view_field('node', $event_node, 'field_event_date', 'default');
+    $location = field_view_field('node', $event_node, 'field_location_name', 'default');
+    $direction = l(t('Get Directions'), 'http://maps.google.com/maps?daddr=' . $event_node->field_location_name[LANGUAGE_NONE][0]['value'], array('attributes' => array('target' => '_blank', 'class' => 'directions-link')));
+    $block['subject'] = '';
+    $block['content'] = render($date) . render($location);
+  }
+  if ($delta == 'events_calendar_date_block') {
+    $event_node = menu_get_object('node', 1);
+    $event_date = $event_node->field_event_date[LANGUAGE_NONE][0]['value'];
+    $time = strtotime($event_date.' UTC');
+
+    $block['subject'] = '';
+    $block['content'] = '<span class="month">' . date('M ', $time) . '</span><span class="day">' . date('d', $time) . '</span>';
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function cls_events_calendar_block_configure($delta = '') {
+  $form = array();
+  if ($delta == 'law_school_events_link' || $delta == 'law_school_events_link_bottom') {
+    $form['calendar_link_text'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text'),
+      '#size' => 60,
+      '#default_value' => variable_get('calendar_link_text', t('Law School Event Calendar')),
+    );
+    $form['calendar_link_url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link URL'),
+      '#size' => 60,
+      '#description' => t('Events page URL.'),
+      '#default_value' => variable_get('calendar_link_url', 'events'),
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function cls_events_calendar_block_save($delta = '', $edit = array()) {
+  if ($delta == 'law_school_events_link' || $delta == 'law_school_events_link_bottom') {
+    variable_set('calendar_link_text', $edit['calendar_link_text']);
+    variable_set('calendar_link_url', $edit['calendar_link_url']);
+  }
+  if ($delta == 'events_addthis_print_block') {
+    variable_set('events_addthis_block_widget_type', $edit['addthis_settings']['type']);
+    if ($edit['addthis_settings']['type'] != 'addthis_disabled') {
+      variable_set('events_addthis_block_widget_settings', $edit['addthis_settings']['settings']);
+    }
+  }
+  if ($delta == 'events_addthis_social_block') {
+    variable_set('events_addthis_block_social_widget_type', $edit['addthis_settings']['type']);
+    if ($edit['addthis_settings']['type'] != 'addthis_disabled') {
+      variable_set('events_addthis_block_social_widget_settings', $edit['addthis_settings']['settings']);
+    }
+  }
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function cls_events_calendar_node_view($node, $view_mode, $langcode) {
+  switch ($node->type) {
+    case 'calendar':
+      if (!empty($node->field_event_date)) {
+        $date = date_create($node->field_event_date[LANGUAGE_NONE][0]['value']);
+        $node->content['calendar_event_date'] = array(
+          '#type' => 'item',
+          '#title' => '',
+          '#markup' => '<span class="month">' . date_format($date, 'M ') . '</span><span class="day">' . date_format($date, 'd') . '</span>',
+        );
+      }
+      if (!empty($node->field_location_name)) {
+        $node->content['calendar_direction'] = array(
+          '#type' => 'item',
+          '#title' => '',
+          '#markup' => l(t('Get Directions'), 'http://maps.google.com/maps?daddr=' . $node->field_location_name[LANGUAGE_NONE][0]['value']),
+        );
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function cls_events_calendar_field_extra_fields() {
+  $extra['node']['calendar']['display']['calendar_event_date'] = array(
+    'label' => t('Event Date (M d) format.'),
+    'description' => t('Event date in specified format.'),
+    'weight' => -1,
+  );
+  $extra['node']['calendar']['display']['calendar_direction'] = array(
+    'label' => t('Get Direction link'),
+    'description' => t('Get direction link for google map.'),
+    'weight' => 3,
+  );
+  return $extra;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function cls_events_calendar_form_block_admin_configure_alter(&$form, &$form_state) {
+  if ($form['delta']['#value'] == 'events_addthis_print_block' || $form['delta']['#value'] == 'events_addthis_social_block') {
+    form_load_include($form_state, 'inc', 'addthis', 'addthis.block');
+    module_load_include('inc', 'addthis', 'addthis.block');
+    $form['#cache'] = TRUE;
+
+    $form['settings']['addthis_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => 'Display settings',
+    );
+    if ($form['delta']['#value'] == 'events_addthis_social_block') {
+      // Retrieve settings.
+      $addthis_settings['type'] = variable_get('events_addthis_block_social_widget_type', 'twitter');
+      $addthis_settings['settings'] = variable_get('events_addthis_block_social_widget_settings', 'twitter');
+    }
+    else {
+      // Retrieve settings.
+      $addthis_settings['type'] = variable_get('events_addthis_block_widget_type', 'twitter');
+      $addthis_settings['settings'] = variable_get('events_addthis_block_widget_settings', 'twitter');
+    }
+
+    // Create a addthis settings form based on the available configuration.
+    $element = _addthis_settings_form(
+      isset($form['addthis_settings']['form']) ? $form['addthis_settings']['form'] : array(),
+      $form_state,
+      isset($addthis_settings['type']) ? $addthis_settings['type'] : NULL,
+      isset($addthis_settings['settings']) ? $addthis_settings['settings'] : NULL
+    );
+
+    // Change the submit and callback because our handling is different and the
+    // form structure is different form the default implementation.
+    $element['type']['#submit'] = array('_addthis_settings_form_block_submit');
+    $element['type']['#ajax']['callback'] = '_addthis_settings_form_block_submit_callback';
+    $form['settings']['addthis_settings']['form'] = $element;
+
+    array_unshift($form['#submit'], '_addthis_settings_form_block_submit');
+  }
+
+  return $form;
+}
+
+/**
+ * Callback submit.
+ */
+function _cls_events_calendar_settings_form_block_submit($form, &$form_state) {
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Callback to return ajax replace part.
+ */
+function _cls_events_calendar_settings_form_block_submit_callback($form, &$form_state) {
+  return $form['settings']['addthis_settings']['form'];
+}
+
+/**
+ * Implements hook_menu().
+ */
+function cls_events_calendar_menu() {
+  $items = array();
+  module_load_include('inc', 'cls_events_calendar', 'cls_events_calendar');
+  foreach (cls_events_calendar_get_addtocal_entities() as $entity_name => $values) {
+    $items[$entity_name . '/%entity_object/%/%/addtocal.ics'] = array(
+      'load arguments' => array($entity_name),
+      'title' => 'Download Event',
+      'page callback' => 'cls_events_calendar_download_ics',
+      'page arguments' => array(1, 2, 3),
+      'access callback' => 'entity_access',
+      'access arguments' => array('view', $entity_name, 1),
+      'file' => 'cls_events_calendar.inc',
+      'file path' => drupal_get_path('module', 'cls_events_calendar'),
+    );
+    $items[$entity_name . '/%entity_object/%/%/addtocal-google'] = array(
+      'load arguments' => array($entity_name),
+      'title' => 'Download Event',
+      'page callback' => 'cls_events_calendar_google_link',
+      'page arguments' => array(1, 2, 3),
+      'access callback' => 'entity_access',
+      'access arguments' => array('view', $entity_name, 1),
+      'file' => 'cls_events_calendar.inc',
+      'file path' => drupal_get_path('module', 'cls_events_calendar'),
+    );
+    $items[$entity_name . '/%entity_object/%/%/addtocal-yahoo'] = array(
+      'load arguments' => array($entity_name),
+      'title' => 'Download Event',
+      'page callback' => 'cls_events_calendar_yahoo_link',
+      'page arguments' => array(1, 2, 3),
+      'access callback' => 'entity_access',
+      'access arguments' => array('view', $entity_name, 1),
+      'file' => 'cls_events_calendar.inc',
+      'file path' => drupal_get_path('module', 'cls_events_calendar'),
+    );
+  }
+  return $items;
+}

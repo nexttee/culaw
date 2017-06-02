@@ -1,0 +1,108 @@
+body div#cls-mcl-check-status-form-serverside-errors {
+  color: #cc0000;
+  font-size: 8pt;
+  background-image: none;
+  margin: 0 0 0 20px;
+}
+
+body div#cls-mcl-check-status-form-serverside-errors .serverside-error {
+    
+}
+
+body div.mcl-status-checker-form-column, body div.mcl-status-checker-form-instructions-column {
+}
+
+body div.mcl-status-checker-form-column span.error-msg {
+	color: #cc0000;
+}
+
+body div.mcl-status-checker-form-column input.form-mcl-submit-button {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #186E9D;
+    border: 2px solid #999999;
+    color: #FFFFFF;
+    font: 15px Verdana, Arial, sans-serif;
+    padding: 1px 10px 3px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    float: left;
+}
+
+body div.mcl-status-checker-form-column input.form-mcl-reset-button {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #333333;
+    border: 2px solid #999999;
+    color: #FFFFFF;
+    font: 15px Verdana, Arial, sans-serif;
+    padding: 1px 10px 3px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    float: left;
+}
+
+body div.mcl-status-checker-form-column input#edit-reset {
+    margin-left: 30px;
+}
+
+body div.mcl-status-checker-form-column .messages {
+    padding: 10px; 
+}
+
+body div.mcl-status-checker-form-column .clientside-error li {
+    list-style: none;
+    margin: 0 0 5px 0; 
+}
+
+body div.mcl-status-checker-form-column .error {
+    color: #cc0000;
+    font-size: 8pt;
+    background-image: none;  
+}
+
+body div.mcl-status-checker-form-column label {
+  color: #666666;
+  font: 14px Verdana,Arial,Helvetica,sans-serif;
+  margin-bottom: 10px;
+}
+body div.mcl-status-checker-form-column div.description {
+  font-size: 11px;
+  color: #999999;
+}
+
+body div.mcl-status-checker-form-column input.form-text {
+	background-color: #FFFFFF;
+    border: 2px solid #999999;
+    border-radius:15px;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+    color: #666666;
+    display: block;
+    font: 14px/12px Verdana,Arial,Helvetica,sans-serif;
+    height: 25px;
+    margin: 10px 0;
+    padding: 1px 10px 3px;
+    width: 240px;
+}
+
+body div.mcl-status-checker-form-column input#edit-lsac-account-number,
+body div.mcl-status-checker-form-column input#edit-birth-date {
+  width: 90px;
+}
+
+div.mcl-status-checker-result-column {
+  font-size: 12px;
+  color: #4d4d4d;
+  margin-right: 20px;
+}
+
+div.mcl-status-checker-result-column table tr td {
+  padding-bottom: 10px;
+}
+
+.mcl-status-checker-result-column table tr td img {
+  margin-left: 20px;
+}

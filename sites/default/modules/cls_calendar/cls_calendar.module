@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the cls_calendar feature.
+ */
+
+include_once 'cls_calendar.features.inc';

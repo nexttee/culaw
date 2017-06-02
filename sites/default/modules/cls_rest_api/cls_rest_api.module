@@ -1,0 +1,170 @@
+<?php
+
+require_once("sites/all/libraries/PHP-OAuth2/src/OAuth2/Client.php");
+require_once("sites/all/libraries/PHP-OAuth2/src/OAuth2/GrantType/IGrantType.php");
+require_once("sites/all/libraries/PHP-OAuth2/src/OAuth2/GrantType/ClientCredentials.php");
+
+/**
+* Implements hook_menu().
+*/
+function cls_rest_api_menu() {
+  $items = array();
+
+  $items['admin/config/services/cls-rest-api'] = array(
+    'title' => 'CLS Rest API',
+    'description' => 'Adminster settings for CLS Rest API',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('cls_rest_api_settings_form'),
+    'access callback' => 'cls_rest_api_user_has_role',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+function cls_rest_api_settings_form($form, &$form_state){
+  $form['client_wrapper_1'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Client Credentials for Public Directory and Curriculum Guide'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['client_wrapper_1']['cls_client_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Client ID'),
+    '#default_value' => variable_get('cls_client_id'),
+    '#required' => TRUE,
+  );
+
+  $form['client_wrapper_1']['cls_client_secret'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Client Secret'),
+    '#default_value' => variable_get('cls_client_secret'),
+    '#required' => TRUE,
+  );
+
+  $form['client_wrapper_2'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Client Credentials for Aces2 Data'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['client_wrapper_2']['cls_client_id_2'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Client ID'),
+    '#default_value' => variable_get('cls_client_id_2'),
+    '#required' => TRUE,
+  );
+
+  $form['client_wrapper_2']['cls_client_secret_2'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Client Secret'),
+    '#default_value' => variable_get('cls_client_secret_2'),
+    '#required' => TRUE,
+  );
+
+  $form['cls_token_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Token URL'),
+    '#default_value' => variable_get('cls_token_url'),
+    '#required' => TRUE,
+  );
+
+  $form['cls_endpoint_base_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Endpoint Base URL'),
+    '#default_value' => variable_get('cls_endpoint_base_url'),
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+}
+
+function cls_rest_api_user_has_role(){
+  global $user;
+
+  if( !user_is_logged_in() ) {
+    return FALSE;
+  }
+
+  if (in_array('System Administrator', $user->roles)) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+function cls_rest_api_make_api_request($client_id, $client_secret){
+  $session_name = 'cls_rest_api_token_session_' . $client_id;
+
+  if( isset($_SESSION[$session_name]) ){
+    $access_token = $_SESSION[$session_name]['access_token'];
+    $expires_in = $_SESSION[$session_name]['expires_in'];
+    $timestamp = $_SESSION[$session_name]['time'];
+
+    $is_token_expired = cls_rest_api_is_access_token_expired($timestamp, $expires_in);
+
+    if($is_token_expired == FALSE){
+      $client = new OAuth2\Client($client_id, $client_secret, OAuth2\Client::AUTH_TYPE_AUTHORIZATION_BASIC);
+      $client->setAccessToken($access_token);
+      $client->setAccessTokenType(OAuth2\Client::ACCESS_TOKEN_BEARER);
+    }
+    else{
+      $_SESSION[$session_name] = array();
+
+      $client = cls_rest_api_instantiate_new_client($client_id, $client_secret);
+      $_SESSION[$session_name] = array(
+        'access_token' => $client->retrieveAccessToken(),
+        'expires_in' => $client->retrieveTokenExpiration(),
+        'time' => time()
+      );
+    }
+  }
+  else{
+    $_SESSION[$session_name] = array();
+
+    $client = cls_rest_api_instantiate_new_client($client_id, $client_secret);
+    $_SESSION[$session_name] = array(
+      'access_token' => $client->retrieveAccessToken(),
+      'expires_in' => $client->retrieveTokenExpiration(),
+      'time' => time()
+    );
+  }
+
+  return $client;
+}
+
+function cls_rest_api_is_access_token_expired($timestamp, $expires_in){
+  $now = time();
+  $diff = abs($now - $timestamp);
+  $expires_in = intval($expires_in);
+
+  if($diff >= $expires_in){
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+function cls_rest_api_instantiate_new_client($client_id, $client_secret){
+  $token_endpoint = variable_get('cls_token_url');
+
+  $client = new OAuth2\Client($client_id, $client_secret, OAuth2\Client::AUTH_TYPE_AUTHORIZATION_BASIC);
+
+  $params = array();
+  $response = $client->getAccessToken($token_endpoint, 'client_credentials', $params);
+
+  $access_token_result = $response["result"];
+  $client->setAccessToken($access_token_result["access_token"]);
+  $client->setTokenExpiration($access_token_result["expires_in"]);
+
+  $client->setAccessTokenType(OAuth2\Client::ACCESS_TOKEN_BEARER);
+
+  return $client;
+}
+
+function cls_rest_api_get_endpoint_base_url(){
+  return variable_get('cls_endpoint_base_url');
+}

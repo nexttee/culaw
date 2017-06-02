@@ -1,0 +1,21 @@
+name = CLS Migrate Runtime
+description = Migrate content from RTSB into Drupal
+core = 7.x
+
+dependencies[] = migrate
+dependencies[] = transliteration
+
+files[] = cls_migrate_rt.migrate.inc
+files[] = rtsb_base.inc
+files[] = file.inc
+files[] = group.inc
+files[] = reader.inc
+files[] = json_preprocess.inc
+files[] = json_base.inc
+files[] = file_preprocess.inc
+files[] = category.inc
+files[] = rtsb_publish.inc
+files[] = redirect_source.inc
+files[] = redirect_preprocess.inc
+files[] = redirect.inc
+files[] = node_base.inc

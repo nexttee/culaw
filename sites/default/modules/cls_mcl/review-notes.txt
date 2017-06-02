@@ -1,0 +1,36 @@
+======================================
+Code Review Comments per Commit
+======================================
+
+6dd4b99 Account type field added to user object.
+-------
+* QUES: Should we instead use a numeric code in order to make querying more performant?
+* QUES: Maybe cardinality should be unlimited? If so, this would necessitate a change in how we save the code and handle login)
+
+39ff63f	Minor logic corrections.
+-------
+* TODO: Check if other professional degree is checked here.
+
+1e0fa8d Password recovery, password change and security question update templates modified to accomodate LLM.
+-------
+* TODO: Make sure templates have correct information per instance.
+
+
+======================================
+General Todos, Questions, and Comments
+======================================
+
+* TODO: Move Mandrill keys to their respective site instance definition
+* TODO: Autocomplete refactoring
+* TODO: Change role names or rids to the site instance definition
+* QUES: Should we use functions that are used by both new accounts and profile updates to a user utils file?
+* TODO: Add link on registration pages to go back to the login page
+
+
+======================================
+Other Random Notes
+======================================
+
+* TODO: Have Varnish cache: default/files/js/*
+* TODO: Investigate Different etags for .gif files
+* TODO: Configure Varnish to allow browsers to cache dynamic pages for up to 5 minutes

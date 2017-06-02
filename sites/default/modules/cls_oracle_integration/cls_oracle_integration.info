@@ -1,0 +1,7 @@
+name = CLS Oracle Integration
+description = Provides integration with Oracle database servers.
+package = Columbia Law School
+
+core = 7.x
+
+files[] = cls_oracle_integration.connection.class.inc

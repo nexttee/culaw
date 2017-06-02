@@ -1,0 +1,74 @@
+<?php
+/**
+ * @file
+ * Code for the CLS Faculty feature.
+ */
+
+include_once 'cls_faculty.features.inc';
+
+/**
+ * Implements hook_block_info().
+ */
+function cls_faculty_block_info() {
+  $blocks['faculty_link'] = array(
+    'info' => t('Law School Faculty Page Link Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  $blocks['faculty_link_bottom'] = array(
+    'info' => t('Law School Faculty Page Bottom Link Block'),
+    'cache' => DRUPAL_CACHE_GLOBAL
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function cls_faculty_block_view($delta = '') {
+  if ($delta == 'faculty_link' || $delta == 'faculty_link_bottom') {
+    $block['subject'] = '';
+    $rid = array_search('Faculty User', user_roles());
+    $user = menu_get_object('user', 1, NULL);
+    if ($user && user_has_role($rid, $user)) {
+      $block['content'] = l(variable_get('faculty_link_text', t('Faculty Directory')), variable_get('faculty_link_url', 'faculty'));
+    }
+    else {
+      $block['content'] = '';
+    }
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function cls_faculty_block_configure($delta = '') {
+  $form = array();
+  if ($delta == 'faculty_link' || $delta == 'faculty_link_bottom') {
+    $form['faculty_link_text'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text'),
+      '#size' => 60,
+      '#default_value' => variable_get('faculty_link_text', t('Faculty Directory')),
+    );
+    $form['faculty_link_url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link URL'),
+      '#size' => 60,
+      '#description' => t('Faculty page URL.'),
+      '#default_value' => variable_get('faculty_link_url', 'faculty'),
+    );
+  }
+  return $form;
+}
+
+
+/**
+ * Implements hook_block_save().
+ */
+function cls_faculty_block_save($delta = '', $edit = array()) {
+  if ($delta == 'faculty_link' || $delta == 'faculty_link_bottom') {
+    variable_set('faculty_link_text', $edit['faculty_link_text']);
+    variable_set('faculty_link_url', $edit['faculty_link_url']);
+  }
+}

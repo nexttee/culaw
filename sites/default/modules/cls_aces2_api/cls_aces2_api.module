@@ -1,0 +1,333 @@
+<?php
+
+/**
+ * Implements hook_permission().
+ */
+function cls_aces2_api_permission() {
+  return array(
+    'manage cls_aces2 applicants' => array(
+      'title' => t('Manage Admissions Applicants (ACES2)')
+    ),
+  );
+}
+
+
+/**
+ * Find admitted GLS cls_aces2_applicant by LSAC#, email and application year
+ */
+function cls_aces2_api_gls_applicant_find_admitted(
+        $year_entering, 
+        $lsac_account_number, 
+        $email = NULL,
+        $skip_email_verification = false ) {
+  
+        if(empty($year_entering) || empty($lsac_account_number) 
+                || (!$skip_email_verification && empty($email)) ) {
+            return NULL;
+        }
+    
+        $client_id = variable_get('cls_client_id_2');
+        $client_secret = variable_get('cls_client_secret_2');
+        $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+        $client = cls_rest_api_make_api_request($client_id, $client_secret);
+    
+        
+        if($skip_email_verification) {
+            $request = array(
+                    'applicationYear' => $year_entering
+                  );
+        } else {
+            $request = array(
+                    'applicationYear' => $year_entering,
+                    'email' => $email
+                  );
+        }
+
+        $response = $client->fetch($endpoint_base_url.'/batch/aces2/gls/applicants/admitted/'.$lsac_account_number, 
+                                    json_encode($request), 'POST', array('Content-Type' => 'application/json'));
+        
+        $ApplicantObject = NULL;
+        $cls_aces2_applicant = array();
+        
+        if(isset($response['result']) && $response['code'] == 200){
+    
+            $result = $response['result'];
+        
+            $current_status = trim($result['currentStatus']);
+            $lsac_account_number = trim($result['lsacAccount']);
+
+            $enrollment_decision_date = trim($record['enrollmentStatus']['decisionDate']);
+            $enrollment_decision_date = date("Y-m-d H:i:s", strtotime($enrollment_decision_date));
+
+            $program_applied = (trim($record['degreeApplied']) == 'LLM') ? 2 : 3;
+            $deposit_amount = trim($record['depositAmount']);
+            $deposit_amount = (!empty($deposit_amount) && is_numeric($deposit_amount)) ? number_format($deposit_amount, 2, '.', '') : NULL;
+            $deposit2_amount = trim($record['depositAmount2']);
+            $deposit2_amount = (!empty($deposit2_amount) && is_numeric($deposit2_amount)) ? number_format($deposit2_amount, 2, '.', '') : NULL;
+
+            $enrollment_id = trim($record['enrollmentStatus']['id']);
+
+            if(isset($record['depositWaived'])){
+              $depositWaived = trim($record['depositWaived']) == true ? 'Y' : 'N';
+            }else{
+              $depositWaived = NULL;
+            }
+
+            if(isset($record['depositWaived2'])){
+              $depositWaived2 = trim($record['depositWaived2']) == true ? 'Y' : 'N';
+            }else{
+              $depositWaived2 = NULL;
+            }
+
+            if(isset($record['enrollmentStatus']['offerAccepted'])){
+              $offerAccepted = trim($record['enrollmentStatus']['offerAccepted']) == true ? 'Y' : 'N';
+            }else{
+              $offerAccepted = NULL;
+            }
+
+            $cls_aces2_applicant = array(
+              'year_entering' => trim($record['yearEntering']),
+              'lsac_account_number' => $lsac_account_number,
+              'last_name' => trim($result['lastName']),
+              'first_name' => trim($result['firstName']),
+              'middle_name' => trim($result['middleName']),
+              'prefix' => trim($result['prefix']),
+              'suffix' => trim($result['suffix']),
+              'salutation' => trim($result['salutation']),
+              'birth_date' => trim($result['dob']),
+              'gender' => trim($result['gender']),
+              'cuid' => trim($result['cuid']),
+              'email_primary' => trim($result['primaryEmail']),
+              'email_secondary' => trim($result['secondaryEmail']),
+              'application_status' => trim($result['applicationStatus']),
+              'current_status' => $current_status,
+              'decision_status' => trim($result['decisionStatus']),
+              'application_type' => trim($result['applicationType']),
+              'degree_applied' => trim($record['degreeApplied']),
+              'deposit_deadline' => !empty($record['depositDeadline']) ? strtotime($record['depositDeadline']) : NULL,
+              'deposit_deadline_formatted' => trim($record['depositDeadline']),
+              'deposit_amount' => $deposit_amount,
+              'deposit_waived' => $depositWaived,
+              'deposit2_deadline' => !empty($record['depositDeadline2']) ? strtotime($record['depositDeadline2']) : NULL,
+              'deposit2_deadline_formatted' => trim($record['depositDeadline2']),
+              'deposit2_amount' => $deposit2_amount,
+              'deposit2_waived' => $depositWaived2,
+              'enrollment_id' => !empty($enrollment_id) ? intval($enrollment_id) : NULL,
+              'enrollment_offer_accepted' => $offerAccepted,
+              'enrollment_decline_reason' => trim($record['enrollmentStatus']['declineReason']),
+              'enrollment_decision_date' => !empty($record['enrollmentStatus']['decisionDate']) ? strtotime($record['enrollmentStatus']['decisionDate']) : NULL,
+              'enrollment_decision_date_formatted' => $enrollment_decision_date,
+
+              'program_applied' => $program_applied,
+              );
+            
+              $ApplicantObject = new stdClass();
+                foreach ($cls_aces2_applicant as $key => $value) {
+                    $ApplicantObject->$key = $value;
+                }
+        }    
+       
+  return $ApplicantObject;
+}
+
+
+
+/**
+ * Find admitted JD cls_aces2_applicant by LSAC#, email and application year
+ */
+function cls_aces2_api_jd_applicant_find_admitted(
+        $year_entering, 
+        $lsac_account_number, 
+        $email = NULL,
+        $skip_email_verification = false ) {
+  
+        if(empty($year_entering) || empty($lsac_account_number) 
+                || (!$skip_email_verification && empty($email)) ) {
+            return NULL;
+        }
+    
+        $client_id = variable_get('cls_client_id_2');
+        $client_secret = variable_get('cls_client_secret_2');
+        $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+        $client = cls_rest_api_make_api_request($client_id, $client_secret);
+    
+        if($skip_email_verification) {
+            $request = array(
+                    'applicationYear' => $year_entering
+                  );
+        } else {
+            $request = array(
+                    'applicationYear' => $year_entering,
+                    'email' => $email
+                  );
+        }
+        
+        $response = $client->fetch($endpoint_base_url.'/batch/aces2/jd/applicants/admitted/'.$lsac_account_number, 
+                                    json_encode($request), 'POST', array('Content-Type' => 'application/json'));
+        
+        $ApplicantObject = NULL;
+        $cls_aces2_applicant = array();
+        
+        if(isset($response['result']) && $response['code'] == 200){
+    
+            $result = $response['result'];
+        
+            $current_status = trim($result['currentStatus']);
+            $lsac_account_number = trim($result['lsacAccount']);
+
+            $cls_aces2_applicant = array(
+              'year_entering' => trim($result['yearEntering']),
+              'lsac_account_number' => $lsac_account_number,
+              'last_name' => trim($result['lastName']),
+              'first_name' => trim($result['firstName']),
+              'middle_name' => trim($result['middleName']),
+              'prefix' => trim($result['prefix']),
+              'suffix' => trim($result['suffix']),
+              'salutation' => trim($result['salutation']),
+              'birth_date' => trim($result['dob']),
+              'gender' => trim($result['gender']),
+              'cuid' => trim($result['cuid']),
+              'email_primary' => trim($result['primaryEmail']),
+              'email_secondary' => trim($result['secondaryEmail']),
+              'application_status' => trim($result['applicationStatus']),
+              'current_status' => $current_status,
+              'decision_status' => trim($result['decisionStatus']),
+              'application_type' => trim($result['applicationType']),
+              'program_applied' => 1,
+              'degree_applied' => 'JD'
+              );
+            
+              $ApplicantObject = new stdClass();
+                foreach ($cls_aces2_applicant as $key => $value) {
+                    $ApplicantObject->$key = $value;
+                }
+        }    
+       
+  return $ApplicantObject;
+}
+
+
+
+/**
+ * Find cls_aces2_applicant by status check criteria.
+ */
+function cls_aces2_api_jd_applicant_load_by_status_checker_criteria(
+        $year_entering, 
+        $lsac_account_number, 
+        $first_name, 
+        $last_name, 
+        $birth_date ) {
+  
+        if(empty($year_entering) || empty($lsac_account_number) 
+                || empty($first_name) || empty($last_name) 
+                || empty($birth_date)) {
+            return NULL;
+        }
+    
+        $client_id = variable_get('cls_client_id_2');
+        $client_secret = variable_get('cls_client_secret_2');
+        $endpoint_base_url = cls_rest_api_get_endpoint_base_url();
+        $client = cls_rest_api_make_api_request($client_id, $client_secret);
+    
+        
+        $request = array(
+                    'applicationYear' => $year_entering,
+                    'dob' => $birth_date,
+                    'firstName' => $first_name,
+                    'lastName' => $last_name
+                  );
+        $response = $client->fetch($endpoint_base_url.'/batch/aces2/jd/applicants/'.$lsac_account_number, 
+                                    json_encode($request), 'POST', array('Content-Type' => 'application/json'));
+        
+        $ApplicantObject = NULL;
+        $cls_aces2_applicant = array();
+        
+        if(isset($response['result']) && $response['code'] == 200){
+    
+            $result = $response['result'];
+        
+            $current_status = trim($result['applicant']['currentStatus']);
+            $lsac_account_number = trim($result['applicant']['lsacAccount']);
+
+            if(isset($result['applicant']['applicationSigned'])){
+              $applicationSigned = trim($result['applicant']['applicationSigned']) == true ? 'Y' : 'N';
+            }else{
+              $applicationSigned = NULL;
+            }
+
+            if(isset($result['applicant']['applicationFeeReceived'])){
+              $applicationFeeReceived = trim($result['applicant']['applicationFeeReceived']) == true ? 'Y' : 'N';
+            }else{
+              $applicationFeeReceived = NULL;
+            }
+
+            if(isset($result['applicant']['personalStatementReceived'])){
+              $personalStatementReceived = trim($result['applicant']['personalStatementReceived']) == true ? 'Y' : 'N';
+            }else{
+              $personalStatementReceived = NULL;
+            }
+
+            if(isset($result['applicant']['resumeOnFile'])){
+              $resumeOnFile = trim($result['applicant']['resumeOnFile']) == true ? 'Y' : 'N';
+            }else{
+              $resumeOnFile = NULL;
+            }
+
+            if(isset($result['applicant']['finalTranscriptRecieved'])){
+              $finalTranscriptRecieved = trim($result['applicant']['finalTranscriptRecieved']) == true ? 'Y' : 'N';
+            }else{
+              $finalTranscriptRecieved = NULL;
+            }
+
+            $recommenders = array();
+
+            if(isset($result['recommenders'])){
+                foreach($result['recommenders'] as $recommender){
+                    $name = trim($recommender['name']);
+                    $name = preg_replace('!\s+!', ' ', $name);
+                    $recommenders[] = $name;
+                }    
+            }
+    
+            $cls_aces2_applicant = array(
+              'year_entering' => trim($result['applicant']['yearEntering']),
+              'lsac_account_number' => $lsac_account_number,
+              'last_name' => trim($result['applicant']['lastName']),
+              'first_name' => trim($result['applicant']['firstName']),
+              'middle_name' => trim($result['applicant']['middleName']),
+              'prefix' => trim($result['applicant']['prefix']),
+              'suffix' => trim($result['applicant']['suffix']),
+              'salutation' => trim($result['applicant']['salutation']),
+              'birth_date' => trim($result['applicant']['dob']),
+              'gender' => trim($result['applicant']['gender']),
+              'cuid' => trim($result['applicant']['cuid']),
+              'email_primary' => trim($result['applicant']['primaryEmail']),
+              'email_secondary' => trim($result['applicant']['secondaryEmail']),
+              'application_status' => trim($result['applicant']['applicationStatus']),
+              'current_status' => $current_status,
+              'application_signed' => $applicationSigned,
+              'application_fee_received' => $applicationFeeReceived,
+              'completed_date' => trim($result['applicant']['completedDate']),
+              'decision_status' => trim($result['applicant']['decisionStatus']),
+              'resume_on_file' => $resumeOnFile,
+              'personal_statement_received' => $personalStatementReceived,
+              'number_of_lors' => intval(trim($result['applicant']['numberOfLors'])),
+              'application_type' => trim($result['applicant']['applicationType']),
+              'lsdas_received_date' => trim($result['applicant']['lsdasReceived']),
+              'dean_certification' => trim($result['applicant']['deanCertificationStatus']),
+              'final_transcript' => $finalTranscriptRecieved,
+              'program_applied' => 1,
+              'degree_applied' => 'JD',
+              'recommenders' => $recommenders  
+              );
+            
+              $ApplicantObject = new stdClass();
+                foreach ($cls_aces2_applicant as $key => $value) {
+                    $ApplicantObject->$key = $value;
+                }
+        }    
+       
+  return $ApplicantObject;
+}
+
+

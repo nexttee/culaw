@@ -1,0 +1,9 @@
+name = CLS Curriculum Guide
+description = Implements curriculum guide using CLS rest API
+package = Columbia Law School
+core = 7.x
+
+dependencies[] = cls_rest_api
+dependencies[] = entity
+
+files[] = controllers/cls_curriculum_guide.offering.controller.inc

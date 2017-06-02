@@ -1,0 +1,32 @@
+name = My Columbia Law/LL.M.
+description = Provides personalized prospective student microsites for the J.D. and LL.M. programs.
+package = Columbia Law School Admissions
+
+core = 7.x
+
+dependencies[] = cls_aces2
+dependencies[] = cls_aces2_api
+dependencies[] = cls_common (>=1.3)
+dependencies[] = cls_curriculum_guide
+;dependencies[] = cls_courses
+dependencies[] = cls_mandrill_integration
+dependencies[] = cls_user
+
+dependencies[] = entity
+dependencies[] = jcarousel
+dependencies[] = jquery_update
+dependencies[] = libraries (>=2.x)
+dependencies[] = location
+dependencies[] = location_cck
+dependencies[] = views
+dependencies[] = xregexp_api
+
+dependencies[] = select_or_other
+
+files[] = controllers/cls_mcl.center.controller.inc
+files[] = controllers/cls_mcl.course.controller.inc
+files[] = controllers/cls_mcl.faculty.controller.inc
+files[] = controllers/cls_mcl.interest_type.controller.inc
+files[] = controllers/cls_mcl.journal.controller.inc
+files[] = controllers/cls_mcl.student_organization.controller.inc
+files[] = views/handlers/cls_mcl_handler_filter_course_categories.inc

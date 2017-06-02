@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function cls_mandrill_integration_install() {
+  variable_set('cls_mandrill_integration.config.mandrill_api_key','mykey');
+  variable_set('cls_mandrill_integration.config.production_mode', FALSE);
+}
+
+/**
+* Renames CLS Admissions Mandrill API key variable, adds another one for CLS GLS.
+*/
+function cls_mandrill_integration_update_7001() {
+  variable_set('cls_mandrill_integration.config.mandrill_api_key.cls_admissions', variable_get('cls_mandrill_integration.config.mandrill_api_key'));
+  variable_set('cls_mandrill_integration.config.mandrill_api_key.cls_gls','psYVDlY3BOz61GLkvIly9Q');
+  variable_del('cls_mandrill_integration.config.mandrill_api_key');
+}
+
+/**
+* Reverts update 7001 which should not have been made to this abstract module.
+*/
+function cls_mandrill_integration_update_7002() {
+  variable_set('cls_mandrill_integration.config.mandrill_api_key', variable_get('cls_mandrill_integration.config.mandrill_api_key.cls_admissions'));
+  variable_del('cls_mandrill_integration.config.cls_admissions');
+  variable_del('cls_mandrill_integration.config.cls_gls');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function cls_mandrill_integration_uninstall() {
+  variable_del('cls_mandrill_integration.config.mandrill_api_key');
+  variable_del('cls_mandrill_integration.config.production_mode');
+}
+
+/**
+ * Implements hook_requirements().
+ */
+/*
+function cls_mandrill_integration_requirements($phase) {
+  $requirements = array();
+
+  // Ensure translations don't break during installation.
+  $t = get_t();
+
+  // Test PHP version
+  $requirements['mandrill-php'] = array(
+    'title' => t('Mandrill PHP Library'), 
+  );
+  
+  if (($library = libraries_detect('mandrill-php')) && $library['installed']) {
+    $requirements['mandrill-php']['value'] = $library['version'];
+    $requirements['mandrill-php']['severity'] = REQUIREMENT_OK;
+  }
+  else {
+    $requirements['mandrill-php']['value'] = t('Not installed');
+    $requirements['mandrill-php']['severity'] = REQUIREMENT_ERROR;
+    $requirements['mandrill-php']['description'] = $t('You need to install the <a href="@url">mandrill-php</a> library.', array('@url' => 'https://github.com/kai5263499/mandrill-php'));
+  }
+
+  return $requirements;
+}
+*/

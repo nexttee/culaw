@@ -1,0 +1,161 @@
+body.page-admissions-jd-my-columbia-law-experience div.container .twelvecol {width:910px;margin:0;padding:25px}
+body.page-admissions-jd-my-columbia-law-experience div.content-header {display:none;}
+body.page-admissions-jd-my-columbia-law-experience div.content-container {min-height:300px !important;}
+body.page-admissions-jd-my-columbia-law-experience div.content-container div.group,
+body.page-admissions-jd-my-columbia-law-experience div.content-container div.content-main-area {margin:0;}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content h2 {
+	color: #186E9D;
+	font-size: 36px;
+	margin-top: -10px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content p.introduction {
+  font: 19px/30px Georgia,"Times New Roman",Times,serif;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content p.introduction img.float-right {
+	float: right;
+	padding: 10px 0px 20px 20px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content p.article {
+  font-size: 16px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content ul.article li {
+  font-size: 16px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content p.article img.float-right {
+	float: right;
+	padding: 5px 0px 0px 20px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content h4 {
+  font-size: 16px;
+}
+
+form#cls-mcl-display-tour-first-year-form,
+form#cls-mcl-display-tour-second-third-year-form {
+  width: 400px;
+}
+
+form#cls-mcl-display-tour-first-year-form div.iPhoneCheckContainer,
+form#cls-mcl-display-tour-second-third-year-form div.iPhoneCheckContainer {
+  float: left;
+}
+
+form#cls-mcl-display-tour-first-year-form .form-type-checkbox,
+form#cls-mcl-display-tour-second-third-year-form .form-type-checkbox {
+  margin-bottom: 15px;
+  width: 300px;
+}
+
+form#cls-mcl-display-tour-first-year-form label.option,
+form#cls-mcl-display-tour-second-third-year-form label.option {
+    color: #333333;
+    font-size: 14px;
+    margin-left: 10px;
+    position: relative;
+    top: 4px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content div.actions {
+  margin-top: 30px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content div.actions p {
+  margin-bottom: 5px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content div.actions a.continue-with-the-tour {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #186E9D;
+    border: 2px solid #999999;
+    color: #FFFFFF;
+    font: 18px Verdana, Arial, sans-serif;
+    padding: 3px 10px 5px;
+    margin-bottom: 15px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content div#edit-actions {
+  margin-top: 15px !important;
+  margin-bottom: 0 !important;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content div.actions-choices p {
+  margin-bottom: 5px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content input.form-continue-with-the-tour {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  background-color: #186E9D;
+  border: 2px solid #999999;
+  color: #FFFFFF;
+  font: 18px Verdana, Arial, sans-serif;
+  padding: 3px 10px 5px;
+  margin-bottom: 10px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content input.form-continue-with-the-tour:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+body.page-admissions-jd-my-columbia-law-experience select.form-select {
+  color: #666666;
+  display: block;
+  font: 12px/10px Verdana,Arial,Helvetica,sans-serif;
+  height: 33px;
+  margin: 10px 0;
+  padding: 5px 0 5px 5px;
+  width: 350px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content input#edit-save {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #186E9D;
+    border: 2px solid #999999;
+    color: #FFFFFF;
+    font: 18px Verdana, Arial, sans-serif;
+    padding: 3px 10px 5px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content div.actions p {
+	margin-top: 10px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content div.actions a.skip-tour {
+	margin-left: 12px;
+	font-size: 11px;
+}
+
+body.page-admissions-jd-my-columbia-law-experience div.tour-content div.actions-choices a.skip-tour {
+	margin-left: 12px;
+	font-size: 11px;
+}
+
+body div.mcl-new-account-form-instructions-column {
+  float: left;
+	width: 415px;
+  padding: 20px 25px 25px;
+}
+
+body div.mcl-new-account-form-column {
+    /* border-right: 2px solid #999999; */
+    width: 440px;
+    float: left;
+    padding: 25px;
+    background-color: #E7F0F5;
+    border-radius: 10px 0 0 10px;
+}

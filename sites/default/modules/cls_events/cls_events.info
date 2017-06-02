@@ -1,0 +1,13 @@
+name = CLS Events
+description = This feature provides various views for listing of all the events in categories.
+core = 7.x
+package = CLS Features
+version = 7.x-1.0
+project = cls_events
+dependencies[] = jcarousel
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = event_views
+features_exclude[dependencies][ctools] = ctools
+project path = sites/all/modules/features

@@ -1,0 +1,503 @@
+<?php
+
+/**
+ * @file
+ * Install file for the cls_core module.
+ */
+
+/**
+ * Ensures that 'insert_at_front' exists in 'field list'.
+ *
+ * @return mixed
+ *    Ensures dependency chain is met.
+ */
+function cls_core_update_dependencies() {
+  $dependencies['cls_core'][7010] = array(
+    'nodequeue' => 7202,
+  );
+  return $dependencies;
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enables the field_group module.
+ */
+function cls_core_update_7001() {
+  if (!module_enable(array('field_group'), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enables the multiple_selects module.
+ */
+function cls_core_update_7002() {
+  if (!module_enable(array('multiple_selects'), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Grant users with system administrator role permission: Can Delete Content.
+ */
+function cls_core_update_7003() {
+  // Rid is 3 for system administrator.
+  user_role_grant_permissions(3, array('can delete content'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the paragraphs module.
+ */
+function cls_core_update_7004() {
+  if (!module_enable(array('paragraphs'), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * ARM-248: Cleanup user roles (broken migration).
+ */
+function cls_core_update_7005() {
+  $rids = array(
+  // Committed Student (GLS) User.
+    ':keep' => 216,
+  // Admitted Student (GLS) User.
+    ':remove' => 139,
+  );
+
+  // Get all users which have both these roles.
+  $query = 'SELECT uid FROM {users_roles} WHERE uid IN (SELECT uid FROM {users_roles} WHERE rid = :keep) AND rid = :remove';
+  $result = db_query($query, $rids);
+  foreach ($result as $record) {
+    $affected = db_delete('users_roles')
+      ->condition('uid', $record->uid)
+      ->condition('rid', $rids[':remove'])
+      ->execute();
+
+    $vars = array(
+      '%rid' => $rids[':remove'],
+      '%uid' => $record->uid,
+    );
+    if ($affected == 1) {
+      $message = 'Removed "Admitted Student (GLS) User" role (rid = %rid) from user uid = %uid';
+      watchdog('role cleanup', $message, $vars, WATCHDOG_NOTICE);
+    }
+    else {
+      $message = 'Failed to remove "Admitted Student (GLS) User" role (rid = %rid) from user uid = %uid';
+      watchdog('role cleanup', $message, $vars, WATCHDOG_ERROR);
+    }
+  }
+
+  drupal_set_message('Removed "Admitted Student (GLS) User" role from ' . $result->rowCount() . ' users');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change debug file path to avoid issues while creating file.
+ */
+function cls_core_update_7006() {
+  if (module_exists('cas')) {
+    variable_set('cas_debugfile', '/tmp/cas_debug.txt');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the cls_content_common_features and cls_calendar feature modules.
+ */
+function cls_core_update_7007() {
+  if (!module_enable(array('cls_content_common_features', 'cls_calendar'))) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Removing field configuration instance from field_config_instance table.
+ * Removing related value from field_config_instance table.
+ */
+function cls_core_update_7008() {
+  db_delete('field_config_instance')
+    ->condition('field_name', 'cls_document_library_file')
+    ->condition('entity_type', 'cls_document_library_document')
+    ->condition('bundle', 'cls_document_library_ag')
+    ->execute();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the cls_news_articles feature module.
+ */
+function cls_core_update_7009() {
+  if (!module_enable(array('cls_news_articles'))) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable following features.
+ * cls_content_type_featured_content
+ * cls_home_featured
+ * cls_home_sub_featured.
+ */
+function cls_core_update_7010() {
+  if (!module_enable(array(
+    'nodequeue',
+    'cls_content_type_featured_content',
+    'cls_home_featured',
+    'cls_home_sub_featured',
+  ), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove extra field instances from the calendar content type and enable
+ * extra required date modules.
+ */
+function cls_core_update_7011() {
+  if ($instance = field_info_instance('node', 'field_permission_flags', 'calendar')) {
+    field_delete_instance($instance);
+  }
+  if ($instance = field_info_instance('node', 'field_body', 'calendar')) {
+    field_delete_instance($instance);
+  }
+  if ($instance = field_info_instance('node', 'field_select_lawcal_categories', 'calendar')) {
+    field_delete_instance($instance);
+  }
+  if ($instance = field_info_instance('node', 'field_add_to_a_microsite_calenda', 'calendar')) {
+    field_delete_instance($instance);
+  }
+  if (!module_enable(array('date_all_day', 'date_repeat', 'date_repeat_field'))) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the cls_social_menu feature module.
+ */
+function cls_core_update_7012() {
+  if (!module_enable(array('cls_social_menu'))) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+  features_revert_module('cls_social_menu');
+  // Reverting fe_block related settings for feature as it is required to get
+  // menu block.
+  fe_block_settings_features_revert('cls_social_menu');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the cls_social_menu feature module.
+ */
+function cls_core_update_7013() {
+  if (!module_enable(array('cls_footer_menu'), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+  features_revert_module('cls_footer_menu');
+  // Reverting fe_block related settings for feature as it is required to get
+  // menu block.
+  fe_block_settings_features_revert('cls_footer_menu');
+
+  if (!module_enable(array('cls_header_menus'))) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+  features_revert_module('cls_header_menus');
+  // Reverting fe_block related settings for feature as it is required to get
+  // menu block.
+  fe_block_settings_features_revert('cls_header_menus');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the cls_social_menu feature module.
+ */
+function cls_core_update_7014() {
+  if (!module_enable(array('cls_marketing_content'), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+  features_revert_module('cls_marketing_content');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the cls_magazine_archive feature module.
+ */
+function cls_core_update_7015() {
+  if (!module_enable(array('cls_magazine_archive'), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the cls_themekey feature modules.
+ */
+function cls_core_update_7016() {
+  if (!module_enable(array('cls_themekey'))) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the cls_community_content feature modules.
+ */
+function cls_core_update_7017() {
+  if (!module_enable(array('cls_community_content'))) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the parent menu link for Mega Menu footer blocks.
+ * Reason is, sometimes parent menu links can differ based on mlid. So here
+ * we will retrieve particular mlid and save it in parent menu's variable.
+ */
+function cls_core_update_7018() {
+  $menu_blocks_variables = array(
+    'menu_block_320_parent',
+    'menu_block_321_parent',
+    'menu_block_322_parent',
+    'menu_block_323_parent',
+    'menu_block_324_parent',
+    'menu_block_325_parent',
+  );
+  $parent_menus = array(
+    'Admissions',
+    'Academics & Courses',
+    'Our Faculty',
+    'Research & Scholarship',
+    'Careers',
+    'About',
+  );
+  foreach ($parent_menus as $key => $link_title) {
+    $menu = cls_core_get_menu_from_title($link_title, 'menu-main-mega-menu');
+    if ($menu) {
+      variable_set($menu_blocks_variables[$key], 'menu-main-mega-menu:' . $menu['mlid']);
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Setting values for address block.
+ */
+function cls_core_update_7019() {
+  variable_set('cls_core_main_address', t('435 West 116th Street'));
+  variable_set('cls_core_city', t('New York, NY 10027-7297'));
+  variable_set('cls_core_contact', t('212-854-2640'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Setting values for copyright block .
+ */
+function cls_core_update_7020() {
+  variable_set('web_administrator_link', 'mailto:webadmin@law.columbia.edu');
+  variable_set('web_administrator_text', t('web administrators'));
+  variable_set('copyright_contact', t('For questions or comments, please contact the'));
+  variable_set('copyright_heading', t('The Trustees of Columbia University in the City of New York.'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Performing feature revert for tb_mega menu feature component. This will
+ * restore tb_megamenu configurations.
+ */
+function cls_core_update_7021() {
+  module_disable(array('menu_attach_block', 'megamenu'));
+  drupal_uninstall_schema('megamenu');
+  registry_rebuild();
+  module_enable(array('tb_megamenu'));
+  module_load_include('inc', 'tb_megamenu', 'tb_megamenu.features');
+  tb_megamenu_features_rebuild('cls_header_menus');
+}
+
+/**
+ * Enables the addthis and addthis_displays modules.
+ */
+function cls_core_update_7022() {
+  if (!module_enable(array('addthis', 'addthis_displays'), TRUE)) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+  features_revert_module('cls_news_articles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Saving variables and values for experience columbia law block.
+ */
+function cls_core_update_7023() {
+  $content[]['link_1']['title'] = t('Explore');
+  $content[]['link_1']['url'] = 'https://www.law.columbia.edu/';
+
+  $content[]['link_2']['title'] = t('Degree Programs');
+  $content[]['link_2']['url'] = 'https://www.law.columbia.edu/';
+
+  $content[]['link_3']['title'] = t('Class Profiles');
+  $content[]['link_3']['url'] = 'https://www.law.columbia.edu/';
+
+  $content[]['link_4']['title'] = t('Courses');
+  $content[]['link_4']['url'] = 'https://www.law.columbia.edu/';
+
+  for ($i = 1; $i < 5; $i++) {
+    variable_set('link_' . $i . '_title', $content['link_' . $i]['title']);
+    variable_set('link_' . $i . '_url', $content['link_' . $i]['url']);
+  }
+  variable_set('block_description', t('Learn about all that Columbia Law has to offer.'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable the cls_events_calendar, cls_news_archive, cls_events features.
+ */
+function cls_core_update_7024() {
+  if (!module_enable(array(
+    'cls_events_calendar',
+    'cls_news_archive',
+    'cls_events',
+    'cls_site_information',
+  ))) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+
+  // Delete the current redirect for events page. Otherwise it will redirect to
+  // 'node/9471'.
+  $redirect = redirect_fetch_rids_by_path('events', 'en');
+  if (!empty($redirect)) {
+    redirect_delete($redirect[0]);
+  }
+
+  // Enable culaw theme programmatically.
+  theme_enable(array('culaw'));
+
+  features_revert_module('cls_site_information');
+  features_revert_module('cls_home_featured');
+  features_revert_module('cls_home_sub_featured');
+  features_revert_module('cls_news_archive');
+
+  // Disabling previous block from culaw theme.
+  $blocks[0]['module'] = 'views';
+  $blocks[0]['delta'] = '3972200b9f17d5d4ec6f478dee515948';
+
+  $blocks[1]['module'] = 'menu_block';
+  $blocks[1]['delta'] = '204';
+
+  $blocks[2]['module'] = 'menu_block';
+  $blocks[2]['delta'] = '203';
+
+  $blocks[3]['module'] = 'menu';
+  $blocks[3]['delta'] = 'menu-military-association';
+
+  foreach ($blocks as $block) {
+    db_update('block')
+      ->fields(array(
+        'status' => 0,
+        'region' => -1,
+      ))
+      ->condition('theme', 'culaw', '=')
+      ->condition('module', $block['module'], '=')
+      ->condition('delta', $block['delta'], '=')
+      ->execute();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable faculty related modules and features.
+ */
+function cls_core_update_7025() {
+  module_enable(array('cls_faculty', 'views_fieldsets'));
+}
+
+/**
+ * Enable and configure view_profiles_perms module.
+ */
+function cls_core_update_7026() {
+  if (!module_enable(array('view_profiles_perms'))) {
+    throw new DrupalUpdateException('Something went wrong or a dependency was missing.');
+  }
+
+  // Set permission for anonymous user to view faculty profiles.
+  $permissions = array('access Faculty User profiles');
+  $role = user_role_load(DRUPAL_ANONYMOUS_RID);
+  user_role_grant_permissions($role->rid, $permissions);
+}
+
+/**
+ * Allow anonymous users to view user profiles.
+ */
+function cls_core_update_7027() {
+  // Set permission for anonymous user to view faculty profiles.
+  $permissions = array('access user profiles');
+  $role = user_role_load(DRUPAL_ANONYMOUS_RID);
+  user_role_grant_permissions($role->rid, $permissions);
+  // Set permissions for authenticated users as well.
+  $role = user_role_load(DRUPAL_AUTHENTICATED_RID);
+  user_role_grant_permissions($role->rid, $permissions);
+}
+
+/**
+ * ARM-334: Faculty roles and permissions.
+ */
+function cls_core_update_7029() {
+  features_revert_module('cls_user');
+}
+
+/**
+ * ARM-330: Allow access on a per node basis for Calendar Content.
+ */
+function cls_core_update_7030() {
+  // Revert the feature.
+  features_revert_module('cls_calendar');
+}
+
+/**
+ * ARM-322: News content access-control.
+ */
+function cls_core_update_7031() {
+  // Revert the feature.
+  features_revert_module('cls_news_articles');
+
+  // Rebuild content permissions.
+  node_access_rebuild();
+}
+
+/**
+ * ARM-336: Faculty User: Faculty Order on landing page.
+ */
+function cls_core_update_7032() {
+  // Revert the feature.
+  features_revert_module('cls_faculty');
+}

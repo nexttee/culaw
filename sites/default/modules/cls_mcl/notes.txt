@@ -1,0 +1,49 @@
+dependencies:
+background_process
+ctools
+entity
+jcarousel
+libraries (>=2.x)
+location
+location_cck
+progress
+select_or_other
+ultimate_cron
+views
+cls_aces2
+cls_mandrill_integration
+cls_oracle_integration
+cls_user
+mandrill-php (library)
+cls (theme)
+
+For Meagan or Alexey:
+iOS Web App Icons & Startup Images
+crossdomain.xml
+html5shiv
+humans.txt
+plugins.js (to avoid console issues)
+css3pie
+Modernizr (maybe)
+Respond.js (maybe)
+Even Faster 404 page
+Can we turn CAS debugging off on production?
+drupal_exit()
+
+Random notes to self:
+Emmett
+Jenkins
+Coda plugins
+Jenkins PHP
+html5boilerplate
+bootstrap 3
+
+MCL notes to self:
+Get trucking on the CSS styles!!
+To CLS theme, add class to differentiate between a directory and the root
+Refactor common add body class logic to cls_common
+Added .hidden class to cls theme -- Need to test on production!
+Deal with spinner: http://jsfiddle.net/amanaplan/zY2PC/
+Implement drupal_html_id($id) in multiblocks
+Use: drupal_html_class (drupal_clean_css_identifier)
+http://www.grasmash.com/article/drupal-add-current-users-role-body-classes

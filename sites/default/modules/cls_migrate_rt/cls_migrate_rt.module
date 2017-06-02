@@ -1,0 +1,20 @@
+<?php
+/**
+ * @file
+ * Module file for migrate_rt module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function cls_migrate_rt_menu() {
+  $items['admin/content/migrate/rt_config'] = array(
+    'title' => 'RT Migration Configuration',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'migrate_rt_configure',
+    'access arguments' => array(MIGRATE_ACCESS_BASIC),
+    'file' => 'cls_migrate_rt.pages.inc',
+  );
+
+  return $items;
+}

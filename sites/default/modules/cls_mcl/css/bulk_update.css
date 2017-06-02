@@ -1,0 +1,103 @@
+body #cls-mcl-student-role-update-form label {
+  color: #666666;
+  font: 14px Verdana,Arial,Helvetica,sans-serif;
+  margin-top: 15px;
+}
+
+body #cls-mcl-student-role-update-form textarea#edit-account-ids {
+    color: #666666;
+    font: 14px/12px Verdana,Arial,Helvetica,sans-serif;
+}
+
+body #cls-mcl-student-role-update-form textarea.error, 
+body #cls-mcl-student-role-update-form .form-item select.error {
+    border: 1px solid #cc0000;
+}
+
+body #cls-mcl-student-role-update-form select.form-select {
+  color: #666666;
+  display: block;
+  font: 12px/10px Verdana,Arial,Helvetica,sans-serif;
+  height: 33px;
+  margin: 10px 0;
+  padding: 5px 0 5px 5px;
+  width: 264px;
+}
+
+body #cls-mcl-student-role-update-form #edit-roles-to-remove, body #cls-mcl-student-role-update-form #edit-roles-to-add {
+  height: 88px;
+}
+
+body #cls-mcl-student-role-update-form input#edit-submit {
+    background-color: #186E9E;
+    color: #FFFFFF;
+    border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border: 2px solid #999999;
+    font: 15px Verdana, Arial, sans-serif;
+    padding: 1px 10px 3px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+body div.messages {
+	display: none;
+}
+
+body div.status-msg {
+    background-color: #F8FFF0;
+    color: #234600;
+    border: 1px solid #BBEE77;
+    background-image: url("/misc/message-24-ok.png");
+    background-position: 8px 8px;
+    background-repeat: no-repeat;
+    margin: 6px 0px;
+    padding: 10px 10px 10px 50px;
+    font-size: 8pt;
+}
+
+body div.error-msg {
+    color: #cc0000;
+    font-size: 8pt;
+    background-image: none;
+    margin: 6px 0px;
+    padding: 10px 10px 10px 50px;
+    background-color: #ffffff;
+    border: 1px solid #cc0000;
+}
+
+body div#cls-mcl-student-role-update-form .clientside-error li {
+    list-style: none;
+    margin: 0 0 5px 0; 
+}
+
+body div#cls-mcl-bulk-update-form-errors {
+    color: #cc0000;
+    font-size: 8pt;
+    background-image: none;
+    margin: 0;
+    background-color: #ffffff;
+}
+
+body div#cls-mcl-bulk-update-form-errors label {
+  width: auto;
+  float: none;
+  color: #cc0000;
+}
+
+body div#cls-mcl-bulk-update-form-errors li {
+ margin: 0 0 5px 15px;
+ color: #cc0000;
+}
+
+div#cls-mcl-bulk-update-form-errors:after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+    width: 0;
+}

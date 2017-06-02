@@ -1,0 +1,71 @@
+.page-courses .courses-featured h4 {color: #dbdbdb;}
+.page-courses .courses-featured #course-spotlight-left{height:350px; width: 480px;}
+.page-courses .courses-featured #course-spotlight-right{height:350px; width: 460px;}
+.page-courses .courses-featured p {margin-top: 15px;}
+.page-courses .courses-featured p a {color: #dbdbdb;}
+.page-courses .courses-featured .table-wrapper {padding:10px; height:330px;}
+.page-courses .courses-featured #table-course-spotlight {height:330px; width: 100%}
+.page-courses .courses-featured #table-course-spotlight td {vertical-align: middle;}
+
+.page-courses .courses-home-bottom .course-number-title h5{margin: 0 0 5px 0;}
+.page-courses .courses-home-bottom p.learn-more {margin-left: 75px;}
+.page-courses .courses-home-bottom .promoted-functions input#search-compare-courses-input {font: 13px/14px Verdana,Arial,Helvetica,sans-serif; height: 20px; padding: 1px 5px 4px;}
+.page-courses .courses-home-bottom .promoted-functions input#search-compare-courses-input:focus {border: 1px solid #186E9E;}
+.page-courses .courses-home-bottom .no-margin {margin: 0}
+
+.page-courses ul.content-tools li{font-size: 13px; margin: 0; pading: 0 16px 0 0;}
+.page-courses .choose-a-section-instructions p{margin: 5px; font-size: 11px;}
+.page-courses table.results-table tr.group-top{border: none;}
+.page-courses table.results-table tr.group-bottom{border: none;}
+
+.page-courses .change-year-container{float: right;}
+.page-courses #change-school-year{display: none;}
+
+.page-courses-search .advanced-search label {display: inline; font-size: 11px;}
+.page-courses-search .advanced-search h3 {font-size: 14px; margin-bottom: 10px; color: #000;}
+.page-courses-search .advanced-search h3 label {font-size: 14px;}
+.page-courses-search .advanced-search .new-courses {float: left; width: 240px;}
+.page-courses-search .advanced-search .row div.categories{width: 690px;}
+.page-courses-search .advanced-search .row div.categories ul.two-columns{width: 100%; columns: 2; -webkit-columns: 2; -moz-columns: 2;}
+.page-courses-search .advanced-search .row div.tags ul.two-columns{width: 79%; columns: 3; -webkit-columns: 3; -moz-columns: 3;}
+.page-courses-search #course-search-expanded-options{display: none;}
+.page-courses-search .advanced-search div.buttons div div.more{display: none;}
+.page-courses-search .year-semester select{margin-bottom: 5px;}
+.page-courses-search .weekdays{margin-bottom: 5px;}
+
+.page-courses-search-results .search-results-container .results-table tr .type { width: 65px; }
+.page-courses-search-results .search-results-container .results-table tr.even,
+.page-courses-search-results .search-results-container .results-table tr.odd {border: none; padding: 0;}
+.page-courses-search-results .search-results-container .results-table tr.course-expanded div {display: none; margin-bottom: 10px;}
+.page-courses-search-results .search-results-container table.inner tr{background: none;}
+.page-courses-search-results .search-results-container table.inner tr th{padding: 0;}
+
+.page-courses-search-results .search-results-container .ajax-loading-icon{height:38px; background: url('/sites/all/modules/custom/cls_curriculum_guide/images/lazy-loader.gif') no-repeat center;}
+
+.page-courses-search-results .nav-search-result-criteria em {font-style: italic;}
+.page-courses-search-results .nav-search-result-criteria ul {list-style: disc outside none;}
+.page-courses-search-results .nav-download {margin-right: 2px;}
+
+.page-courses-sections ul.content-tools li {font-size: 13px; margin: 0; pading: 0 16px 0 0;}
+.page-courses-sections .section-goals p {font: 120%/130% Verdana,Arial,Helvetica,sans-serif !important;}
+.page-courses-sections .section-goals p.no-goals {color: #666666;}
+.page-courses-sections .section-goals #primary-goals, .page-courses-sections .section-goals #secondary-goals {display:none;}
+.page-courses-sections .section-goals #primary-goals p,.page-courses-sections .section-goals #secondary-goals p {font: italic 120%/130% Verdana,Arial,Helvetica,sans-serif; color: #666666;}
+.page-courses-sections .section-goals ul {margin-top:15px;}
+.page-courses-sections .section-goals ul li {margin: 0 0 10px 25px;}
+.page-courses-sections .right-small-column {margin: 0;}
+.page-courses-sections .other-sections p {font-size: 10px;}
+
+.page-courses-instructors .browse-courses div.course-abstract {width: 155px;}
+.page-courses-instructors .browse-courses div.course-abstract h5 {clear: left;}
+.page-courses-instructors .browse-courses div.course-abstract div.new-course {background-color: #87B7D3; color: #FFFFFF; float: left; font-size: 10px; font-weight: bold; letter-spacing: 1px; margin-left: 8px; margin-top: 1px; padding: 3px 5px; text-transform: uppercase; width: 29px;}
+.page-courses-instructors img.browse-year {margin: -10px 0 -10px -10px;}
+
+#block-cls_curriculum_guide-cls_cg_top_nav{float: right}
+
+#cls-curriculum-guide-settings-form .form-type-radios{float: left; width: 25%;}
+#cls-curriculum-guide-settings-form .form-type-checkboxes{float: left; width: 25%;}
+
+#browseSchoolYear{display: block;background-color: #fff; width: 200px; height: 20px; margin: 10px 0 0;font: 11px/13px Verdana,Arial,Helvetica,sans-serif; color: #666666; border: #CCCCCC 1px solid;}
+
+#curriculum-guide-search-error{color: #cc0000; font-size: 11px;}
