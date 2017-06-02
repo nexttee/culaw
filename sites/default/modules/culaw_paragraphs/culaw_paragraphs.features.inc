@@ -118,11 +118,6 @@ function culaw_paragraphs_node_info() {
  */
 function culaw_paragraphs_paragraphs_info() {
   $items = array(
-    'cta_card' => array(
-      'name' => 'CTA Card',
-      'bundle' => 'cta_card',
-      'locked' => '1',
-    ),
     'feed_card' => array(
       'name' => 'Feed Card',
       'bundle' => 'feed_card',

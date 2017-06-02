@@ -10,6 +10,35 @@
 function culaw_paragraphs_field_default_field_bases() {
   $field_bases = array();
 
+  // Exported field_base: 'field_area_of_study'.
+  $field_bases['field_area_of_study'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_area_of_study',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(
+      'tid' => array(
+        0 => 'tid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'taxonomy',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => array(
+          'vocabulary' => 'area_of_study',
+          'parent' => 0,
+        ),
+      ),
+    ),
+    'translatable' => 0,
+    'type' => 'taxonomy_term_reference',
+  );
+
   // Exported field_base: 'field_attribution'.
   $field_bases['field_attribution'] = array(
     'active' => 1,
@@ -64,6 +93,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_card_options',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'paragraphs',
@@ -100,6 +132,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_cta_options',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -109,9 +144,12 @@ function culaw_paragraphs_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        'Basic Column' => 'Basic Column',
-        'Circular Images' => 'Circular Images',
-        'Flexible Grid' => 'Flexible Grid',
+        'basic-column' => 'Basic Column',
+        'circular-images' => 'Circular Images',
+        'flexible-grid' => 'Flexible Grid',
+        'Basic Column' => 'Basic Column Old',
+        'Circular Images' => 'Circular Images Old',
+        'Flexible Grid' => 'Flexible Grid Old',
       ),
       'allowed_values_function' => '',
     ),
@@ -126,6 +164,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_feed_type',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -135,10 +176,10 @@ function culaw_paragraphs_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        'Events' => 'Events',
-        'News' => 'News',
-        'In the Press' => 'In the Press',
-        'Curriculum' => 'Curriculum',
+        'cls_mcl_event' => 'Events',
+        'news_article' => 'News',
+        'News' => 'Old News',
+        'Events' => 'Old Events',
       ),
       'allowed_values_function' => '',
     ),
@@ -235,6 +276,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_media_layout_options',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -244,8 +288,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        'Media Card' => 'Media Card',
+        'media-card' => 'Media Card',
         'banner' => 'Banner Graphic with Overlapping Text',
+        'Media Card' => 'Media Card Old',
       ),
       'allowed_values_function' => '',
     ),
@@ -341,6 +386,24 @@ function culaw_paragraphs_field_default_field_bases() {
     'type' => 'link_field',
   );
 
+  // Exported field_base: 'field_social'.
+  $field_bases['field_social'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_social',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'social_media_aggregator',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'social_media_aggregator',
+  );
+
   // Exported field_base: 'field_style_card'.
   $field_bases['field_style_card'] = array(
     'active' => 1,
@@ -388,6 +451,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_text_formatting',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -397,9 +463,12 @@ function culaw_paragraphs_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        'Callout Text' => 'Callout Text',
-        'Testimonial' => 'Testimonial',
-        'Rich Text' => 'Rich Text',
+        'callout-text' => 'Callout Text',
+        'testimonial' => 'Testimonial',
+        'rich-text' => 'Rich Text',
+        'Callout Text' => 'Callout Text Old',
+        'Testimonial' => 'Testimonial Old',
+        'Rich Text' => 'Rich Text Old',
       ),
       'allowed_values_function' => '',
     ),
