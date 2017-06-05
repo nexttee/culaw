@@ -47,15 +47,14 @@ var columbia = {
 				// add a short timeout to stop IE from having a panic attack
 				setTimeout( function() {
 					jQuery(".sticky-nav-area a").each(function() {
-						console.log('looping')
-						// var $this = jQuery(this),
-						// 	$parent = $this.parent("li"),
-						// 	target = jQuery($this.attr("href"));
-						// // repurposed logic from https://stanhub.com/sticky-header-change-navigation-active-class-on-page-scroll-with-jquery/
-						// if ((target.offset().top - 60) <= scrollPosition && (target.offset().top - 60 + target.height()) > scrollPosition) {
-						// 	jQuery(".sticky-nav-area li").removeClass("active"); // remove all active classes
-						// 	$parent.addClass("active"); // place active class on current item
-						// }
+						var $this = jQuery(this),
+							$parent = $this.parent("li"),
+							target = jQuery($this.attr("href"));
+						// repurposed logic from https://stanhub.com/sticky-header-change-navigation-active-class-on-page-scroll-with-jquery/
+						if ((target.offset().top - 60) <= scrollPosition && (target.offset().top - 60 + target.height()) > scrollPosition) {
+							jQuery(".sticky-nav-area li").removeClass("active"); // remove all active classes
+							$parent.addClass("active"); // place active class on current item
+						}
 					}, 100);
 				});
 			});
