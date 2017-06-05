@@ -27,7 +27,10 @@
  */
 //dpm($content);
 
+$classes = "";
 $content_classes = array("");
+$container_class = "container";
+
 if (isset($content['field_cta_options']['#items'][0])) {
     $layout_option = $content['field_cta_options']['#items'][0];
     unset($content['field_cta_options']);
@@ -55,16 +58,25 @@ if (isset($content['field_backgrounds'])) {
 
 //handle wrapper for content here
 //format headline, optional
+//Basic Column
 switch($layout_option['value']) {
     case 'flexible-grid':
         $classes = "four-column";
+        $container_class = "container";
+        //if I remove this the layout fails
         break;
     case 'circle-images':
         $classes = "three-column";
+        $container_class = "container";
+        break;
+    case 'banner':
+        $classes = "one-column";
+        $container_class = "null";
         break;
     default:
         unset($content['field_headline']);
         unset($content['headline']);
+        $container_class = "container";
         break;
 }
 $content_classes[] = "";
@@ -75,18 +87,10 @@ $content_classes[] = "";
     <div class="content<?php print implode(" ", $content_classes); ?>"<?php print $content_attributes; ?>>
         <div class="row">
             <!-- this container should not appear on hero-banner -->
-            <div class="container">
+            <div class="<?php print $container_class; ?>">
                 <?php print render($content); ?>
                 <div class="clear"></div>
             </div>
         </div>
     </div>
 </div>
-
-<!--layout row for flex grid
-<div class="flex-grid-multi-color">
-    <div class="four-column">
-
-    </div>
-</div>
--->
