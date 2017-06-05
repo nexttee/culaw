@@ -30,6 +30,7 @@
 $classes = "";
 $content_classes = array("");
 $container_class = "container";
+$secondary_layout_option= "";
 
 if (isset($content['field_cta_options']['#items'][0])) {
     $layout_option = $content['field_cta_options']['#items'][0];
@@ -59,6 +60,18 @@ if (isset($content['field_backgrounds'])) {
 //handle wrapper for content here
 //format headline, optional
 //Basic Column
+if (isset($content['field_card_options'][0]['entity']['paragraphs_item'])) {
+    foreach ($content['field_card_options'][0]['entity']['paragraphs_item'] as $key => $item) {
+        if (isset($item['field_text_formatting'])) {
+            //field_media_layout_options
+            $secondary_layout_option = $item['field_text_formatting']['#items'][0]['value'];
+        }
+        if (isset($item['field_feed_type'])) {
+            //field_media_layout_options
+            $secondary_layout_option = $item['field_feed_type']['#items'][0]['value'];
+        }
+    }
+}
 switch($layout_option['value']) {
     case 'flexible-grid':
         $classes = "flexible-grid";//"four-column";
@@ -74,6 +87,14 @@ switch($layout_option['value']) {
         $container_class = "null";
         break;
     default:
+        switch ($secondary_layout_option) {
+            case 'testimonial':
+                $classes = "testimonial";
+                break;
+            case 'cls_mcl_event':
+                $classes = "events-feed-grid";
+                break;
+        }
         unset($content['field_headline']);
         unset($content['headline']);
         $container_class = "container";
