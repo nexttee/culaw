@@ -91,6 +91,7 @@ switch($layout_option['value']) {
             case 'testimonial':
                 $classes = "testimonial";
                 break;
+            case 'news_article':
             case 'cls_mcl_event':
                 $classes = "events-feed-grid";
                 break;
