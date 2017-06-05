@@ -61,8 +61,8 @@ if (isset($content['field_backgrounds'])) {
 //Basic Column
 switch($layout_option['value']) {
     case 'flexible-grid':
-        $classes = "four-column";
-        $container_class = "container";
+        $classes = "flexible-grid";//"four-column";
+        $container_class = "null";
         //if I remove this the layout fails
         break;
     case 'circular-images':
