@@ -46,6 +46,7 @@ if (isset($content['field_backgrounds'])) {
     <style>
         .content-background-<?php print $row_id; ?> {
             background:transparent url(<?php print $bg_image; ?>) no-repeat;
+            background-size: cover;
         }
     </style>
 
@@ -66,18 +67,18 @@ switch($layout_option['value']) {
         unset($content['headline']);
         break;
 }
-$content_classes[] = "container";
+$content_classes[] = "";
 
 ?>
 
 <div class="<?php print $classes; ?>"<?php print $attributes; ?>>
     <div class="content<?php print implode(" ", $content_classes); ?>"<?php print $content_attributes; ?>>
-
         <div class="row">
-
-            <?php print render($content); ?>
-            <div class="clear"></div>
-
+            <!-- this container should not appear on hero-banner -->
+            <div class="container">
+                <?php print render($content); ?>
+                <div class="clear"></div>
+            </div>
         </div>
     </div>
 </div>

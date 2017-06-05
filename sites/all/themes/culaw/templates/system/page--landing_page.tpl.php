@@ -82,7 +82,7 @@
   </div>
 <?php endif; ?>
 
-<div class="main-container <?php print $container_class; ?>">
+<div class="main-container" id="wrapper">
 
   <header role="banner" id="page-header">
     <?php if (!empty($site_slogan)): ?>
@@ -115,7 +115,7 @@
 
   <div class="row">
 
-    <section class="col-sm-12 main__master">
+    <section class="col-sm-12">
       <?php if (!empty($page['highlighted'])): ?>
         <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
       <?php endif; ?>
