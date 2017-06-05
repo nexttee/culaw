@@ -283,6 +283,7 @@ function _facebook_pull_feed($graph_id, $type, $token, $options = array()) {
   $qs = http_build_query($options, '', '&');
   $url = "https://graph.facebook.com/%s/%s?%s&%s";
   $fullurl = sprintf($url, $graph_id, $type, $token, $qs);
+  echo $fullurl . "<br/>here";
   $raw = file_get_contents($fullurl);
   $data = json_decode($raw);
   if (!isset($data->data)) {
