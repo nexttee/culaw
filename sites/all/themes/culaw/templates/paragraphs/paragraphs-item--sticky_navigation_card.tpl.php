@@ -1,5 +1,5 @@
 <?php
-dpm($content);
+//dpm($content);
 $count = 1;
 ?>
 <div class="main-holder">

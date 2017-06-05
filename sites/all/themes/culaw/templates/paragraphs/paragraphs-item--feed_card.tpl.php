@@ -60,53 +60,49 @@ $output = $view->render();
 
 <?php switch($feed_type) : ?>
 <?php case 'cls_mcl_event': ?>
-    <div class="events-feed-grid">
-        <div class="container">
-            <h2>Upcoming Events</h2>
-            <div class="events-feed-holder row">
+    <div class="container">
+        <h2>Upcoming Events</h2>
+        <div class="events-feed-holder row">
 
-                <?php foreach($view->result AS $key => $item) : ?>
-                    <?php $row = _culaw_paragraphs_format_content($item->nid, 'event_feed_row'); ?>
-                    <div class="col-md-3 col-sm-6 col-xs-12">
-                        <div class="event-block">
-                            <time datetime="<?php print $row['date']['class']; ?>" class="event-block__time"><span class="event-block__month"><?php print $row['date']['month']; ?></span><?php print $row['date']['day']; ?></time>
-                            <strong class="event-block__title"><a href="<?php print $row['url']; ?>"><?php print $row['source']; ?></a></strong>
-                            <p><?php print $row['summary']; ?></p>
-                        </div>
+            <?php foreach($view->result AS $key => $item) : ?>
+                <?php $row = _culaw_paragraphs_format_content($item->nid, 'event_feed_row'); ?>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="event-block">
+                        <time datetime="<?php print $row['date']['class']; ?>" class="event-block__time"><span class="event-block__month"><?php print $row['date']['month']; ?></span><?php print $row['date']['day']; ?></time>
+                        <strong class="event-block__title"><a href="<?php print $row['url']; ?>"><?php print $row['source']; ?></a></strong>
+                        <p><?php print $row['summary']; ?></p>
                     </div>
-                <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
 
-            </div>
-            <span class="events-feed-grid__more"><a href="#" class="more-link">View Event Calendar<i class="icon-keyboard_arrow_right"></i></a></span>
         </div>
+        <span class="events-feed-grid__more"><a href="#" class="more-link">View Event Calendar<i class="icon-keyboard_arrow_right"></i></a></span>
     </div>
     <?php break; ?>
 
 <?php case 'news_article': ?>
 <?php case 'default': ?>
-    <div class="news-feed">
-        <div class="container">
-            <h2>Columbia Law in the Press</h2>
-            <div class="news-feed__frame">
-                <div class="row">
+    <div class="container">
+        <h2>Columbia Law in the Press</h2>
+        <div class="news-feed__frame">
+            <div class="row">
 
-                    <?php foreach($view->result AS $key => $item) : ?>
-                        <div class="col-sm-4 col-xs-12 news-feed__wrap">
-                            <div class="news-block">
-                                <?php $row = _culaw_paragraphs_format_content($item->nid, 'news_feed_row'); ?>
-                                <div class="news-block__head-wrap">
-                                    <span class="news-block__text"><?php print $row['category']; ?></span>
-                                </div>
-                                <p><?php print $row['summary']; ?></p>
-                                <div class="news-block__time-wrap">
-                                    <span class="news-block__newspapper"><a href="<?php print $row['url']; ?>"><?php print $row['source']; ?></a></span>
-                                    <time datetime="2017-04-12"><?php print $row['date']['date']; ?></time>
-                                </div>
+                <?php foreach($view->result AS $key => $item) : ?>
+                    <div class="col-sm-4 col-xs-12 news-feed__wrap">
+                        <div class="news-block">
+                            <?php $row = _culaw_paragraphs_format_content($item->nid, 'news_feed_row'); ?>
+                            <div class="news-block__head-wrap">
+                                <span class="news-block__text"><?php print $row['category']; ?></span>
+                            </div>
+                            <p><?php print $row['summary']; ?></p>
+                            <div class="news-block__time-wrap">
+                                <span class="news-block__newspapper"><a href="<?php print $row['url']; ?>"><?php print $row['source']; ?></a></span>
+                                <time datetime="2017-04-12"><?php print $row['date']['date']; ?></time>
                             </div>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
 
-                </div>
             </div>
         </div>
     </div>

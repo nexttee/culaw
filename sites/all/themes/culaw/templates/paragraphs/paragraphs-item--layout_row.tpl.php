@@ -27,7 +27,11 @@
  */
 //dpm($content);
 
+$classes = "";
 $content_classes = array("");
+$container_class = "container";
+$secondary_layout_option= "";
+
 if (isset($content['field_cta_options']['#items'][0])) {
     $layout_option = $content['field_cta_options']['#items'][0];
     unset($content['field_cta_options']);
@@ -46,6 +50,7 @@ if (isset($content['field_backgrounds'])) {
     <style>
         .content-background-<?php print $row_id; ?> {
             background:transparent url(<?php print $bg_image; ?>) no-repeat;
+            background-size: cover;
         }
     </style>
 
@@ -54,38 +59,60 @@ if (isset($content['field_backgrounds'])) {
 
 //handle wrapper for content here
 //format headline, optional
+//Basic Column
+if (isset($content['field_card_options'][0]['entity']['paragraphs_item'])) {
+    foreach ($content['field_card_options'][0]['entity']['paragraphs_item'] as $key => $item) {
+        if (isset($item['field_text_formatting'])) {
+            //field_media_layout_options
+            $secondary_layout_option = $item['field_text_formatting']['#items'][0]['value'];
+        }
+        if (isset($item['field_feed_type'])) {
+            //field_media_layout_options
+            $secondary_layout_option = $item['field_feed_type']['#items'][0]['value'];
+        }
+    }
+}
 switch($layout_option['value']) {
     case 'flexible-grid':
-        $classes = "four-column";
+        $classes = "flexible-grid";//"four-column";
+        $container_class = "null";
+        //if I remove this the layout fails
         break;
-    case 'circle-images':
+    case 'circular-images':
         $classes = "three-column";
+        $container_class = "container";
+        break;
+    case 'banner':
+        $classes = "one-column";
+        $container_class = "null";
         break;
     default:
+        switch ($secondary_layout_option) {
+            case 'testimonial':
+                $classes = "testimonial";
+                break;
+            case 'news_article':
+            case 'cls_mcl_event':
+                $classes = "events-feed-grid";
+                break;
+        }
         unset($content['field_headline']);
         unset($content['headline']);
+        $container_class = "container";
         break;
 }
-$content_classes[] = "container";
+$content_classes[] = "";
 
 ?>
 
 <div class="<?php print $classes; ?>"<?php print $attributes; ?>>
     <div class="content<?php print implode(" ", $content_classes); ?>"<?php print $content_attributes; ?>>
-
         <div class="row">
-
-            <?php print render($content); ?>
-            <div class="clear"></div>
-
+            <!-- this container should not appear on hero-banner -->
+            <div class="<?php print $container_class; ?>">
+                <?php print render($content); ?>
+                <div class="clear"></div>
+            </div>
         </div>
     </div>
 </div>
-
-<!--layout row for flex grid
-<div class="flex-grid-multi-color">
-    <div class="four-column">
-
-    </div>
-</div>
--->
