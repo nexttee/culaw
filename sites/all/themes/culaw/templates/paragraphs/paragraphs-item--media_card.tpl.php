@@ -129,7 +129,7 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
     </div>-->
 
 
-        <div class="four-column__block yellow">
+        <div class="flexible-grid__block yellow">
             <?php if (isset($bg_path)) :?>
                 <div class="four-column__image-wrap bg-stretch">
                     <span data-srcset="<?php print $bg_path; ?>"></span>
