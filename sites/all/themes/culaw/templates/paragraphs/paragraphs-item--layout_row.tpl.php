@@ -65,7 +65,7 @@ switch($layout_option['value']) {
         $container_class = "container";
         //if I remove this the layout fails
         break;
-    case 'circle-images':
+    case 'circular-images':
         $classes = "three-column";
         $container_class = "container";
         break;
