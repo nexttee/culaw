@@ -9297,7 +9297,7 @@ blockquote cite a:hover {
 	-ms-transform: translateY(0);
 	transform: translateY(0);
 }
-
+/*
 .four-column__block.blue .four-column__image-caption:before,
 .flexible-grid__block.blue .four-column__image-caption:before {
 	background: url(../images/bg2.jpg) no-repeat;
@@ -9308,17 +9308,26 @@ blockquote cite a:hover {
 .flexible-grid__block.yellow .four-column__image-caption:before {
 	background: url(../images/bg3.jpg) no-repeat;
 	background-size: cover;
-}
+}*/
 
 .four-column__image-wrap:before {
-	background: -webkit-linear-gradient(top, transparent 0%, black 100%);
-	background: linear-gradient(to bottom, transparent 0%, black 100%);
+	background: -webkit-linear-gradient(top, transparent 8%, rgba(0,0,0,0.85) 100%);
+	background: linear-gradient(to bottom, transparent 8%, rgba(0,0,0,0.85) 100%);
 	content: "";
 	position: absolute;
 	left: 0;
 	right: 0;
 	bottom: 0;
 	height: 216px;
+	-webkit-transition: all .8s ease;
+	transition: all .8s ease;
+}
+
+.four-column__block:hover .four-column__image-wrap:before,
+.flexible-grid__block:hover .four-column__image-wrap:before {
+	height: 150%;
+	/*background: -webkit-linear-gradient(top, transparent 0%, rgba(0,0,0,0.8) 80%);
+	background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 80%);*/
 }
 
 .four-column__image-caption {
@@ -9348,8 +9357,6 @@ blockquote cite a:hover {
 	-webkit-transform: translateY(100%);
 	-ms-transform: translateY(100%);
 	transform: translateY(100%);
-	background: url(../images/bg1.jpg) no-repeat;
-	background-size: cover;
 	top: -1px;
 }
 
