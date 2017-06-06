@@ -36,6 +36,7 @@ if ($layout_option != "banner") {
 
 if (isset($content['field_media_file']['#items'][0]['uri'])) {
     $bg_uri = $content['field_media_file']['#items'][0]['uri'];
+    $bg_alt_text = $content['field_media_file']['#items'][0]['alt'];
     switch ($layout_option) {
         case 'banner':
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'responsive_1200w'));
