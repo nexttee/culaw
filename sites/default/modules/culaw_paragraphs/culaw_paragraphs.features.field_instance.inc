@@ -476,6 +476,53 @@ function culaw_paragraphs_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
+      'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'paragraphs_item-media_card-field_hover_state'.
+  $field_instances['paragraphs_item-media_card-field_hover_state'] = array(
+    'bundle' => 'media_card',
+    'default_value' => array(
+      0 => array(
+        'value' => 'yellow',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 7,
+      ),
+      'faculty_detail_items' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_hover_state',
+    'label' => 'Hover State',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
       'weight' => 2,
     ),
   );
@@ -519,7 +566,7 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -702,7 +749,7 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -751,7 +798,7 @@ function culaw_paragraphs_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -1432,6 +1479,49 @@ function culaw_paragraphs_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'paragraphs_item-social_media_card-field_social'.
+  $field_instances['paragraphs_item-social_media_card-field_social'] = array(
+    'bundle' => 'social_media_card',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'social_media_aggregator',
+        'settings' => array(),
+        'type' => 'social_media_aggregator',
+        'weight' => 0,
+      ),
+      'faculty_detail_items' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_social',
+    'label' => 'Social',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'social_media_aggregator',
+      'settings' => array(),
+      'type' => 'social_media_aggregator',
+      'weight' => 1,
+    ),
+  );
+
   // Exported field_instance:
   // 'paragraphs_item-social_media_card-field_twitter_key'.
   $field_instances['paragraphs_item-social_media_card-field_twitter_key'] = array(
@@ -2091,6 +2181,7 @@ function culaw_paragraphs_field_default_field_instances() {
   t('Feed Type');
   t('Hashtag or username');
   t('Headline');
+  t('Hover State');
   t('Image');
   t('Instagram Client ID');
   t('Instagram Limit');
@@ -2105,6 +2196,7 @@ function culaw_paragraphs_field_default_field_instances() {
   t('Media Layout Options');
   t('Menu Option');
   t('Number of posts to limit');
+  t('Social');
   t('Style Card');
   t('Summary');
   t('Text Formatting');

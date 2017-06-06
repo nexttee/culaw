@@ -147,6 +147,7 @@ function culaw_paragraphs_field_default_field_bases() {
         'basic-column' => 'Basic Column',
         'circular-images' => 'Circular Images',
         'flexible-grid' => 'Flexible Grid',
+        'banner' => 'Banner with Overlapping Text',
         'Basic Column' => 'Basic Column Old',
         'Circular Images' => 'Circular Images Old',
         'Flexible Grid' => 'Flexible Grid Old',
@@ -277,6 +278,34 @@ function culaw_paragraphs_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'text',
+  );
+
+  // Exported field_base: 'field_hover_state'.
+  $field_bases['field_hover_state'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_hover_state',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        'yellow' => 'Yellow',
+        'blue' => 'Blue',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'list_text',
   );
 
   // Exported field_base: 'field_instagram_client_id'.
@@ -540,6 +569,24 @@ function culaw_paragraphs_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'link_field',
+  );
+
+  // Exported field_base: 'field_social'.
+  $field_bases['field_social'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_social',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'social_media_aggregator',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'social_media_aggregator',
   );
 
   // Exported field_base: 'field_style_card'.

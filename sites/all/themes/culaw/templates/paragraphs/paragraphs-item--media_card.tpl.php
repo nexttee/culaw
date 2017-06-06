@@ -41,8 +41,12 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'responsive_1200w'));
             break;
         case 'flexible-grid':
+            $hover_state = "yellow";
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'flexible_grid', 'attributes' => array("class" => $style_option)));
             $bg_path = image_style_url('flexible_grid',$bg_uri);
+            if (isset($content['field_hover_state'])) {
+                $hover_state = $content['field_hover_state']['#items'][0]['value'];
+            }
             break;
         case 'basic-column':
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
@@ -129,7 +133,7 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
     </div>-->
 
 
-        <div class="flexible-grid__block yellow">
+        <div class="flexible-grid__block <?php print $hover_state; ?>">
             <?php if (isset($bg_path)) :?>
                 <div class="four-column__image-wrap bg-stretch">
                     <span data-srcset="<?php print $bg_path; ?>"></span>
