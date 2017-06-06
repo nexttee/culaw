@@ -39,6 +39,9 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
     switch ($layout_option) {
         case 'banner':
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'responsive_1200w'));
+            $bg_desktop_path = image_style_url('banner_desktop_style',$bg_uri);
+            $bg_tablet_path = image_style_url('banner_tablet_style',$bg_uri);
+            $bg_mobile_path = image_style_url('banner_mobile_style',$bg_uri);
             break;
         case 'flexible-grid':
             $hover_state = "yellow";
