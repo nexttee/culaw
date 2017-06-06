@@ -8028,8 +8028,8 @@ h4,
 /*heading area style*/
 
 .heading-area {
-	background: url(../images/patern.jpg) no-repeat;
-	background-size: cover;
+	background: url(../images/pattern.png) repeat;
+	/*background-size: cover;*/
 	position: relative;
 }
 
@@ -9059,8 +9059,8 @@ blockquote cite a:hover {
 }
 
 .three-column__style02 {
-	background: url(../images/bg6.jpg) no-repeat;
-	background-size: cover;
+	background: url(../images/bg6.png) repeat;
+	/*background-size: cover;*/
 }
 
 .three-column__style03 {
