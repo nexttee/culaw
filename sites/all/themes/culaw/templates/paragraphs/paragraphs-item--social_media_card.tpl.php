@@ -97,25 +97,22 @@ if($field_facebook_token != "") {
         float:left;
     }
 </style>
-<main id="main">
-			<!-- social area -->
-			<div class="social-area">
-				<div class="container">
-					<div class="row social-feed-container">
-						
-					</div>
-					<div class="social-networks-wrap">
-						<strong class="social-networks-wrap__title">Connect With Us</strong>
-						<ul class="social-networks list-unstyled">
-							<li><a href="#"><span class="hidden">twitter</span><i class="icon-twitter"></i></a></li>
-							<li><a href="#"><span class="hidden">facebook</span><i class="icon-facebook2"></i></a></li>
-							<li><a href="#"><span class="hidden">linkedin</span><i class="icon-linkedin"></i></a></li>
-							<li><a href="#"><span class="hidden">instagram</span><i class="icon-instagram"></i></a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</main>
+
+    <!-- social area -->
+    <div class="social-area">
+        <div class="container">
+            <div class="row social-feed-container"></div>
+            <div class="social-networks-wrap">
+                <strong class="social-networks-wrap__title">Connect With Us</strong>
+                <ul class="social-networks list-unstyled">
+                    <li><a href="#"><span class="hidden">twitter</span><i class="icon-twitter"></i></a></li>
+                    <li><a href="#"><span class="hidden">facebook</span><i class="icon-facebook2"></i></a></li>
+                    <li><a href="#"><span class="hidden">linkedin</span><i class="icon-linkedin"></i></a></li>
+                    <li><a href="#"><span class="hidden">instagram</span><i class="icon-instagram"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
  
 
 

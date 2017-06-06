@@ -9781,6 +9781,15 @@ blockquote cite a:hover {
 	overflow: hidden;
 }
 
+.social-block__body {
+	padding: 20px;
+}
+
+.social-block__body p.social-feed-text {
+	font-size: 15px;
+	line-height: 1.5;
+}
+
 .social-block img {
 	display: block;
 	width: 100%;
