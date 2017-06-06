@@ -100,7 +100,13 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
 <?php case 'banner': ?>
         <!-- hero banner -->
         <div class="hero-banner">
-            <?php print $bg_image;?>
+            <picture id="images__hero--box1">
+                <!--[if IE 9]><video style="display: none;"><![endif]-->
+                <source srcset="<?php echo $bg_desktop_path; ?>" media="(min-width: 1224px)">
+                <source srcset="<?php echo $bg_tablet_path; ?>" media="(min-width: 768px)">
+                <!--[if IE 9]></video><![endif]-->
+                <img src="http://placehold.it/800x900" srcset="<?php echo $bg_mobile_path; ?>" alt="<?php echo  $bg_alt_text; ?>">
+            </picture>
             <div class="hero-banner-wrap">
                 <div class="hero-banner__caption-holder hidden-xs">
                     <div class="container">

@@ -8757,6 +8757,10 @@ blockquote cite a:hover {
 	height: auto;
 }
 
+.hero-banner .container {
+	height: calc(100% - 150px);
+}
+
 .hero-banner__caption-holder {
 	position: absolute;
 	top: 0;
@@ -8767,16 +8771,23 @@ blockquote cite a:hover {
 
 .hero-banner__caption {
 	position: relative;
-	float: right;
-	padding: 81px 7px 0 0;
-	width: 497px;
+	display: table;
+	width: 100%;
+	height: 100%;
+	bottom: 0;
+	vertical-align: bottom;
+	/*float: right;*/
+	/*padding: 81px 7px 0 0;*/
+	/*width: 497px;*/
 }
 
 .hero-banner__blockquote {
 	font-size: 30px;
 	line-height: 36px;
+	display: table-cell;
+	vertical-align: bottom;
 	quotes: none;
-	padding: 0;
+	padding: 0 0 0 50%;
 	margin: 0;
 	border: none;
 	color: #fff;
@@ -10825,8 +10836,7 @@ blockquote cite a:hover {
 	.hero-banner img {
 		position: relative;
 		left: 50%;
-		width: 1600px;
-		margin: 0 0 0 -800px;
+		margin: 0 0 0 -50%;
 	}
 }
 
@@ -11088,14 +11098,18 @@ blockquote cite a:hover {
 		margin: 0;
 	}
 
+	.hero-banner .container {
+		height: calc(100% - 100px);
+	}
+
 	.hero-banner img {
-		width: 1001px;
-		margin: 0 0 0 -500px;
+		/*width: 1001px;
+		margin: 0 0 0 -500px;*/
 	}
 
 	.hero-banner__caption {
-		padding: 82px 28px 0 0;
-		width: 310px;
+		
+		/*width: 310px;*/
 	}
 
 	.hero-banner__caption br {
@@ -11942,8 +11956,8 @@ blockquote cite a:hover {
 	}
 
 	.hero-banner img {
-		width: 932px;
-		margin: 0 0 0 -416px;
+		/*width: 932px;
+		margin: 0 0 0 -416px;*/
 	}
 
 	.apply-holder {
@@ -12552,6 +12566,10 @@ blockquote cite a:hover {
 		position: static;
 	}
 
+	.hero-banner .container {
+		height: auto;
+	}
+
 	.hero-banner-wrap,
 	.callout-holder,
 	.three-column__style01,
@@ -12563,7 +12581,7 @@ blockquote cite a:hover {
 	.hero-banner__caption {
 		float: none;
 		padding: 0 0 10px;
-		width: 100% !important;
+		/*width: 100% !important;*/
 	}
 
 	.utility-copy {
