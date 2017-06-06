@@ -109,10 +109,10 @@ $content_classes[] = "";
     <div class="content<?php print implode(" ", $content_classes); ?>"<?php print $content_attributes; ?>>
         <div class="row">
             <!-- this container should not appear on hero-banner -->
-            <!--<div class="<?php // print $container_class; ?>">-->
+            <div class="<?php print $container_class; ?>">
                 <?php print render($content); ?>
                 <div class="clear"></div>
-            <!--</div>-->
+            </div>
         </div>
     </div>
 </div>
