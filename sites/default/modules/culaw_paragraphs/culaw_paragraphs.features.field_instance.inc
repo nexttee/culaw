@@ -431,6 +431,49 @@ function culaw_paragraphs_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'paragraphs_item-media_card-field_backgrounds'.
+  $field_instances['paragraphs_item-media_card-field_backgrounds'] = array(
+    'bundle' => 'media_card',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 7,
+      ),
+      'faculty_detail_items' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_backgrounds',
+    'label' => 'Placeholder Backgrounds',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 3,
+    ),
+  );
+
   // Exported field_instance: 'paragraphs_item-media_card-field_headline'.
   $field_instances['paragraphs_item-media_card-field_headline'] = array(
     'bundle' => 'media_card',
@@ -476,54 +519,7 @@ function culaw_paragraphs_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 3,
-    ),
-  );
-
-  // Exported field_instance: 'paragraphs_item-media_card-field_hover_state'.
-  $field_instances['paragraphs_item-media_card-field_hover_state'] = array(
-    'bundle' => 'media_card',
-    'default_value' => array(
-      0 => array(
-        'value' => 'yellow',
-      ),
-    ),
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 7,
-      ),
-      'faculty_detail_items' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_hover_state',
-    'label' => 'Hover State',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 2,
+      'weight' => 4,
     ),
   );
 
@@ -566,7 +562,7 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -605,8 +601,13 @@ function culaw_paragraphs_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 0,
-      'entity_translation_sync' => FALSE,
-      'exclude_cv' => FALSE,
+      'epsacrop' => array(
+        'styles' => array(
+          'banner_desktop_style' => 'banner_desktop_style',
+          'banner_mobile_style' => 'banner_mobile_style',
+          'banner_tablet_style' => 'banner_tablet_style',
+        ),
+      ),
       'file_directory' => 'media_browser',
       'file_extensions' => 'jpg png jpeg gif',
       'max_filesize' => '',
@@ -617,7 +618,6 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'media',
       'settings' => array(
         'allowed_schemes' => array(
-          'private' => 0,
           'public' => 'public',
           'vimeo' => 'vimeo',
           'youtube' => 'youtube',
@@ -637,54 +637,6 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
       'type' => 'media_generic',
       'weight' => 1,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'paragraphs_item-media_card-field_media_layout_options'.
-  $field_instances['paragraphs_item-media_card-field_media_layout_options'] = array(
-    'bundle' => 'media_card',
-    'default_value' => array(
-      0 => array(
-        'value' => 'media-card',
-      ),
-    ),
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 5,
-      ),
-      'faculty_detail_items' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_media_layout_options',
-    'label' => 'Media Layout Options',
-    'required' => 1,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 0,
     ),
   );
 
@@ -749,7 +701,7 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -798,7 +750,86 @@ function culaw_paragraphs_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 5,
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'paragraphs_item-media_card-field_thumbnail_image'.
+  $field_instances['paragraphs_item-media_card-field_thumbnail_image'] = array(
+    'bundle' => 'media_card',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '',
+        ),
+        'type' => 'image',
+        'weight' => 8,
+      ),
+      'faculty_detail_items' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_thumbnail_image',
+    'label' => 'Thumbnail Image',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'epsacrop' => array(
+        'styles' => array(
+          'banner_desktop_style' => 0,
+          'banner_mobile_style' => 0,
+          'banner_tablet_style' => 0,
+        ),
+      ),
+      'file_directory' => 'media_thumbs',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'media',
+      'settings' => array(
+        'allowed_schemes' => array(
+          'public' => 'public',
+          'vimeo' => 0,
+          'youtube' => 0,
+        ),
+        'allowed_types' => array(
+          'audio' => 0,
+          'document' => 0,
+          'image' => 'image',
+          'video' => 0,
+        ),
+        'browser_plugins' => array(
+          'media_default--media_browser_1' => 'media_default--media_browser_1',
+          'media_default--media_browser_my_files' => 'media_default--media_browser_my_files',
+          'media_internet' => 'media_internet',
+          'upload' => 'upload',
+        ),
+      ),
+      'type' => 'media_generic',
+      'weight' => 2,
     ),
   );
 
@@ -1479,49 +1510,6 @@ function culaw_paragraphs_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'paragraphs_item-social_media_card-field_social'.
-  $field_instances['paragraphs_item-social_media_card-field_social'] = array(
-    'bundle' => 'social_media_card',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'social_media_aggregator',
-        'settings' => array(),
-        'type' => 'social_media_aggregator',
-        'weight' => 0,
-      ),
-      'faculty_detail_items' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_social',
-    'label' => 'Social',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'social_media_aggregator',
-      'settings' => array(),
-      'type' => 'social_media_aggregator',
-      'weight' => 1,
-    ),
-  );
-
   // Exported field_instance:
   // 'paragraphs_item-social_media_card-field_twitter_key'.
   $field_instances['paragraphs_item-social_media_card-field_twitter_key'] = array(
@@ -1789,69 +1777,6 @@ function culaw_paragraphs_field_default_field_instances() {
       'settings' => array(),
       'type' => 'paragraphs_embed',
       'weight' => 2,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'paragraphs_item-sticky_navigation_card-field_navigation_links'.
-  $field_instances['paragraphs_item-sticky_navigation_card-field_navigation_links'] = array(
-    'bundle' => 'sticky_navigation_card',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 1,
-      ),
-      'faculty_detail_items' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_navigation_links',
-    'label' => 'Links',
-    'required' => 0,
-    'settings' => array(
-      'absolute_url' => 0,
-      'attributes' => array(
-        'class' => '',
-        'configurable_class' => 0,
-        'configurable_title' => 0,
-        'rel' => '',
-        'target' => 'default',
-        'title' => '',
-      ),
-      'display' => array(
-        'url_cutoff' => 80,
-      ),
-      'enable_tokens' => 1,
-      'rel_remove' => 'default',
-      'title' => 'required',
-      'title_label_use_field_label' => 0,
-      'title_maxlength' => 128,
-      'title_value' => '',
-      'url' => 0,
-      'user_register_form' => FALSE,
-      'validate_url' => 1,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'link',
-      'settings' => array(),
-      'type' => 'link_field',
-      'weight' => 0,
     ),
   );
 
@@ -2181,7 +2106,6 @@ function culaw_paragraphs_field_default_field_instances() {
   t('Feed Type');
   t('Hashtag or username');
   t('Headline');
-  t('Hover State');
   t('Image');
   t('Instagram Client ID');
   t('Instagram Limit');
@@ -2193,13 +2117,13 @@ function culaw_paragraphs_field_default_field_instances() {
   t('Make sure to have your twitter app read-only');
   t('Media Category');
   t('Media File');
-  t('Media Layout Options');
   t('Menu Option');
   t('Number of posts to limit');
-  t('Social');
+  t('Placeholder Backgrounds');
   t('Style Card');
   t('Summary');
   t('Text Formatting');
+  t('Thumbnail Image');
   t('Twitter Key');
   t('Twitter Limit');
   t('Twitter Query');

@@ -29,6 +29,75 @@ function culaw_paragraphs_views_api($module = NULL, $api = NULL) {
 function culaw_paragraphs_image_default_styles() {
   $styles = array();
 
+  // Exported image style: banner_desktop_style.
+  $styles['banner_desktop_style'] = array(
+    'label' => 'Banner Desktop Style',
+    'effects' => array(
+      5 => array(
+        'name' => 'epsacrop_crop',
+        'data' => array(
+          'width' => 1600,
+          'height' => 630,
+          'anchor' => 'center-center',
+          'disable_scale' => 0,
+          'jcrop_settings' => array(
+            'aspect_ratio' => '',
+            'bgcolor' => 'black',
+            'bgopacity' => 0.6,
+            'fallback' => 0,
+          ),
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  // Exported image style: banner_mobile_style.
+  $styles['banner_mobile_style'] = array(
+    'label' => 'Banner Mobile Style',
+    'effects' => array(
+      6 => array(
+        'name' => 'epsacrop_crop',
+        'data' => array(
+          'width' => 800,
+          'height' => 900,
+          'anchor' => 'center-center',
+          'disable_scale' => 0,
+          'jcrop_settings' => array(
+            'aspect_ratio' => '',
+            'bgcolor' => 'black',
+            'bgopacity' => 0.6,
+            'fallback' => 0,
+          ),
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
+  // Exported image style: banner_tablet_style.
+  $styles['banner_tablet_style'] = array(
+    'label' => 'Banner Tablet Style',
+    'effects' => array(
+      7 => array(
+        'name' => 'epsacrop_crop',
+        'data' => array(
+          'width' => 1550,
+          'height' => 800,
+          'anchor' => 'center-center',
+          'disable_scale' => 0,
+          'jcrop_settings' => array(
+            'aspect_ratio' => '',
+            'bgcolor' => 'black',
+            'bgopacity' => 0.6,
+            'fallback' => 0,
+          ),
+        ),
+        'weight' => 1,
+      ),
+    ),
+  );
+
   // Exported image style: flexible_grid.
   $styles['flexible_grid'] = array(
     'label' => 'flexible_grid',

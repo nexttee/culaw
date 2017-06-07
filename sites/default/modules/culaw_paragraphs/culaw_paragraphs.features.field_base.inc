@@ -67,6 +67,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_backgrounds',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'tid' => array(
         0 => 'tid',
@@ -280,34 +283,6 @@ function culaw_paragraphs_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_hover_state'.
-  $field_bases['field_hover_state'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_hover_state',
-    'field_permissions' => array(
-      'type' => 0,
-    ),
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(
-        'yellow' => 'Yellow',
-        'blue' => 'Blue',
-      ),
-      'allowed_values_function' => '',
-    ),
-    'translatable' => 0,
-    'type' => 'list_text',
-  );
-
   // Exported field_base: 'field_instagram_client_id'.
   $field_bases['field_instagram_client_id'] = array(
     'active' => 1,
@@ -454,35 +429,6 @@ function culaw_paragraphs_field_default_field_bases() {
     'type' => 'file',
   );
 
-  // Exported field_base: 'field_media_layout_options'.
-  $field_bases['field_media_layout_options'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_media_layout_options',
-    'field_permissions' => array(
-      'type' => 0,
-    ),
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(
-        'media-card' => 'Media Card',
-        'banner' => 'Banner Graphic with Overlapping Text',
-        'Media Card' => 'Media Card Old',
-      ),
-      'allowed_values_function' => '',
-    ),
-    'translatable' => 0,
-    'type' => 'list_text',
-  );
-
   // Exported field_base: 'field_media_link'.
   $field_bases['field_media_link'] = array(
     'active' => 1,
@@ -571,24 +517,6 @@ function culaw_paragraphs_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_social'.
-  $field_bases['field_social'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_social',
-    'field_permissions' => array(
-      'type' => 0,
-    ),
-    'indexes' => array(),
-    'locked' => 0,
-    'module' => 'social_media_aggregator',
-    'settings' => array(),
-    'translatable' => 0,
-    'type' => 'social_media_aggregator',
-  );
-
   // Exported field_base: 'field_style_card'.
   $field_bases['field_style_card'] = array(
     'active' => 1,
@@ -659,6 +587,31 @@ function culaw_paragraphs_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'list_text',
+  );
+
+  // Exported field_base: 'field_thumbnail_image'.
+  $field_bases['field_thumbnail_image'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_thumbnail_image',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(
+      'fid' => array(
+        0 => 'fid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'image',
+    'settings' => array(
+      'default_image' => 0,
+      'uri_scheme' => 'public',
+    ),
+    'translatable' => 0,
+    'type' => 'image',
   );
 
   // Exported field_base: 'field_twitter_key'.
