@@ -45,12 +45,8 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
             $bg_mobile_path = image_style_url('banner_mobile_style',$bg_uri);
             break;
         case 'flexible-grid':
-            $hover_state = "yellow";
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'flexible_grid', 'attributes' => array("class" => $style_option)));
             $bg_path = image_style_url('flexible_grid',$bg_uri);
-            if (isset($content['field_hover_state'])) {
-                $hover_state = $content['field_hover_state']['#items'][0]['value'];
-            }
             break;
         case 'basic-column':
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
@@ -61,6 +57,14 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
             $bg_path = image_style_url('medium',$bg_uri);
             break;
     }
+} elseif (isset($content['field_backgrounds']['#items'][0]['tid'])) {
+    $background = $content['field_backgrounds'];
+    $bg_tid = $background['#items'][0]['tid'];
+    $bg_term = taxonomy_term_load($bg_tid);
+    $bg_uri = $bg_term->field_media_file['und'][0]['uri'];
+    $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'flexible_grid', 'attributes' => array("class" => $style_option)));
+    $bg_path = image_style_url('flexible_grid',$bg_uri);
+
 }
 
 if (isset($content['field_media_link']['#items'][0]['url'])) {
@@ -131,19 +135,8 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
         </div>
     <?php break; ?>
 <?php case 'flexible-grid': ?>
-        <!--<div class="flexible_grid_wrapper">
-        <div class="background"><?php print $bg_image;?></div>
-        <div class="summary_wrapper">
-            <div class="headline"><?php print $headline; ?></div>
-            <?php if (isset($summary)) : ?>
-                <div class="summary"><?php print $summary; ?></div>
-            <?php endif; ?>
-            <div class="cta"><?php print $cta; ?></div>
-        </div>
-    </div>-->
 
-
-        <div class="flexible-grid__block <?php print $hover_state; ?>">
+        <div class="flexible-grid__block">
             <?php if (isset($bg_path)) :?>
                 <div class="four-column__image-wrap bg-stretch">
                     <span data-srcset="<?php print $bg_path; ?>"></span>
