@@ -9832,12 +9832,17 @@ blockquote cite a:hover {
 	width: 100%;
 	float: left;
 	padding: 5px 0px 10px;
+	color: #ababab;
+	font-size: 12px;
 }
 
 .social-feed__footer-left {
 	float: left;
 	display: inline-block;
 	width: 50%;
+}
+.social-feed__footer-left .fa {
+	margin-right: 4px;
 }
 .social-feed__footer-right {
 	float: right;
