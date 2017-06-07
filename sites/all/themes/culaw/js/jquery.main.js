@@ -55,8 +55,8 @@ var columbia = {
 							jQuery(".sticky-nav-area li").removeClass("active"); // remove all active classes
 							$parent.addClass("active"); // place active class on current item
 						}
-					}, 100);
-				});
+					});
+				}, 100);
 			});
 		},
 
