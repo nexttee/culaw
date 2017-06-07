@@ -1,6 +1,7 @@
 <div class="col col-md-3 col-sm-6 col-xs-12 social-feed-element {{? !it.moderation_passed}}hidden{{?}}" dt-create="{{=it.dt_create}}" social-feed-id="{{=it.id}}">
     <div class='content  social-block'>
         {{=it.attachment}}
+        {{? !it.attachment}}<img src="/sites/all/themes/culaw/images/social-placeholder.jpg" alt="Placeholder image with crown" />{{?}}
         <div class="social-block__body">
             <p class="social-feed-text">{{=it.text}}</p>
 

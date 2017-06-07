@@ -134,7 +134,7 @@ if($field_facebook_token != "") {
                 
 				<?php echo $js_facebook_config; ?>
                 <?php echo $js_twitter_config; ?>
-				<?php echo $js_instagram_config; ?>
+				<?php // echo $js_instagram_config; ?>
                 
 
                 // GENERAL SETTINGS
@@ -149,6 +149,20 @@ if($field_facebook_token != "") {
                 // When all the posts are collected and displayed - this function is evoked
                 callback: function() {
                     console.log('all posts are collected');
+
+                    jQuery('.social-feed-container').each( function() {
+                        var $this = jQuery(this);
+                        var elems = $this.children('.social-feed-element');
+
+                        elems.sort(function() { return (Math.round(Math.random())-0.5); });  
+
+                        $this.detach('.social-feed-element');  
+
+                        for(var i=0; i < elems.length; i++)
+                            $this.append(elems[i]);
+                        
+                        console.log(elems);
+                    });
                 }
             });
         };
