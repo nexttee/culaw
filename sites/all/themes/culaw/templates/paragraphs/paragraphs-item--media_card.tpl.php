@@ -30,6 +30,7 @@
 $cta = "";
 $layout_option = $content['field_media_layout_options']['#items'][0]['value'];
 $style_option = $content['style_option'];
+$column_style = "col-sm-4";
 if ($layout_option != "banner") {
     $layout_option = $style_option;
 }
@@ -156,7 +157,7 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
         <?php break; ?>
     <?php case 'basic-column': ?>
 
-        <div class="col-sm-4 col-xs-12">
+        <div class="<?php print $column_style; ?> col-xs-12">
 			<div class="spotlight">
                 <?php if (isset($bg_image)) :?>
                     <div class="three-column__image-wrap">
@@ -177,14 +178,8 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
         <?php break; ?>
     <?php case 'circular-images': ?>
     <?php default: ?>
-        <!--<div class="media_card_wrapper">
-        <div class="background"><?php print $bg_image;?></div>
-        <div class="headline"><?php print $headline; ?></div>
-        <div class="summary"><?php print $summary; ?></div>
-        <div class="cta"><?php print $cta; ?></div>
-    </div>-->
 
-        <div class="col-sm-4 col-xs-12">
+        <div class="<?php print $column_style; ?> col-xs-12">
             <div class="three-column__circle-images">
                 <?php if (isset($bg_image)) :?>
                     <div class="three-column__image-holder">
