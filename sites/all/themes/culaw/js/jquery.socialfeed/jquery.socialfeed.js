@@ -106,6 +106,8 @@ if (typeof Object.create !== 'function') {
             this.content.dt_create = this.content.dt_create.valueOf();
             this.content.text = Utility.wrapLinks(Utility.shorten(data.message + ' ' + data.description), data.social_network);
             this.content.moderation_passed = (options.moderation) ? options.moderation(this.content) : true;
+			this.content.likes = (data.likes === undefined) ? undefined : data.likes;
+			this.content.shares = (data.shares === undefined) ? undefined : data.shares;
 
             Feed[social_network].posts.push(this);
         }
@@ -254,7 +256,7 @@ if (typeof Object.create !== 'function') {
                 },
                 utility: {
                     getPosts: function(json) {
-                        if (json) {
+                        if (json) {							
                             $.each(json, function() {
                                 var element = this;
                                 var post = new SocialFeedPost('twitter', Feed.twitter.utility.unifyPostData(element));
@@ -275,6 +277,8 @@ if (typeof Object.create !== 'function') {
                             post.message = element.text;
                             post.description = '';
                             post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
+							post.likes = element.favorite_count;
+							post.shares = element.retweet_count;
 
                             if (options.show_media === true) {
                                 if (element.entities.media && element.entities.media.length > 0) {
@@ -297,7 +301,7 @@ if (typeof Object.create !== 'function') {
                     var proceed = function(request_url){
                         Utility.request(request_url, Feed.facebook.utility.getPosts);
                     };
-                    var fields = '?fields=id,from,name,message,created_time,story,description,link';
+                    var fields = '?fields=id,from,name,message,created_time,story,description,link,shares';
                        fields += (options.show_media === true)?',picture,object_id':'';
                     var request_url, limit = '&limit=' + options.facebook.limit,
                         query_extention = '&access_token=' + options.facebook.access_token + '&callback=?';
@@ -372,6 +376,7 @@ if (typeof Object.create !== 'function') {
                         post.message = (text) ? text : '';
                         post.description = (element.description) ? element.description : '';
                         post.link = (element.link) ? element.link : 'http://facebook.com/' + element.from.id;
+						post.shares = (element.shares) ? element.shares.count : undefined;
 
                         if (options.show_media === true) {
                             if (element.picture) {
@@ -516,7 +521,6 @@ if (typeof Object.create !== 'function') {
                     },
                     unifyPostData: function(element) {
                         var post = {};
-
                         post.id = element.id;
                         post.dt_create = moment(element.created_time * 1000);
                         post.author_link = 'http://instagram.com/' + element.user.username;
@@ -525,6 +529,7 @@ if (typeof Object.create !== 'function') {
                         post.message = (element.caption && element.caption) ? element.caption.text : '';
                         post.description = '';
                         post.link = element.link;
+						post.likes = (element.like) ? element.likes.count : undefined;
                         if (options.show_media) {
                             post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
                         }

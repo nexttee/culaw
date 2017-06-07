@@ -6,7 +6,7 @@
             <p class="social-feed-text">{{=it.text}}</p>
 
             <div class="social-feed__footer">
-                <div class="social-feed__footer-left"></div>
+                <div class="social-feed__footer-left">{{? it.likes}}likes - {{=it.likes}} {{?}} {{? it.shares}}shares - {{=it.shares}} {{?}}</div>
                 
                 <div class="social-feed__footer-right">
                     <a href="{{=it.link}}" target="_blank" class="social-feed-media"><i class="fa fa-{{=it.social_network}}"></i></a>
