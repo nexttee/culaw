@@ -65,10 +65,11 @@ if (isset($content['field_card_options'][0]['entity']['paragraphs_item'])) {
         if (isset($item['field_text_formatting'])) {
             //field_media_layout_options
             $secondary_layout_option = $item['field_text_formatting']['#items'][0]['value'];
-        }
-        if (isset($item['field_feed_type'])) {
+        } else if (isset($item['field_feed_type'])) {
             //field_media_layout_options
             $secondary_layout_option = $item['field_feed_type']['#items'][0]['value'];
+        } else {
+            $secondary_layout_option = $item['#bundle'];
         }
     }
 }
@@ -90,15 +91,19 @@ switch($layout_option['value']) {
         switch ($secondary_layout_option) {
             case 'testimonial':
                 $classes = "testimonial";
+                $container_class = "container";
                 break;
             case 'news_article':
             case 'cls_mcl_event':
                 $classes = "events-feed-grid";
+            $container_class = "container";
+                break;
+            case 'social_media_card':
+                $container_class = "null";
                 break;
         }
         unset($content['field_headline']);
         unset($content['headline']);
-        $container_class = "container";
         break;
 }
 $content_classes[] = "";
