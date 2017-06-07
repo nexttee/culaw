@@ -28,17 +28,14 @@
 //dpm($content);
 
 $cta = "";
-$layout_option = $content['field_media_layout_options']['#items'][0]['value'];
 $style_option = $content['style_option'];
 $column_style = "col-sm-4";
-if ($layout_option != "banner") {
-    $layout_option = $style_option;
-}
+
 
 if (isset($content['field_media_file']['#items'][0]['uri'])) {
     $bg_uri = $content['field_media_file']['#items'][0]['uri'];
     $bg_alt_text = $content['field_media_file']['#items'][0]['alt'];
-    switch ($layout_option) {
+    switch ($style_option) {
         case 'banner':
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'responsive_1200w'));
             $bg_desktop_path = image_style_url('banner_desktop_style',$bg_uri);
@@ -50,8 +47,36 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
             $bg_path = image_style_url('flexible_grid',$bg_uri);
             break;
         case 'basic-column':
-            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
-            $bg_path = image_style_url('medium',$bg_uri);
+            if ($field_media_file[0]['type'] == "video") {
+                $display['settings'] = array('image_style' => 'medium');
+                $file = file_load($field_media_file[0]['fid']);
+                switch($field_media_file[0]['filemime']) {
+                    case "video/youtube":
+                        module_load_include('inc', 'media_youtube', '/includes/media_youtube.formatters.inc');
+                        $video_code = str_replace("youtube://v/", "", $bg_uri);
+                        $base_url = "https://www.youtube.com/embed/";
+                        $image_render_array = media_youtube_file_formatter_image_view($file, $display, LANGUAGE_NONE);
+                        break;
+                    case "video/vimeo":
+                        module_load_include('inc', 'media_vimeo', '/includes/media_vimeo.formatters.inc');
+                        $video_code = str_replace("vimeo://v/", "", $bg_uri);
+                        $base_url = "https://player.vimeo.com/video/";
+                        $image_render_array = media_vimeo_file_formatter_image_view($file, $display, LANGUAGE_NONE);
+                        break;
+                }
+                $video_path = $base_url . $video_code."?autoplay=1";
+                $video = '<a class="lightbox fancybox.iframe thumb three-column__play-btn" href="' . $video_path . '"><span class="hidden">video</span></a>';
+                if (isset($content['field_thumbnail_image'])) {
+                    $thumbnail_uri = $content['field_thumbnail_image']['#items'][0]['uri'];
+                    $thumbnail = theme('image_style', array('path' => $thumbnail_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
+                } else {
+                    $thumbnail = render($image_render_array);
+                }
+                $bg_image = $thumbnail . $video;
+            } else {
+                $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
+                $bg_path = image_style_url('medium',$bg_uri);
+            }
             break;
         default:
             $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
@@ -75,33 +100,11 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
 }
 
 $headline = $content['field_headline']['#items'][0]['value'];
-
 $summary = $content['field_summary']['#items'][0]['safe_value'];
-
 
 ?>
 
-<style>
-    /*.banner_wrapper {
-        position:relative;
-        height:350px;
-        overflow:hidden;
-    }
-    .banner_wrapper .background {
-        position:absolute;
-    }
-    .banner_wrapper .summary_wrapper {
-        position:relative;
-        text-align:center;
-        margin:100px auto;
-        font-size:3em;
-    }*/
-    .media_card_wrapper {
-        float:left;
-    }
-</style>
-
-<?php switch($layout_option) : ?>
+<?php switch($style_option) : ?>
 <?php case 'banner': ?>
         <!-- hero banner -->
         <div class="hero-banner">
@@ -162,8 +165,6 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
                 <?php if (isset($bg_image)) :?>
                     <div class="three-column__image-wrap">
                         <?php print $bg_image;?>
-                        <a class="lightbox fancybox.iframe thumb three-column__play-btn" href="https://www.youtube.com/embed/P_rbC-qgB5o"><span class="hidden">video</span></a>
-                    </div>
                     </div>
                 <?php endif; ?>
                 <div class="three-column__detail">
