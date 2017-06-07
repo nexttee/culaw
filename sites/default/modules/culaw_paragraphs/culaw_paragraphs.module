@@ -50,6 +50,7 @@ function culaw_paragraphs_preprocess_entity(&$variables) {
 
 
 function culaw_paragraphs_render_menu($menu) {
+    $output = "";
     $menuItems = menu_tree_page_data($menu);
     foreach ($menuItems as $key => $m) {
         if ($m['link']['in_active_trail'] && $menuItems[$key]['below']) {
@@ -64,14 +65,14 @@ function culaw_paragraphs_render_menu($menu) {
                     );
                 }
             }
-            //split menut into 3 columns
-            //change #theme to custom
-            //$menu = render($tree_output);
-            //reference ... https://api.drupal.org/api/drupal/includes%21theme.inc/function/theme_links/7.x
-            $menu = '<div class="col-sm-4 col-xs-12 same-height">'.theme('links', array('links' => $links, 'attributes' => array('class' => array('subnavigation-wrap__subnavigation-links', 'list-unstyled')), 'header' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible')))).'</div>';
+            $groups = array_chunk($links,(int)ceil(count($links)/3));
+            $output = "";
+            foreach($groups AS $key => $value) {
+                $output .= '<div class="col-sm-4 col-xs-12 same-height">'.theme('links', array('links' => $value, 'attributes' => array('class' => array('subnavigation-wrap__subnavigation-links', 'list-unstyled')), 'header' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible')))).'</div>';
+            }
         }
     }
-    print $menu.$menu.$menu;
+    print $output;
 }
 
 function culaw_paragraphs_format_class($var) {
