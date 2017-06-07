@@ -9823,7 +9823,32 @@ blockquote cite a:hover {
 }
 
 .social-feed-element {
-	margin-bottom: 20px;
+	margin-bottom: 40px;
+}
+.social-feed-media {
+	color: #ababab;
+}
+.social-feed__footer {
+	width: 100%;
+	float: left;
+	padding: 5px 0px 10px;
+}
+
+.social-feed__footer-left {
+	float: left;
+	display: inline-block;
+	width: 50%;
+}
+.social-feed__footer-right {
+	float: right;
+	width: 50%;
+	display: inline-block;
+	text-align: right;
+}
+.social-feed__footer-right:after,
+.social-feed__footer:after {
+	content: '';
+	clear: both;
 }
 
 .social-feed-element:nth-of-type(4n + 1) {
