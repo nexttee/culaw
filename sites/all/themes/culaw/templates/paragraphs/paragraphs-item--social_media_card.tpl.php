@@ -134,7 +134,7 @@ if($field_facebook_token != "") {
                 
 				<?php echo $js_facebook_config; ?>
                 <?php echo $js_twitter_config; ?>
-				<?php // echo $js_instagram_config; ?>
+				<?php echo $js_instagram_config; ?>
                 
 
                 // GENERAL SETTINGS
