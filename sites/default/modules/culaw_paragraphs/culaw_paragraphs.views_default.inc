@@ -64,6 +64,13 @@ function culaw_paragraphs_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = 1;
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'news_article' => 'news_article',
+  );
 
   /* Display: News Page */
   $handler = $view->new_display('page', 'News Page', 'page');
@@ -91,6 +98,13 @@ function culaw_paragraphs_views_default_views() {
   $handler->display->display_options['filters']['cls_mcl_event_datetime_value']['table'] = 'field_data_cls_mcl_event_datetime';
   $handler->display->display_options['filters']['cls_mcl_event_datetime_value']['field'] = 'cls_mcl_event_datetime_value';
   $handler->display->display_options['filters']['cls_mcl_event_datetime_value']['operator'] = '>=';
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'cls_mcl_event' => 'cls_mcl_event',
+  );
   $handler->display->display_options['path'] = 'internal-feeds/event/%';
   $export['internal_feeds'] = $view;
 
