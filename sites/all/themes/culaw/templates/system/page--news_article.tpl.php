@@ -150,7 +150,7 @@
 
         <?php print render($page['content']); ?>
 
-        <a href="/news-listing" class="button back_to_news">Back to Latest news at Columbia Law</a>
+        <a href="/news-listing" class="news-detail-wrap__back-btn">Back to Latest news at Columbia Law</a>
       </main>
 
       <div class="sub__content">
