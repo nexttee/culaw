@@ -6,6 +6,27 @@
 
 include_once 'culaw_paragraphs.features.inc';
 
+function culaw_paragraphs_block_info() {
+    $blocks = array();
+    $blocks['secondary_navigation'] = array(
+        'info' => t('Secondary Navigation'),
+    );
+
+    return $blocks;
+}
+
+function culaw_paragraphs_block_view($delta='') {
+    $block = array();
+
+    switch($delta) {
+        case 'secondary_navigation' :
+            $block['content'] = culaw_paragraphs_render_menu('main-menu','secondary-nav');
+            break;
+    }
+
+    return $block;
+}
+
 
 function culaw_paragraphs_preprocess_node(&$variables) {
     $node = $variables['node'];
@@ -49,7 +70,7 @@ function culaw_paragraphs_preprocess_entity(&$variables) {
 }
 
 
-function culaw_paragraphs_render_menu($menu) {
+function culaw_paragraphs_render_menu($menu, $style) {
     $output = "";
     $menuItems = menu_tree_page_data($menu);
     foreach ($menuItems as $key => $m) {
@@ -65,10 +86,18 @@ function culaw_paragraphs_render_menu($menu) {
                     );
                 }
             }
-            $groups = array_chunk($links,(int)ceil(count($links)/3));
-            $output = "";
-            foreach($groups AS $key => $value) {
-                $output .= '<div class="col-sm-4 col-xs-12 same-height">'.theme('links', array('links' => $value, 'attributes' => array('class' => array('subnavigation-wrap__subnavigation-links', 'list-unstyled')), 'header' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible')))).'</div>';
+            if (isset($style)) {
+                switch($style) {
+                    case 'secondary-nav':
+                        return theme('links', array('links' => $links));
+                        break;
+                }
+            } else {
+                $groups = array_chunk($links, (int)ceil(count($links) / 3));
+                $output = "";
+                foreach ($groups AS $key => $value) {
+                    $output .= '<div class="col-sm-4 col-xs-12 same-height">' . theme('links', array('links' => $value, 'attributes' => array('class' => array('subnavigation-wrap__subnavigation-links', 'list-unstyled')), 'header' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible')))) . '</div>';
+                }
             }
         }
     }

@@ -149,6 +149,8 @@
         <?php print render($title_suffix); ?>
 
         <?php print render($page['content']); ?>
+
+        <a href="/news-listing" class="button back_to_news">Back to Latest news at Columbia Law</a>
       </main>
 
       <div class="sub__content">
