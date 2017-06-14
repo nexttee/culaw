@@ -70,7 +70,7 @@ function culaw_paragraphs_preprocess_entity(&$variables) {
 }
 
 
-function culaw_paragraphs_render_menu($menu, $style) {
+function culaw_paragraphs_render_menu($menu, $style = null) {
     $output = "";
     $menuItems = menu_tree_page_data($menu);
     foreach ($menuItems as $key => $m) {
