@@ -28,19 +28,19 @@
 //dpm($content);
 //barebones setup of feed
 
-$field_twitter_query = $content['field_twitter_query']['#items'][0]['value'];
-$field_twitter_key = $content['field_twitter_key']['#items'][0]['value'];
-$field_twitter_secret = $content['field_twitter_secret']['#items'][0]['value'];
-$field_twitter_limit = $content['field_twitter_limit']['#items'][0]['value'];
+$field_twitter_query = isset($content['field_twitter_query']['#items'][0]['value']) ? $content['field_twitter_query']['#items'][0]['value'] : "";
+$field_twitter_key = isset($content['field_twitter_key']['#items'][0]['value']) ? $content['field_twitter_key']['#items'][0]['value'] : "";
+$field_twitter_secret = isset($content['field_twitter_secret']['#items'][0]['value']) ? $content['field_twitter_secret']['#items'][0]['value'] : "";
+$field_twitter_limit = isset($content['field_twitter_limit']['#items'][0]['value']) ? $content['field_twitter_limit']['#items'][0]['value'] : "";
 
-$field_instagram_query = $content['field_instagram_query']['#items'][0]['value'];
-$field_instagram_client_id = $content['field_instagram_client_id']['#items'][0]['value'];
-$field_instagram_token = $content['field_instagram_token']['#items'][0]['value'];
-$field_instagram_limit = $content['field_instagram_limit']['#items'][0]['value'];
+$field_instagram_query = isset($content['field_instagram_query']['#items'][0]['value']) ? $content['field_instagram_query']['#items'][0]['value'] : "";
+$field_instagram_client_id = isset($content['field_instagram_client_id']['#items'][0]['value']) ? $content['field_instagram_client_id']['#items'][0]['value'] : "";
+$field_instagram_token = isset($content['field_instagram_token']['#items'][0]['value']) ? $content['field_instagram_token']['#items'][0]['value'] : "";
+$field_instagram_limit = isset($content['field_instagram_limit']['#items'][0]['value']) ? $content['field_instagram_limit']['#items'][0]['value'] : "";
 
-$field_facebook_query = $content['field_facebook_query']['#items'][0]['value'];
-$field_facebook_token = $content['field_facebook_token']['#items'][0]['value'];
-$field_facebook_limit = $content['field_facebook_limit']['#items'][0]['value'];
+$field_facebook_query = isset($content['field_facebook_query']['#items'][0]['value']) ? $content['field_facebook_query']['#items'][0]['value'] : "";
+$field_facebook_token = isset($content['field_facebook_token']['#items'][0]['value']) ? $content['field_facebook_token']['#items'][0]['value'] : "";
+$field_facebook_limit = isset($content['field_facebook_limit']['#items'][0]['value']) ? $content['field_facebook_limit']['#items'][0]['value'] : "";
 
 $js_twitter_config = "";
 $js_instagram_config = "";
