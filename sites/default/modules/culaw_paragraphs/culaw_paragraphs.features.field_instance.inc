@@ -88,7 +88,7 @@ function culaw_paragraphs_field_default_field_instances() {
         'feed_card' => -1,
         'layout_row' => 'layout_row',
         'media_card' => -1,
-        'navigation_row' => -1,
+        'navigation_row' => 'navigation_row',
         'news_article_blocks' => -1,
         'quick_links_card' => -1,
         'section_navigation_card' => -1,
@@ -111,7 +111,7 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
       'default_edit_mode' => 'open',
       'title' => 'Row',
-      'title_multiple' => 'Rowss',
+      'title_multiple' => 'Rows',
       'user_register_form' => FALSE,
     ),
     'widget' => array(
