@@ -3,7 +3,7 @@
         {{=it.attachment}}
         {{? !it.attachment}}<img src="/sites/all/themes/culaw/images/social-placeholder.jpg" alt="Placeholder image with crown" />{{?}}
         <div class="social-block__body">
-            <p class="social-feed-text">{{=it.text}}</p>
+            <p class="social-feed-text">{{=it.text}} <a href="{{=it.link}}" target="_blank" class="social-feed-media">Read more</a></p>
 
             <div class="social-feed__footer">
                 <div class="social-feed__footer-left">{{? it.likes}}<i class="fa fa-thumbs-o-up" aria-hidden="true"></i> {{=it.likes}} {{?}} {{? it.shares}}<i class="fa fa-share" aria-hidden="true"></i> {{=it.shares}} {{?}}</div>

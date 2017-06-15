@@ -9318,7 +9318,7 @@ blockquote cite a:hover {
 	background-size: cover;
 }*/
 
-.four-column__image-wrap:before {
+.four-column__image-wrap:not(.four-column__image-wrap--static):before { 
 	background: -webkit-linear-gradient(top, transparent 8%, rgba(0,0,0,0.85) 100%);
 	background: linear-gradient(to bottom, transparent 8%, rgba(0,0,0,0.85) 100%);
 	content: "";
