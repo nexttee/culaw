@@ -27,7 +27,7 @@
  */
 //dpm($content);
 $summary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sed elit tellus. Nam ullam tincidunt bibendum. Sed ipsum augue, mattis sed tristique at.";
-
+$cta = "";
 $layout_option = culaw_paragraphs_format_class($content['field_text_formatting']['#items'][0]['value']);
 
 if (isset($content['field_media_file']['#items'][0]['uri'])) {
@@ -56,6 +56,16 @@ if (isset($content['field_attribution']['#items'][0]['safe_value'])) {
     $attribution = $content['field_attribution']['#items'][0]['safe_value'];
 }
 
+if (isset($content['field_media_link']['#items'][0]['url'])) {
+    $cta_target = "_self";
+    $cta_url = $content['field_media_link']['#items'][0]['url'];
+    if (isset($content['field_media_link']['#items'][0]['attributes']['target'])) {
+        $cta_target = $content['field_media_link']['#items'][0]['attributes']['target'];
+    }
+    $cta_title = $content['field_media_link']['#items'][0]['title'];
+    $cta = l($cta_title, $cta_url);
+}
+
 ?>
 
     <style>
@@ -81,7 +91,7 @@ if (isset($content['field_attribution']['#items'][0]['safe_value'])) {
             </div>
         </div>
     <?php break; ?>
-    <?php case 'callout-text': ?>
+<?php case 'callout-text': ?>
         <div class="callout-holder">
             <div class="container">
                 <div class="callout-frame">
@@ -92,15 +102,50 @@ if (isset($content['field_attribution']['#items'][0]['safe_value'])) {
 
         <?php break; ?>
 <?php case 'two-column-lists': ?>
-        <div class="list-wrap">
-            <h2><?php print $headline; ?></h2>
-            <div class="list-frame">
-                <?php
-                $summary_array = explode("\n", $summary);
-                print theme('item_list',array("items"=>$summary_array,"attributes"=>array("class"=>"list list-unstyled")));
+        <div class="main-wrap">
+            <div class="list-wrap">
+                    <?php
+                    if (isset($headline)) {
+                        print "<h2>".$headline."</h2>";
+                    }
+                    ?>
+                <div class="list-frame">
+                    <?php
+                    $summary_array = explode("\n", $summary);
+                    print theme('item_list',array("items"=>$summary_array,"attributes"=>array("class"=>"list list-unstyled")));
 
-                $summary_two_array = explode("\n", $summary_two);
-                print theme('item_list',array("items"=>$summary_two_array,"attributes"=>array("class"=>"list list-unstyled")));
+                    $summary_two_array = explode("\n", $summary_two);
+                    print theme('item_list',array("items"=>$summary_two_array,"attributes"=>array("class"=>"list list-unstyled")));
+                    ?>
+                </div>
+            </div>
+        </div>
+
+        <?php break; ?>
+    <?php case 'cta': ?>
+        <div class="faculty-text-area">
+            <div class="container">
+                <div class="faculty-text">
+                    <p><?php print $summary; ?></p>
+                    <?php if(isset($cta_url)) : ?>
+                        <a href="<?php print $cta_url; ?>" target="<?php print $cta_target; ?>" class="faculty-text__more"><span class="hidden"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <?php break; ?>
+<?php case 'rich-text': ?>
+        <div class="main-wrap">
+            <div class="main-wrap__holder">
+                <?php
+                if (isset($headline)) {
+                    print "<h2>".$headline."</h2>";
+                }
+                $summary_array = explode("\n", $summary);
+                foreach($summary_array AS $key => $row) {
+                    print "<p>".$row."</p>";
+                }
                 ?>
             </div>
         </div>

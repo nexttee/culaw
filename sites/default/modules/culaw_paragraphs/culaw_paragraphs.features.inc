@@ -169,6 +169,14 @@ function culaw_paragraphs_image_default_styles() {
  */
 function culaw_paragraphs_node_info() {
   $items = array(
+    'enhanced_page' => array(
+      'name' => t('Enhanced Page'),
+      'base' => 'node_content',
+      'description' => '',
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
     'landing_page' => array(
       'name' => t('Landing Page'),
       'base' => 'node_content',
