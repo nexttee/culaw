@@ -69,34 +69,56 @@ function culaw_paragraphs_preprocess_entity(&$variables) {
     }
 }
 
+function culaw_paragraphs_menu_block_tree_alter(&$tree, &$config) {
+    //dpm($tree);
+}
 
 function culaw_paragraphs_render_menu($menu, $style = null) {
     $output = "";
     $menuItems = menu_tree_page_data($menu);
+
+    if (isset($style)) {
+        $current_leaf = menu_link_get_preferred(current_path());
+        $parameters = array(
+            'active_trail' => array($current_leaf['plid']),
+            'only_active_trail' => FALSE,
+            'min_depth' => $current_leaf['depth']+1,
+            'max_depth' => $current_leaf['depth']+1,
+            'conditions' => array('plid' => $current_leaf['mlid']),
+        );
+        $menuItems = menu_build_tree($current_leaf['menu_name'], $parameters);
+    }
+
+
     foreach ($menuItems as $key => $m) {
         if ($m['link']['in_active_trail'] && $menuItems[$key]['below']) {
-            $tree_output = menu_tree_output($menuItems[$key]['below']);
-            $links = array();
-            foreach($tree_output AS $key => $value) {
-                if (is_numeric($key)) {
-                    $links[] = array(
-                        "title"=>$value['#title'],
-                        "href"=>$value['#href'],
-                        "attributes" => $value['#attributes']
-                    );
+            if (isset($m['below'])) {
+                $parent_key = $key;
+                $tree_output = menu_tree_output($menuItems[$key]['below']);
+
+                $links = array();
+                foreach($tree_output AS $key => $value) {
+                    if (is_numeric($key)) {
+                        $links[] = array(
+                            "title"=>$value['#title'],
+                            "href"=>$value['#href'],
+                            "attributes" => $value['#attributes']
+                        );
+                    }
                 }
-            }
-            if (isset($style)) {
-                switch($style) {
-                    case 'secondary-nav':
-                        return theme('links', array('links' => $links));
-                        break;
-                }
-            } else {
-                $groups = array_chunk($links, (int)ceil(count($links) / 3));
-                $output = "";
-                foreach ($groups AS $key => $value) {
-                    $output .= '<div class="col-sm-4 col-xs-12 same-height">' . theme('links', array('links' => $value, 'attributes' => array('class' => array('subnavigation-wrap__subnavigation-links', 'list-unstyled')), 'header' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible')))) . '</div>';
+                if (isset($style)) {
+                    switch($style) {
+                        case 'secondary-nav':
+                            //culaw_secondary_menu
+                            return theme('links', array('heading'=> $parent_key, 'links' => $links));
+                            break;
+                    }
+                } else {
+                    $groups = array_chunk($links, (int)ceil(count($links) / 3));
+                    $output = "";
+                    foreach ($groups AS $key => $value) {
+                        $output .= '<div class="col-sm-4 col-xs-12 same-height">' . theme('links', array('links' => $value, 'attributes' => array('class' => array('subnavigation-wrap__subnavigation-links', 'list-unstyled')), 'header' => array('text' => t('Main menu'), 'level' => 'h2', 'class' => array('element-invisible')))) . '</div>';
+                    }
                 }
             }
         }

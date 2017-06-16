@@ -6,6 +6,11 @@
  * culaw theme.
  */
 
+function culaw_menu_link__menu_block($variables) {
+  //dpm($variables);
+  return theme_menu_link($variables);
+}
+
 /**
  * Add the title prefix and suffix for the footer menu block titles.
  */
