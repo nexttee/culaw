@@ -34,8 +34,8 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
     $bg_uri = $content['field_media_file']['#items'][0]['uri'];
     switch ($layout_option) {
         default:
-            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium'));
-            $bg_path = image_style_url('medium',$bg_uri);
+            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'large'));
+            $bg_path = image_style_url('large',$bg_uri);
             break;
     }
 }
@@ -91,6 +91,7 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
             </div>
         </div>
     <?php break; ?>
+
 <?php case 'callout-text': ?>
         <div class="callout-holder">
             <div class="container">
@@ -101,6 +102,7 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
         </div>
 
         <?php break; ?>
+
 <?php case 'two-column-lists': ?>
         <div class="main-wrap">
             <div class="list-wrap">
@@ -122,7 +124,8 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
         </div>
 
         <?php break; ?>
-    <?php case 'cta': ?>
+
+<?php case 'cta': ?>
         <div class="faculty-text-area">
             <div class="container">
                 <div class="faculty-text">
@@ -135,6 +138,7 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
         </div>
 
         <?php break; ?>
+
 <?php case 'rich-text': ?>
         <div class="main-wrap">
             <div class="main-wrap__holder">
@@ -150,6 +154,17 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
             </div>
         </div>
 
+        <?php break; ?>
+
+<?php case 'image': ?>
+        <div class="image-holder">
+            <?php print $bg_image; ?>
+            <?php if (isset($summary)) : ?>
+                <div class="news-detail-wrap__image-caption">
+                    <?php print $summary; ?>
+                </div>
+            <?php endif; ?>
+        </div>
         <?php break; ?>
 
 <?php endswitch; ?>
