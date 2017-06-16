@@ -59,6 +59,10 @@ if (isset($content['field_backgrounds'])) {
 
 //handle wrapper for content here
 //format headline, optional
+if (isset($content['field_headline']['#items'][0]['safe_value'])) {
+    $headline = $content['field_headline']['#items'][0]['safe_value'];
+    unset($content['field_headline']);
+}
 //Basic Column
 if (isset($content['field_card_options'][0]['entity']['paragraphs_item'])) {
     foreach ($content['field_card_options'][0]['entity']['paragraphs_item'] as $key => $item) {
@@ -113,6 +117,9 @@ $content_classes[] = "";
 <div class="<?php print $classes; ?>"<?php print $attributes; ?>>
     <div class="content<?php print implode(" ", $content_classes); ?>"<?php print $content_attributes; ?>>
         <div class="row">
+            <?php if (isset($headline)) : ?>
+                <h2><?php print $headline; ?></h2>
+            <?php endif; ?>
             <!-- this container should not appear on hero-banner -->
             <div class="<?php print $container_class; ?>">
                 <?php print render($content); ?>
