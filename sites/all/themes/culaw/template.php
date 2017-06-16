@@ -11,6 +11,14 @@ function culaw_menu_link__menu_block($variables) {
   return theme_menu_link($variables);
 }
 
+function culaw_menu_tree__menu_block__main_menu($vars) {
+  if (count($vars['#tree']) > 8) {//how do we determin that this is the most outer element?
+    return '<ul class="subnavigation-wrap__subnavigation-links list-unstyled">' . $vars['tree'] . '</ul>';
+  } else {
+    return '<ul class="subnavigation-wrap__links-dropdown list-unstyled">' . $vars['tree'] . '</ul>';
+  }
+}
+
 /**
  * Add the title prefix and suffix for the footer menu block titles.
  */

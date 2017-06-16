@@ -17,8 +17,11 @@
  *
  * @see template_preprocess_menu_block_wrapper()
  */
+//dpm($content);
+//how do we get the title and apply it here instead of outside this block template?
+//how do we remove the .html class from the template so this renders correctly?
+//how do we position this block so it appears to the left?
 ?>
-<h1>Dude</h1>
 
 <div class="heading-area__btn-wrap">
     <a href="#" class="heading-area__back-btn">J.D. Admissions</a>
@@ -26,7 +29,7 @@
     <div class="subnavigation-area">
         <div class="subnavigation-frame">
             <a href="#" class="subnavigation-opener">In this section<i class="icon-keyboard_arrow_down"></i></a>
-            <div class="subnavigation-wrap js-slide-hidden">
+            <div class="subnavigation-wrap">
 
                 <div class="<?php print $classes; ?>">
                     <?php print render($content); ?>

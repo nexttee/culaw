@@ -1,0 +1,14 @@
+diff --git a/menu_block.module b/menu_block.module
+index 8611fbf..2129b8f 100644
+--- a/menu_block.module
++++ b/menu_block.module
+@@ -357,7 +357,8 @@ function menu_tree_block_data(array &$config) {
+   }
+   else {
+     // Get the tree pruned for just the active trail.
+-    $tree = menu_tree_page_data($config['menu_name'], $max_depth);
++    $is_expanded = $config['expanded'] ? FALSE : TRUE;     
++    $tree = menu_tree_page_data($config['menu_name'], $max_depth, $is_expanded);
+   }
+ 
+   // Allow alteration of the tree and config before we begin operations on it.

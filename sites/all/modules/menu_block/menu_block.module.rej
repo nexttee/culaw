@@ -1,0 +1,18 @@
+***************
+*** 357,363 ****
+    }
+    else {
+      // Get the tree pruned for just the active trail.
+-     $tree = menu_tree_page_data($config['menu_name'], $max_depth);
+    }
+  
+    // Allow alteration of the tree and config before we begin operations on it.
+--- 357,364 ----
+    }
+    else {
+      // Get the tree pruned for just the active trail.
++     $is_expanded = $config['expanded'] ? FALSE : TRUE;     
++     $tree = menu_tree_page_data($config['menu_name'], $max_depth, $is_expanded);
+    }
+  
+    // Allow alteration of the tree and config before we begin operations on it.
