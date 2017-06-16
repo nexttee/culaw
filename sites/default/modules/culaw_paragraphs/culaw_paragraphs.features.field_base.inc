@@ -535,7 +535,7 @@ function culaw_paragraphs_field_default_field_bases() {
   // Exported field_base: 'field_summary'.
   $field_bases['field_summary'] = array(
     'active' => 1,
-    'cardinality' => 1,
+    'cardinality' => 2,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_summary',
@@ -578,10 +578,9 @@ function culaw_paragraphs_field_default_field_bases() {
       'allowed_values' => array(
         'callout-text' => 'Callout Text',
         'testimonial' => 'Testimonial',
-        'rich-text' => 'Rich Text',
-        'Callout Text' => 'Callout Text Old',
-        'Testimonial' => 'Testimonial Old',
-        'Rich Text' => 'Rich Text Old',
+        'rich-text' => 'Paragraphs',
+        'two-column-lists' => 'Two Column Lists',
+        'cta' => 'Call to Action',
       ),
       'allowed_values_function' => '',
     ),
