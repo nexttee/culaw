@@ -581,6 +581,7 @@ function culaw_paragraphs_field_default_field_bases() {
         'rich-text' => 'Paragraphs',
         'two-column-lists' => 'Two Column Lists',
         'cta' => 'Call to Action',
+        'image' => 'Image with Optional Caption',
       ),
       'allowed_values_function' => '',
     ),
