@@ -105,6 +105,10 @@ switch($layout_option['value']) {
             case 'social_media_card':
                 $container_class = "null";
                 break;
+            default:
+                $classes = "three-column";
+                $container_class = "container";
+                break;
         }
         unset($content['field_headline']);
         unset($content['headline']);
