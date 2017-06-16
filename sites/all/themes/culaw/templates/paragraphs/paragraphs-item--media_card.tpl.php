@@ -99,8 +99,12 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
     $cta = l($cta_title, $cta_url);
 }
 
-$headline = $content['field_headline']['#items'][0]['value'];
-$summary = $content['field_summary']['#items'][0]['safe_value'];
+if(isset($content['field_headline']['#items'][0]['value'])) {
+    $headline = $content['field_headline']['#items'][0]['value'];
+}
+if (isset($content['field_summary']['#items'][0]['safe_value'])) {
+    $summary = $content['field_summary']['#items'][0]['safe_value'];
+}
 
 ?>
 
@@ -116,25 +120,31 @@ $summary = $content['field_summary']['#items'][0]['safe_value'];
                 <img src="<?php echo $bg_mobile_path; ?>" srcset="<?php echo $bg_mobile_path; ?>" alt="<?php echo  $bg_alt_text; ?>">
             </picture>
             <div class="hero-banner-wrap">
-                <div class="hero-banner__caption-holder hidden-xs">
-                    <div class="container">
-                        <div class="hero-banner__caption">
-                            <blockquote class="hero-banner__blockquote">
-                                <?php print $summary; ?>
-                                <!--<cite><strong class="hero-banner__name">David Leapheart</strong>Class of 2014</cite>-->
-                            </blockquote>
+                <?php if (isset($summary)) : ?>
+                    <div class="hero-banner__caption-holder hidden-xs">
+                        <div class="container">
+                            <div class="hero-banner__caption">
+                                <blockquote class="hero-banner__blockquote">
+                                    <?php print $summary; ?>
+                                    <!--<cite><strong class="hero-banner__name">David Leapheart</strong>Class of 2014</cite>-->
+                                </blockquote>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
 				<!-- apply area -->
-				<div class="apply-area">
-					<div class="container">
-						<div class="apply-holder">
-							<h1><a href="#" title="link1"><?php print $headline; ?></a></h1>
-							<a href="<?php print $cta_url; ?>" class="btn btn-default"><span class="btn__text"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
-						</div>
-					</div>
-				</div>
+                <?php if (isset($headline)) : ?>
+                    <div class="apply-area">
+                        <div class="container">
+                            <div class="apply-holder">
+                                <h1><a href="#" title="link1"><?php print $headline; ?></a></h1>
+                                <?php if (isset($cta_url)) : ?>
+                                    <a href="<?php print $cta_url; ?>" class="btn btn-default"><span class="btn__text"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     <?php break; ?>
