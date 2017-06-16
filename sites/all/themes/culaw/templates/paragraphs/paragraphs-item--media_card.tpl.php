@@ -97,6 +97,9 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
     $cta_url = $content['field_media_link']['#items'][0]['url'];
     $cta_title = $content['field_media_link']['#items'][0]['title'];
     $cta = l($cta_title, $cta_url);
+    $apply_holder_class = "apply-holder";
+} else {
+    $apply_holder_class = "apply-holder--cta";
 }
 
 if(isset($content['field_headline']['#items'][0]['value'])) {
@@ -136,7 +139,7 @@ if (isset($content['field_summary']['#items'][0]['safe_value'])) {
                 <?php if (isset($headline)) : ?>
                     <div class="apply-area">
                         <div class="container">
-                            <div class="apply-holder">
+                            <div class="<?php print $apply_holder_class; ?>">
                                 <h1><a href="#" title="link1"><?php print $headline; ?></a></h1>
                                 <?php if (isset($cta_url)) : ?>
                                     <a href="<?php print $cta_url; ?>" class="btn btn-default"><span class="btn__text"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
