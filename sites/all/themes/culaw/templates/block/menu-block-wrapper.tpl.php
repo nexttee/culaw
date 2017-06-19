@@ -23,8 +23,6 @@
 //how do we position this block so it appears to the left?
 ?>
 
-<div class="heading-area__btn-wrap">
-    <a href="#" class="heading-area__back-btn">J.D. Admissions</a>
     <!-- subnavigation area -->
     <div class="subnavigation-area">
         <div class="subnavigation-frame">
@@ -38,4 +36,3 @@
             </div>
         </div>
     </div>
-</div>
