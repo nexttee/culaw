@@ -5,6 +5,9 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+
+@import url("https://fonts.googleapis.com/css?family=Merriweather:400,700");
+
 html {
 	font-family: sans-serif;
 	-ms-text-size-adjust: 100%;
@@ -8866,11 +8869,11 @@ blockquote cite a:hover {
 	margin: 0;
 }
 
-.apply-holder h1, .apply-holder h2 a {
+.apply-holder h1 a, .apply-holder h2 a {
 	color: #fff;
 }
 
-.apply-holder h1, .apply-holder h2 a:hover {
+.apply-holder h1 a:hover, .apply-holder h2 a:hover {
 	opacity: .8;
 }
 
