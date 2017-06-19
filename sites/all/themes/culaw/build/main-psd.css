@@ -9828,7 +9828,7 @@ blockquote cite a:hover {
 }
 
 .social-block img {
-	display: block;
+	display: block !important;
 	width: 100%;
 	height: auto;
 }
