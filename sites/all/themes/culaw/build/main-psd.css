@@ -8860,16 +8860,16 @@ blockquote cite a:hover {
 	background-color: rgba(9, 164, 248, .9);
 }
 
-.apply-holder h1 {
+.apply-holder h1, .apply-holder h2 {
 	color: #fff;
 	margin: 0;
 }
 
-.apply-holder h1 a {
+.apply-holder h1, .apply-holder h2 a {
 	color: #fff;
 }
 
-.apply-holder h1 a:hover {
+.apply-holder h1, .apply-holder h2 a:hover {
 	opacity: .8;
 }
 
@@ -12034,7 +12034,7 @@ blockquote cite a:hover {
 		text-align: center;
 	}
 
-	.apply-holder h1 {
+	.apply-holder h1, .apply-holder h2 {
 		text-align: left;
 		margin: 0 0 16px;
 	}
