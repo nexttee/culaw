@@ -99,7 +99,7 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
     $cta = l($cta_title, $cta_url);
     $apply_holder_class = "apply-holder";
 } else {
-    $apply_holder_class = "apply-holder--cta";
+    $apply_holder_class = "apply-holder apply-holder--cta";
 }
 
 if(isset($content['field_headline']['#items'][0]['value'])) {
