@@ -8756,6 +8756,7 @@ blockquote cite a:hover {
 	position: relative;
 	overflow: hidden;
 	margin: 40px 0 0;
+	margin: 0; 
 }
 
 .hero-banner img {
