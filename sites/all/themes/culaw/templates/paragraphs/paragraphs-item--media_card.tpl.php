@@ -140,7 +140,7 @@ if (isset($content['field_summary']['#items'][0]['safe_value'])) {
                     <div class="apply-area">
                         <div class="container">
                             <div class="<?php print $apply_holder_class; ?>">
-                                <h1><a href="#" title="link1"><?php print $headline; ?></a></h1>
+                                <h1><?php print $headline; ?></h1>
                                 <?php if (isset($cta_url)) : ?>
                                     <a href="<?php print $cta_url; ?>" class="btn btn-default"><span class="btn__text"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
                                 <?php endif; ?>
