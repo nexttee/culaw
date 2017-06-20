@@ -18,9 +18,7 @@
  * @see template_preprocess_menu_block_wrapper()
  */
 //dpm($content);
-//how do we get the title and apply it here instead of outside this block template?
 //how do we remove the .html class from the template so this renders correctly?
-//how do we position this block so it appears to the left?
 ?>
 
     <!-- subnavigation area -->

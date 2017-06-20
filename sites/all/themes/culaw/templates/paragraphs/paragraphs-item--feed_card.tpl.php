@@ -34,16 +34,28 @@ $argument_array = array();
 //set content type for the feed
 $feed_type = $content['field_feed_type']['#items'][0]['value'];
 //$argument_array = array($feed_type);
-//set Aread of Study argument for the feed
+//set Area of Study argument for the feed
 if (isset($content['field_area_of_study'])) {
-    $area = $content['field_area_of_study']['#items'][0]['tid'];
-    $tmp = array_push($argument_array, $area);
+    foreach($content['field_area_of_study']['#items'] AS $key => $item) {
+        $argument_array[] = $item['tid'];
+    }
+}
+if (isset($content['field_lawcal_categories'])) {
+    foreach($content['field_lawcal_categories']['#items'] AS $key => $item) {
+        $argument_array[] = $item['tid'];
+    }
+}
+if (isset($content['field_microsite_calendar_tags'])) {
+    foreach($content['field_microsite_calendar_tags']['#items'] AS $key => $item) {
+        $argument_array[] = $item['tid'];
+    }
 }
 $view = views_get_view('internal_feeds');
 switch($feed_type) {
     case 'news_article':
         $view->set_display("page");
         break;
+    case 'calendar':
     case 'cls_mcl_event':
         $view->set_display("page_1");
         break;

@@ -140,7 +140,12 @@ function _culaw_paragraphs_format_content($id, $format) {
             //$node->created
             break;
         case 'event_feed_row':
-            $date = strtotime($node->cls_mcl_event_datetime['und'][0]['value']);
+            $date = strtotime($node->field_event_date['und'][0]['value']);
+            $today = time();
+            if ($date < $today) {
+                $date = $today;
+            }
+            //if start date is less than today, set to today. this means it spans several days and today is one of those days
             break;
         default:
             break;
