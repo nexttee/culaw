@@ -26,7 +26,6 @@
  * @see template_process()
  */
 //dpm($content);
-$summary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sed elit tellus. Nam ullam tincidunt bibendum. Sed ipsum augue, mattis sed tristique at.";
 $cta = "";
 $layout_option = culaw_paragraphs_format_class($content['field_text_formatting']['#items'][0]['value']);
 
@@ -67,9 +66,6 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
 }
 
 ?>
-
-    <style>
-    </style>
 
 <?php switch($layout_option) : ?>
 <?php case 'testimonial': ?>
@@ -113,11 +109,14 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
                     ?>
                 <div class="list-frame">
                     <?php
-                    $summary_array = explode("\n", $summary);
-                    print theme('item_list',array("items"=>$summary_array,"attributes"=>array("class"=>"list list-unstyled")));
-
-                    $summary_two_array = explode("\n", $summary_two);
-                    print theme('item_list',array("items"=>$summary_two_array,"attributes"=>array("class"=>"list list-unstyled")));
+                    if (isset($summary)) {
+                        $summary_array = explode("\n", $summary);
+                        print theme('item_list', array("items" => $summary_array, "attributes" => array("class" => "list list-unstyled")));
+                    }
+                    if (isset($summary_two)) {
+                        $summary_two_array = explode("\n", $summary_two);
+                        print theme('item_list',array("items"=>$summary_two_array,"attributes"=>array("class"=>"list list-unstyled")));
+                    }
                     ?>
                 </div>
             </div>
@@ -129,7 +128,11 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
         <div class="faculty-text-area">
             <div class="container">
                 <div class="faculty-text">
-                    <p><?php print $summary; ?></p>
+                    <?php
+                    if (isset($summary)) {
+                        print "<p>" . $summary . "</p>";
+                    }
+                    ?>
                     <?php if(isset($cta_url)) : ?>
                         <a href="<?php print $cta_url; ?>" target="<?php print $cta_target; ?>" class="faculty-text__more"><span class="hidden"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
                     <?php endif; ?>
@@ -146,9 +149,11 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
                 if (isset($headline)) {
                     print "<h2>".$headline."</h2>";
                 }
-                $summary_array = explode("\n", $summary);
-                foreach($summary_array AS $key => $row) {
-                    print "<p>".$row."</p>";
+                if (isset($summary)) {
+                    $summary_array = explode("\n", $summary);
+                    foreach ($summary_array AS $key => $row) {
+                        print "<p>" . $row . "</p>";
+                    }
                 }
                 ?>
             </div>
