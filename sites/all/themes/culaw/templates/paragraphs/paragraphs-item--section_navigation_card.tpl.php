@@ -34,13 +34,14 @@ if (isset($content['field_menu_option']['#items'][0]['value'])) {
 }
 
 ?>
-
-<div class="subnavigation-area">
-    <div class="container">
-        <div class="subnavigation-frame">
-            <a href="#" class="subnavigation-opener visible-xs">In this section<i class="icon-keyboard_arrow_down"></i></a>
-            <div class="subnavigation-wrap row js-slide-hidden">
-                <?php print culaw_paragraphs_render_menu($menu); ?>
+<div class="section-nav">
+    <div class="subnavigation-area">
+        <div class="container">
+            <div class="subnavigation-frame">
+                <a href="#" class="subnavigation-opener visible-xs">In this section<i class="icon-keyboard_arrow_down"></i></a>
+                <div class="subnavigation-wrap row js-slide-hidden">
+                    <?php print culaw_paragraphs_render_menu($menu); ?>
+                </div>
             </div>
         </div>
     </div>
