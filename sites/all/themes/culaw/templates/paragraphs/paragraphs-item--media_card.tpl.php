@@ -164,7 +164,9 @@ if (isset($content['field_summary']['#items'][0]['safe_value'])) {
                     <strong class="four-column__title h3"><?php print $headline; ?></strong>
                     <div class="four-column__wrap">
                         <p><?php print $summary; ?></p>
-                        <a href="#" class="four-column__more"><span class="hidden">more link</span><i class="icon-keyboard_arrow_right"></i></a>
+                        <?php if(isset($cta_url)) : ?>
+                            <a href="<?php print $cta_url; ?>" class="four-column__more"><span class="hidden"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -184,7 +186,10 @@ if (isset($content['field_summary']['#items'][0]['safe_value'])) {
                     <span class="three-column__voice">Student Voices</span>
                     <strong class="three-column__heading h4"><?php print $headline; ?></strong>
                     <p><?php print $summary; ?></p>
-                    <a href="#" class="more-link">Read More<i class="icon-keyboard_arrow_right"></i></a>
+                    <?php if(isset($cta_url)) : ?>
+                        <a href="<?php print $cta_url; ?>" class="more-link">Read More<i class="icon-keyboard_arrow_right"></i></a>
+                    <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -203,7 +208,9 @@ if (isset($content['field_summary']['#items'][0]['safe_value'])) {
                 <div class="three-column__description">
                     <strong class="three-column__title h3"><?php print $headline; ?></strong>
                     <p><?php print $summary; ?></p>
-                    <a href="#" class="three-column__more"><span class="hidden">more link</span><i class="icon-keyboard_arrow_right"></i></a>
+                    <?php if(isset($cta_url)) : ?>
+                        <a href="<?php print $cta_url; ?>" class="three-column__more"><span class="hidden"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
