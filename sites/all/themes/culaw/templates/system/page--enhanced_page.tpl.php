@@ -119,7 +119,6 @@
       <?php if (!empty($page['highlighted'])): ?>
         <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
       <?php endif; ?>
-      <?php if (!empty($breadcrumb)): print ('<div class="breadcrumb-area"><div class="container">' . $breadcrumb . '</div></div>'); endif;?>
       <a id="main-content"></a>
 
       <?php print $messages; ?>
@@ -141,12 +140,28 @@
             </aside>  <!-- /#sidebar-first -->
           <?php endif; ?>
         </div>
+        <header class="heading-area">
+          <!-- breadcrumbs area -->
+          <?php
+          if (!empty($breadcrumb)) {
+            print ('<div class="breadcrumb-area hidden-xs"><div class="container">' . $breadcrumb . '</div></div>');
+          }
+          ?>
 
-        <?php print render($title_prefix); ?>
-        <?php if (!empty($title)): ?>
-          <h1 class="page-header"><?php print $title; ?></h1>
-        <?php endif; ?>
-        <?php print render($title_suffix); ?>
+          <div class="container">
+            <div class="heading-wrap">
+
+              <?php print render($title_prefix); ?>
+              <?php if (!empty($title)): ?>
+                <h1 class="page-header"><?php print $title; ?></h1>
+              <?php endif; ?>
+              <?php print render($title_suffix); ?>
+
+              <?php print render($page['top_content']); ?>
+            </div>
+          </div>
+        </header>
+
 
         <?php print render($page['content']); ?>
       </main>
