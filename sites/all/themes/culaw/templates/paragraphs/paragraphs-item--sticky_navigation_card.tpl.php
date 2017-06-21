@@ -36,7 +36,7 @@ $elements = array();
 
         <div class="accordion-wrap">
             <a href="#" class="accordion-opener"><?php print $value['label']; ?></a>
-            <div class="three-column three-column__style03 accordion-slide" id="section<?php print $value['index']; ?>">
+            <div class="accordion-slide" id="section<?php print $value['index']; ?>">
                 <?php print $value['output']; ?>
             </div>
         </div>
