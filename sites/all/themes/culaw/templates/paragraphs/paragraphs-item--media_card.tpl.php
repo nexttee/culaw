@@ -30,6 +30,7 @@
 $cta = "";
 $style_option = $content['style_option'];
 $column_style = "col-sm-4";
+$extra_flex_class = "";
 
 //how many items
 if (isset($content['single_item'])) {
