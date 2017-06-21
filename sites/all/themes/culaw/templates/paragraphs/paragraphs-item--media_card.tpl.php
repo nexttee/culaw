@@ -30,7 +30,6 @@
 $cta = "";
 $style_option = $content['style_option'];
 $column_style = "col-sm-4";
-$extra_flex_class = "";
 
 //how many items
 if (isset($content['single_item'])) {
@@ -97,7 +96,6 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
     $bg_uri = $bg_term->field_media_file['und'][0]['uri'];
     $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'flexible_grid', 'attributes' => array("class" => $style_option)));
     $bg_path = image_style_url('flexible_grid',$bg_uri);
-    $extra_flex_class = " four-column__image-wrap--static";
 }
 
 if (isset($content['field_media_link']['#items'][0]['url'])) {
@@ -166,7 +164,7 @@ if (isset($content['field_summary']['#items'][0]['safe_value'])) {
 
         <div class="flexible-grid__block">
             <?php if (isset($bg_path)) :?>
-                <div class="four-column__image-wrap bg-stretch<?php print $extra_flex_class; ?>">
+                <div class="four-column__image-wrap bg-stretch">
                     <span data-srcset="<?php print $bg_path; ?>"></span>
                 </div>
             <?php endif; ?>
