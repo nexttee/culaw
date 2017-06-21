@@ -31,7 +31,10 @@ $cta = "";
 $style_option = $content['style_option'];
 $column_style = "col-sm-4";
 
-
+//how many items
+if ($content['single_item']) {
+    $column_style = "";
+}
 if (isset($content['field_media_category']['#items'][0])) {
     $media_category = $content['field_media_category']['#items'][0]['taxonomy_term']->name;
 }

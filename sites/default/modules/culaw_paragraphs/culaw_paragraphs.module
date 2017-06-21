@@ -48,7 +48,6 @@ function culaw_paragraphs_preprocess_entity(&$variables) {
                 if (isset($variables['id'])) {
                     $variables['content']['row_id'] = array("#type"=>'field','#value'=>$variables['id']);
                 }
-
                 break;
             case 'quick_links_card':
             case 'section_navigation_card':
@@ -60,6 +59,13 @@ function culaw_paragraphs_preprocess_entity(&$variables) {
             case 'media_card':
             case 'cta_card':
                 $parent_bundle = $variables['paragraphs_item']->hostEntity();
+                switch (count($parent_bundle->field_card_options['und'])) {
+                    //add style option for single so the media card knows how many are in the row
+                    case 1:
+                        $variables['content']['single_item'] = TRUE;
+                        break;
+                }
+
                 $variables['content']['style_option'] = culaw_paragraphs_format_class($parent_bundle->field_cta_options['und'][0]['value']);
             break;
             default;
