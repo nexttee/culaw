@@ -1,0 +1,31 @@
+; $Id: cls.info 2057 2012-06-14 19:21:52Z cstuck $
+
+name = CLS
+description = Basic theme for Columbia Law School
+screenshot = images/screenshot.png
+core = 7.x
+engine = phptemplate
+
+regions[microsite_navigation] = Special microsite navigation
+regions[banner] = Banner
+regions[help] = Help
+regions[content] = Content
+regions[content_bottom] = Content Bottom
+regions[sidebar_first] = First sidebar
+regions[sidebar_second] = Second sidebar
+regions[dashboard_navigate_section] = Dashboard section navigation
+regions[dashboard_messaging_and_marketing_section] = Dashboard messaging/marketing
+regions[mycl_toolbar] = My Columbia Law toolbar
+
+stylesheets[all][] = css/reset.css
+stylesheets[screen][] = css/style.css
+stylesheets[print][] = css/print.css
+
+
+
+; Set the conditional stylesheets that are processed by IE
+stylesheets-conditional[lt IE 6][screen][] = css/ie-lt-6.css
+stylesheets-conditional[lte IE 8][screen][] = css/ie-lte-8.css
+
+scripts[] = js/behavior-global.js
+scripts[] = js/sso-login-workaround.js

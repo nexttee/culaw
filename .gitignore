@@ -1,6 +1,12 @@
 # Ignore configuration files that may contain sensitive information.
 sites/*/settings*.php
+*.sql
+*.tar
+*.gz
 
 # Ignore paths that contain user-generated content.
 sites/*/files
 sites/*/private
+
+# Mac OS generated files.
+.DS_Store

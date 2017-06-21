@@ -1,0 +1,272 @@
+body.allow-cls-print #skip-link  {display: none !important;}
+body.allow-cls-print #toolbar {display: none !important;}
+body.allow-cls-print #skip  {display: none !important;}
+body.allow-cls-print div.dashboard {display: none !important;}
+body.allow-cls-print #global-header {display: none !important;}
+body.allow-cls-print #footer {display: none !important;}
+body.allow-cls-print .region-sidebar-first {display: none !important;}
+body.allow-cls-print .region-sidebar-second {display: none !important;}
+body.allow-cls-print .region-banner {display: none !important;}
+
+body.allow-cls-print {
+	font:10pt Georgia, "Times New Roman", Times, serif;
+}
+
+/* $Id: wysiwyg.css 130 2010-12-16 18:00:05Z cstuck $ */
+
+body.allow-cls-print h1 {
+	font-weight: bold;
+	font-size: 24pt;
+	margin: 0 0 14pt;
+}
+
+body.allow-cls-print h2 {
+	font-weight: bold;
+	font-size: 18pt;
+	letter-spacing: 0;
+	margin: 0 0 14pt;
+	padding: 0;
+}
+
+body.allow-cls-print h3 {
+	font-weight: bold;
+	font-size: 14pt;
+	margin: 0 0 13pt;
+	padding: 0;
+}
+
+body.allow-cls-print h4 {
+	font-weight: bold;
+	font-size: 12pt;
+	margin: 0 0 13pt;
+	padding: 0;
+}
+
+body.allow-cls-print h5 {
+	font-weight: bold;
+	font-size: 11pt;
+	margin: 0 0 12pt;
+	padding: 0;
+}
+
+body.allow-cls-print h6 {
+	font-weight: normal;
+	font-style: italic;
+	font-size: 11pt;
+	margin: 0 0 12pt;
+	padding: 0;
+}
+
+body.allow-cls-print p {
+	font-size: 10pt;
+	margin: 0 0 11pt;
+	padding: 0;
+}
+
+body.allow-cls-print p.introduction {
+	font-size: 14pt;
+	line-height: 18pt;
+	margin: 0 0 15pt;
+	text-rendering: optimizeLegibility;
+}
+
+body.allow-cls-print p.article {
+	font-size: 10pt;
+	margin: 0 0 11pt;
+	padding: 0;
+}
+
+body.allow-cls-print strong {
+	font-weight: bold;
+}
+
+body.allow-cls-print em {
+	font-style:italic;
+}
+
+body.allow-cls-print p a.external {
+    background: url(../images/ico-link-external.gif) center right no-repeat;
+    padding-right: 25px;
+}
+
+body.allow-cls-print a.button {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #186E9D;
+    border: 3px solid #999999;
+    color: #FFFFFF;
+    font: 18px Georgia, "Times New Roman", Times, serif;
+    padding: 5px 10px;
+}
+
+body.allow-cls-print hr {
+	border-bottom: medium none;
+    border-top: 1px solid #C8C8C8;
+    height: 1px;
+    margin: 25px 0 20px;
+}
+
+body.allow-cls-print hr.dashed {
+	border-bottom: medium none;
+    border-top: 2px dashed #C8C8C8;
+    height: 1px;
+    margin: 25px 0 20px;
+}
+
+body.allow-cls-print img.image-left {
+    float: left;
+    margin: 15px 0;
+}
+
+body.allow-cls-print p img.image-left {
+    float: left;
+    margin: 4px 20px 10px 0;
+}
+
+body.allow-cls-print p.introduction img.image-left {
+    float: left;
+    margin: 10px 20px 0 0;
+}
+
+body.allow-cls-print p.article img.image-left {
+    float: left;
+    margin: 3px 20px 10px 0;
+}
+
+body.allow-cls-print img.image-right {
+    float: left;
+    margin: 15px 0;
+}
+
+body.allow-cls-print p img.image-right {
+    float: right;
+    margin: 0 0 10px 20px;
+}
+
+body.allow-cls-print p.introduction img.image-right {
+    float: right;
+    margin: 0 0 0 20px;
+}
+
+body.allow-cls-print p.article img.image-right {
+    float: right;
+    margin: 0 0 10px 20px;
+}
+
+body.allow-cls-print ol {
+	margin-bottom: 15px;
+}
+
+body.allow-cls-print ol li {
+	font: 10pt Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 5px 40px;
+    list-style: decimal outside none;
+}
+
+body.allow-cls-print ol.extramargin li {
+	font: 10pt Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 15px 40px;
+    list-style: decimal outside none;
+}
+
+body.allow-cls-print ol.article li {
+	font: 10pt Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 5px 40px;
+    list-style: decimal outside none;
+}
+
+body.allow-cls-print ol.article-extramargin li {
+	font: 10pt Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 15px 40px;
+    list-style: decimal outside none;
+}
+
+body.allow-cls-print ul {
+	margin-bottom: 15px;
+}
+
+body.allow-cls-print ul li {
+	font: 10pt Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 5px 40px;
+    list-style: square outside none;
+}
+
+body.allow-cls-print ul.extramargin li {
+	font: 10pt Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 15px 40px;
+    list-style: square outside none;
+}
+
+body.allow-cls-print ul.article li {
+	font: 10pt Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 5px 40px;
+    list-style: square outside none;
+}
+
+body.allow-cls-print ul.article-extramargin li {
+	font: 10pt Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 15px 40px;
+    list-style: square outside none;
+}
+
+body.allow-cls-print {
+  float: none !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.allow-cls-print h1.logo {margin-bottom: 5px;}
+
+body.allow-cls-print h1.logo a {display: none !important;}
+
+body.allow-cls-print h1.logo img {display: block !important; width: 378px; height: 36px; padding-top:5px;}
+
+body.allow-cls-print div.content-container {margin-left: 6px;}
+
+body.allow-cls-print a {
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+body.allow-cls-print a[href]:after {
+   content: " (" attr(href) ") ";
+   font-weight: normal;
+   font-style: italic;
+}
+
+body.allow-cls-print a[href^="/"]:after {
+   content: " (http://web.law.columbia.edu" attr(href) ") ";
+}
+
+body.allow-cls-print .content-header h2 {
+	font-weight: normal;
+	margin-bottom: 30px;
+	margin-left: 60px;
+}
+
+body.allow-cls-print .content-header h2 a {
+	font-weight: normal;
+}
+
+body.allow-cls-print .content-header h2 a[href]:after {
+	content: none;
+}
+
+body.allow-cls-print sub,
+body.allow-cls-print sup {
+  font-size: .8em;
+  line-height: .8em;
+}
+
+body.allow-cls-print sub {
+  vertical-align: sub;
+}
+
+body.allow-cls-print sup {
+  vertical-align: super;
+}
+
+.screen-only {display: none;}

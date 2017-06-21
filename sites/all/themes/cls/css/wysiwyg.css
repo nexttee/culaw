@@ -1,0 +1,355 @@
+h1 {
+	color: #666666;
+	font: bold 36px Verdana, Arial, Helvetica, sans-serif;
+	margin: -5px 0 10px;
+}
+
+h2 {
+	color: #666666;
+	font: bold 24px Verdana, Arial, Helvetica, sans-serif;
+	letter-spacing: 0;
+	margin: 0 0 15px;
+	padding: 0;
+}
+
+h3 {
+	color: #666666;
+	font: bold 18px Verdana, Arial, Helvetica, sans-serif;
+	margin: 0 0 15px;
+	padding: 0;
+}
+
+h4 {
+	color: #666666;
+	font: bold 14px Verdana, Arial, Helvetica, sans-serif;
+	margin: 0 0 15px;
+	padding: 0;
+}
+
+h5 {
+	color: #666666;
+	font: bold 12px Verdana, Arial, Helvetica, sans-serif;
+	margin: 0 0 15px;
+	padding: 0;
+}
+
+h6 {
+	color: #666666;
+	font: italic 14px Georgia, "Times New Roman", Times, serif;
+	margin: 0 0 15px;
+	padding: 0;
+}
+
+p {
+	color: #4d4d4d;
+	font: 12px Verdana, Arial, Helvetica, sans-serif;
+	margin: 0 0 15px;
+	padding: 0;
+}
+
+p.introduction {
+	color: #4d4d4d;
+	font: 21px Georgia, "Times New Roman", Times, serif;
+	line-height: 36px;
+	margin: 0 0 15px;
+	text-rendering: optimizeLegibility;
+}
+
+p.article {
+	color: #4d4d4d;
+	font: 14px Georgia, "Times New Roman", Times, serif;
+	margin: 0 0 15px;
+	padding: 0;
+}
+
+a {
+	color: #186E9D;
+}
+
+a:hover {
+    color:#003366;
+    text-decoration:underline;
+}
+
+strong {
+	font-weight: bold;
+}
+
+em {
+	font-style:italic;
+}
+
+p a.external {
+    background: url(../images/ico-link-external.gif) center right no-repeat;
+    padding-right: 25px;
+}
+
+a.button {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    background-color: #186E9D;
+    border: 3px solid #999999;
+    color: #FFFFFF;
+    font: 18px Georgia, "Times New Roman", Times, serif;
+    padding: 5px 10px;
+}
+
+hr {
+	border-bottom: medium none;
+    border-top: 1px solid #C8C8C8;
+    height: 1px;
+    margin: 25px 0 20px;
+}
+
+hr.dashed {
+	border-bottom: medium none;
+    border-top: 2px dashed #C8C8C8;
+    height: 1px;
+    margin: 25px 0 20px;
+}
+
+img.image-left {
+    float: left;
+    margin: 0 15px 0 0;
+}
+
+p img.image-left {
+    float: left;
+    margin: 4px 20px 10px 0;
+}
+
+a:hover img {
+  opacity:0.4;
+  filter:alpha(opacity=40); /* For IE8 and earlier */
+}
+
+p.introduction img.image-left {
+    float: left;
+    margin: 10px 20px 0 0;
+}
+
+p.article img.image-left {
+    float: left;
+    margin: 3px 20px 10px 0;
+}
+
+img.image-right {
+    float: right;
+    margin: 0 0 0 15px;
+}
+
+h3 img.image-right {
+    float: right;
+    margin: 5px 0 15px 15px;
+}
+
+p img.image-right {
+    float: right;
+    margin: 0 0 10px 20px;
+}
+
+p.introduction img.image-right {
+    float: right;
+    margin: 0 0 0 20px;
+}
+
+p.article img.image-right {
+    float: right;
+    margin: 0 0 10px 20px;
+}
+
+ol {
+	margin-bottom: 15px;
+}
+
+ol li {
+	color: #4d4d4d;
+	font: 12px  Verdana, Arial, Helvetica, sans-serif;
+    margin: 0 0 5px 40px;
+    list-style: decimal outside none;
+}
+
+ol.extramargin li {
+	color: #4d4d4d;
+	font: 12px  Verdana, Arial, Helvetica, sans-serif;
+    margin: 0 0 15px 40px;
+    list-style: decimal outside none;
+}
+
+ol.article li {
+	color: #4d4d4d;
+	font: 14px Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 5px 40px;
+    list-style: decimal outside none;
+}
+
+ol.article-extramargin li {
+	color: #4d4d4d;
+	font: 14px Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 15px 40px;
+    list-style: decimal outside none;
+}
+
+ul {
+	margin-bottom: 15px;
+}
+
+ul li {
+	color: #4d4d4d;
+	font: 12px  Verdana, Arial, Helvetica, sans-serif;
+    margin: 0 0 5px 40px;
+    list-style: square outside none;
+}
+
+ul.extramargin li {
+	color: #4d4d4d;
+	font: 12px  Verdana, Arial, Helvetica, sans-serif;
+    margin: 0 0 15px 40px;
+    list-style: square outside none;
+}
+
+ul.article li {
+	color: #4d4d4d;
+	font: 14px Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 5px 40px;
+    list-style: square outside none;
+}
+
+ul.article-extramargin li {
+	color: #4d4d4d;
+	font: 14px Georgia, "Times New Roman", Times, serif;
+    margin: 0 0 15px 40px;
+    list-style: square outside none;
+}
+
+/* http://sonspring.com/journal/clearing-floats */
+
+.clear {
+	clear: both;
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+/* http://perishablepress.com/press/2008/02/05/lessons-learned-concerning-the-clearfix-css-hack */
+
+.clearfix:after {
+	clear: both;
+	content: ' ';
+	display: block;
+	font-size: 0;
+	line-height: 0;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+* html .clearfix {
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}
+
+.group.clearfix {
+	margin-top:10px;
+	margin-bottom:10px;
+}
+.group:after {
+	clear: both;
+	content: ' ';
+	display: block;
+	font-size: 0;
+	line-height: 0;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+.group {
+	display: inline-block;
+}
+.clearfix {
+	display: block;
+}
+.hide {
+	position: absolute;
+	left: -9999px;
+	top: -9999px;
+}
+div.example {margin: 20px 0 20px 20px; width: 560px;}
+div.example div.excerpt {background: none repeat scroll 0 0 #EAEAEA; float: left; font-family: serif; font-size: small; width: 420px; margin-bottom: 20px;}
+div.example div.excerpt div {margin: 30px 0 0 10px;}
+div.example div.tags {float: left; margin: 0; width: 420px;}
+div.example div.explanation {float:none; margin: 0 0 20px 0; width: 420px;}
+div.example div.explanation div {border: 3px solid #EAEAEA; display: block; float:none;}
+div.example div.tags {float: right; margin-top: 30px; width: 150px; font-size: 12px; margin-right: 70px;}
+div.example div.tags p {margin:0; color: #000000;}
+div.example p {margin: 20px;}
+div.tags ul {list-style: square outside none; margin: 0 0 20px; padding: 0 0 0 15px;}
+div.tags li {
+  margin: 5px 0 0 5px;
+}
+#content div.tags p {
+  margin: 0 0 20px;
+  padding: 0;
+}
+span.what-it {
+  display: none;
+}
+div.example span.thumb-space {
+  float: right;
+}
+div.friendly div.excerpt {
+  background: url("http://www.keepyourcopyrights.org/images/friendly_bg.png") no-repeat scroll right top #EAEAEA;
+}
+div.friendly span.thumb-space {
+  height: 18px;
+  width: 40px;
+}
+div.unfriendly div.excerpt {
+  background: url("http://www.keepyourcopyrights.org/images/unfriendly_bg.png") no-repeat scroll right top #EAEAEA;
+}
+div.unfriendly span.thumb-space {
+  height: 18px;
+  width: 30px;
+}
+div.could-be-worse div.excerpt {
+  background: url("http://www.keepyourcopyrights.org/images/could-be-worse_bg.png") no-repeat scroll right top #EAEAEA;
+}
+div.overreaching div.excerpt {
+  background: url("http://www.keepyourcopyrights.org/images/overreaching_bg.png") no-repeat scroll right top #EAEAEA;
+}
+div.overreaching span.thumb-space {
+  height: 18px;
+  width: 80px;
+}
+.excerpt ins {
+  background: none repeat scroll 0 0 #F9F9F9;
+  color: #DD0000;
+  font-weight: bold;
+  text-decoration: none;
+}
+div.glossary div.excerpt {
+  font-size: large;
+  margin: 20px;
+}
+p.friendly-types-small-menu img {
+  vertical-align: middle;
+}
+.clause-example {
+  color: #0000FF;
+}
+sub, sup {
+  font-size: .8em; line-height: .8em;
+}
+sub {
+  vertical-align: sub;
+}
+sup {
+  vertical-align: super;
+}

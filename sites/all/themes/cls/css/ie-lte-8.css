@@ -1,0 +1,16 @@
+/* $Id: ie-lte-8.css 862 2011-04-12 18:46:06Z cstuck $ */
+
+/**
+ * Columbia Law School Stylesheet for 2009 design (fixes for IE <= 8)
+ * screen.js
+ * http://law.columbia.edu
+ *
+ * Copyright (c) 2011 Trustees of Columbia University in the City of New York
+ * You may not use or redistribute this code.
+ *
+ */
+
+/*.container, .dashboard {width:970px;}
+.content-container, .dashboard {behavior:url(/sites/all/themes/custom/cls/css/border-radius.htc)} */
+.content-header {background-color:#666666;}
+.container .sixteencol.omega.alpha {overflow:hidden;}

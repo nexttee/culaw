@@ -1,0 +1,14 @@
+/* $Id: ie-lt-6.css 323 2011-01-18 21:57:44Z cstuck $ */
+
+/**
+ * Columbia Law School Stylesheet for 2009 design (fixes for IE < 6)
+ * screen.js
+ * http://law.columbia.edu
+ *
+ * Copyright (c) 2011 Trustees of Columbia University in the City of New York
+ * You may not use or redistribute this code.
+ *
+ */
+
+.sso .notify input {display:inline;border:none;float:left;}
+.sso .notify a {display:none;}
