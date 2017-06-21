@@ -9967,7 +9967,12 @@ blockquote cite a:hover {
 	height: 44px;
 	position: absolute;
 	right: 60px;
-	top: 28px;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	transform: translateY(-50%);
 	border: 2px solid #fff;
 	border-radius: 50%;
 	font-size: 26px;
@@ -12360,12 +12365,17 @@ blockquote cite a:hover {
 		position: relative;
 		right: 0;
 		top: 0;
+		-webkit-transform: translateY(0);
+		-moz-transform: translateY(0);
+		-ms-transform: translateY(0);
+		-o-transform: translateY(0);
+		transform: translateY(0);
 		margin: 0 auto;
 		display: block;
 	}
 
 	.faculty-text__more .icon-keyboard_arrow_right {
-		top: 4px;
+		/*top: 4px;*/
 	}
 
 	.news-detail-section {
