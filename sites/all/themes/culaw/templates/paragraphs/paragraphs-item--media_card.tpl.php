@@ -32,7 +32,7 @@ $style_option = $content['style_option'];
 $column_style = "col-sm-4";
 
 //how many items
-if ($content['single_item']) {
+if (isset($content['single_item'])) {
     $column_style = "";
 }
 if (isset($content['field_media_category']['#items'][0])) {
@@ -196,7 +196,9 @@ if (isset($content['field_summary']['#items'][0]['safe_value'])) {
                     <?php if(isset($media_category)) : ?>
                         <span class="three-column__voice"><?php print $media_category; ?></span>
                     <?php endif; ?>
-                    <strong class="three-column__heading h4"><?php print $headline; ?></strong>
+                    <?php if(isset($headline)) : ?>
+                        <strong class="three-column__heading h4"><?php print $headline; ?></strong>
+                    <?php endif; ?>
                     <p><?php print $summary; ?></p>
                     <?php if(isset($cta_url)) : ?>
                         <a href="<?php print $cta_url; ?>" target="<?php print $cta_target; ?>" class="more-link">Read More<i class="icon-keyboard_arrow_right"></i></a>
