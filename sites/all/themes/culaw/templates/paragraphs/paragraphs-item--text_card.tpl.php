@@ -42,8 +42,10 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
 if (isset($content['field_headline']['#items'][0]['value'])) {
     $headline = $content['field_headline']['#items'][0]['value'];
 }
-if (trim($content['field_summary']['#items'][0]['safe_value']) != "") {
-    $summary = $content['field_summary']['#items'][0]['safe_value'];
+if (isset($content['field_summary']['#items'][0]['safe_value'])) {
+    if (trim($content['field_summary']['#items'][0]['safe_value']) != "") {
+        $summary = $content['field_summary']['#items'][0]['safe_value'];
+    }
 }
 if (isset($content['field_summary']['#items'][1]['safe_value'])) {
     if (trim($content['field_summary']['#items'][1]['safe_value']) != "") {
@@ -92,7 +94,9 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
         <div class="callout-holder">
             <div class="container">
                 <div class="callout-frame">
-                    <strong class="callout-holder__tagline"><?php print $summary; ?></strong>
+                    <?php if (isset($summary)) : ?>
+                        <strong class="callout-holder__tagline"><?php print $summary; ?></strong>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
