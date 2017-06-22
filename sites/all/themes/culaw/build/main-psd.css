@@ -9194,12 +9194,12 @@ blockquote cite a:hover {
 	visibility: hidden;
 }
 
-.three-column__image-wrap:hover:before {
+.three-column__image-wrap:not(.three-column__image-wrap--no-vid):hover:before {
 	opacity: 1;
 	visibility: visible;
 }
 
-.three-column__image-wrap:hover .three-column__play-btn {
+.three-column__image-wrap:not(.three-column__image-wrap--no-vid):hover .three-column__play-btn {
 	opacity: 1;
 	visibility: visible;
 }
