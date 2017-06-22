@@ -30,10 +30,12 @@
 $cta = "";
 $style_option = $content['style_option'];
 $column_style = "col-sm-4";
+$image_style = "medium";
 
 //how many items
 if (isset($content['single_item'])) {
     $column_style = "";
+    $image_style = "responsive_1200w";
 }
 if (isset($content['field_media_category']['#items'][0])) {
     $media_category = $content['field_media_category']['#items'][0]['taxonomy_term']->name;
@@ -54,7 +56,7 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
             break;
         case 'basic-column':
             if ($field_media_file[0]['type'] == "video") {
-                $display['settings'] = array('image_style' => 'medium');
+                $display['settings'] = array('image_style' => $image_style);
                 $file = file_load($field_media_file[0]['fid']);
                 switch($field_media_file[0]['filemime']) {
                     case "video/youtube":
@@ -74,19 +76,19 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
                 $video = '<a class="lightbox fancybox.iframe thumb three-column__play-btn" href="' . $video_path . '"><span class="hidden">video</span></a>';
                 if (isset($content['field_thumbnail_image'])) {
                     $thumbnail_uri = $content['field_thumbnail_image']['#items'][0]['uri'];
-                    $thumbnail = theme('image_style', array('path' => $thumbnail_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
+                    $thumbnail = theme('image_style', array('path' => $thumbnail_uri, 'style_name' => $image_style, 'attributes' => array("class" => $style_option)));
                 } else {
                     $thumbnail = render($image_render_array);
                 }
                 $bg_image = $thumbnail . $video;
             } else {
-                $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
-                $bg_path = image_style_url('medium',$bg_uri);
+                $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => $image_style, 'attributes' => array("class" => $style_option)));
+                $bg_path = image_style_url($image_style,$bg_uri);
             }
             break;
         default:
-            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => 'medium', 'attributes' => array("class" => $style_option)));
-            $bg_path = image_style_url('medium',$bg_uri);
+            $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => $image_style, 'attributes' => array("class" => $style_option)));
+            $bg_path = image_style_url($image_style,$bg_uri);
             break;
     }
 } elseif (isset($content['field_backgrounds']['#items'][0]['tid'])) {
