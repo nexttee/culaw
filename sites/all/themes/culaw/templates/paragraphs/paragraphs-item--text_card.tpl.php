@@ -167,7 +167,9 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
 
 <?php case 'image': ?>
         <div class="image-holder">
-            <?php print $bg_image; ?>
+            <?php if (isset($summary)) : ?>
+                <?php print $bg_image; ?>
+            <?php endif; ?>
             <?php if (isset($summary)) : ?>
                 <div class="news-detail-wrap__image-caption">
                     <?php print $summary; ?>
