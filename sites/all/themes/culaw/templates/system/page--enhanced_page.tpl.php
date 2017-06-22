@@ -151,18 +151,26 @@
           <div class="container">
             <div class="heading-wrap">
 
-              <?php print render($title_prefix); ?>
               <?php if (!empty($title)): ?>
                 <h1 class="page-header"><?php print $title; ?></h1>
               <?php endif; ?>
-              <?php print render($title_suffix); ?>
 
-              <?php print render($page['top_content']); ?>
+              <?php $block = module_invoke('menu_block', 'block_view', 1); ?>
+              <?php if (count($block['content'])) : ?>
+                <div class="heading-area__btn-wrap">
+                  <?php
+                    $secondary_nav_title = render($block['subject']);
+                    print str_replace(' class="',' class="heading-area__back-btn ',$secondary_nav_title);
+                    print render($block['content']);
+                  ?>
+                </div>
+              <?php endif; ?>
+
             </div>
           </div>
         </header>
 
-
+        <?php print render($page['top_content']); ?>
         <?php print render($page['content']); ?>
       </main>
 

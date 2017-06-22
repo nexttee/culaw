@@ -7,8 +7,15 @@
  */
 
 function culaw_menu_link__menu_block($variables) {
-  //dpm($variables);
+  //this removes the bootstrap extras
   return theme_menu_link($variables);
+}
+
+function culaw_preprocess_menu_link(&$variables) {
+  //this defines the callback for the inner ul style
+  if (count($variables['element']['#below'])) {
+    $variables['element']['#below']['#theme_wrappers'][0] = array("menu_tree__menu_block__main_menu_inner");
+  }
 }
 
 function culaw_menu_tree__menu_block__main_menu($vars) {

@@ -18,7 +18,6 @@
  * @see template_preprocess_menu_block_wrapper()
  */
 //dpm($content);
-//how do we remove the .html class from the template so this renders correctly?
 ?>
 
     <!-- subnavigation area -->
