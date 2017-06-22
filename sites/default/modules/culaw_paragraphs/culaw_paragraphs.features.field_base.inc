@@ -151,9 +151,6 @@ function culaw_paragraphs_field_default_field_bases() {
         'circular-images' => 'Circular Images',
         'flexible-grid' => 'Flexible Grid',
         'banner' => 'Banner with Overlapping Text',
-        'Basic Column' => 'Basic Column Old',
-        'Circular Images' => 'Circular Images Old',
-        'Flexible Grid' => 'Flexible Grid Old',
       ),
       'allowed_values_function' => '',
     ),
@@ -248,8 +245,6 @@ function culaw_paragraphs_field_default_field_bases() {
       'allowed_values' => array(
         'cls_mcl_event' => 'Events',
         'news_article' => 'News',
-        'News' => 'Old News',
-        'Events' => 'Old Events',
       ),
       'allowed_values_function' => '',
     ),
