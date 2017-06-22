@@ -62,6 +62,9 @@ if (isset($content['field_backgrounds'])) {
 if (isset($content['field_headline']['#items'][0]['safe_value'])) {
     $headline = $content['field_headline']['#items'][0]['safe_value'];
     unset($content['field_headline']);
+    //on the sticky nav, we use the headline for the link in the nav.
+    //sometimes the card already has a hard coded headline.
+    //unset headline if the card has a hard coded headline.
 }
 //Basic Column
 if (isset($content['field_card_options'][0]['entity']['paragraphs_item'])) {
@@ -82,6 +85,7 @@ switch($layout_option['value']) {
         $classes = "flexible-grid";//"four-column";
         $container_class = "null";
         //if I remove this the layout fails
+        unset($headline);
         break;
     case 'circular-images':
         $classes = "three-column";
@@ -90,6 +94,7 @@ switch($layout_option['value']) {
     case 'banner':
         $classes = "one-column";
         $container_class = "null";
+        unset($headline);
         break;
     default:
         switch ($secondary_layout_option) {
@@ -100,10 +105,12 @@ switch($layout_option['value']) {
             case 'news_article':
             case 'cls_mcl_event':
                 $classes = "events-feed-grid";
-            $container_class = "container";
+                $container_class = "container";
+                unset($headline);
                 break;
             case 'social_media_card':
                 $container_class = "null";
+                unset($headline);
                 break;
             default:
                 $classes = "three-column";
