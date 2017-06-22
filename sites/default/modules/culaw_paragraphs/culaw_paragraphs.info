@@ -19,6 +19,7 @@ dependencies[] = media
 dependencies[] = media_internet
 dependencies[] = media_vimeo
 dependencies[] = media_youtube
+dependencies[] = menu_block
 dependencies[] = multiple_selects
 dependencies[] = number
 dependencies[] = options
