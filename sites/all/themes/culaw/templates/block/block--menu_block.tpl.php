@@ -45,10 +45,8 @@
  * @ingroup templates
  */
 ?>
-<section id="<?php print $block_html_id; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
-
-    <div class="heading-area__btn-wrap">
-        <?php print str_replace(' class="',' class="heading-area__back-btn ',$title); ?>
+        <div class="heading-area__btn-wrap">
+            <?php print str_replace(' class="',' class="heading-area__back-btn ',$title); ?>
 
         <!--<a href="#" class="heading-area__back-btn"></a><?php print render($title_prefix); ?>
         <div class="title__wrap">
@@ -60,5 +58,3 @@
 
         <?php print $content ?>
     </div>
-
-</section>
