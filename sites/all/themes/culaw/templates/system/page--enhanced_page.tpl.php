@@ -159,6 +159,7 @@
               <?php if (count($block['content'])) : ?>
                 <div class="heading-area__btn-wrap">
                   <?php
+                    $block['content']['#theme'] = array('menu_block_wrapper__secondary_nav');
                     $secondary_nav_title = render($block['subject']);
                     print str_replace(' class="',' class="heading-area__back-btn ',$secondary_nav_title);
                     print render($block['content']);
