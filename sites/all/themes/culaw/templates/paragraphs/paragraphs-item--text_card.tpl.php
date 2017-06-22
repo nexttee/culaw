@@ -114,12 +114,10 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
                 <div class="list-frame">
                     <?php
                     if (isset($summary)) {
-                        $summary_array = explode("\n", $summary);
-                        print theme('item_list', array("items" => $summary_array, "attributes" => array("class" => "list list-unstyled")));
+                        print $summary;
                     }
                     if (isset($summary_two)) {
-                        $summary_two_array = explode("\n", $summary_two);
-                        print theme('item_list',array("items"=>$summary_two_array,"attributes"=>array("class"=>"list list-unstyled")));
+                        print $summary_two;
                     }
                     ?>
                 </div>
@@ -154,6 +152,7 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
                     print "<h2>".$headline."</h2>";
                 }
                 if (isset($summary)) {
+                  // print $summary;
                     $summary_array = explode("\n", $summary);
                     foreach ($summary_array AS $key => $row) {
                         print "<p>" . $row . "</p>";
