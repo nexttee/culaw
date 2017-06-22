@@ -31,6 +31,7 @@ $cta = "";
 $style_option = $content['style_option'];
 $column_style = "col-sm-4";
 $image_style = "medium";
+$extra_basic_column_class = "";
 
 //how many items
 if (isset($content['single_item'])) {
@@ -84,6 +85,7 @@ if (isset($content['field_media_file']['#items'][0]['uri'])) {
             } else {
                 $bg_image = theme('image_style', array('path' => $bg_uri, 'style_name' => $image_style, 'attributes' => array("class" => $style_option)));
                 $bg_path = image_style_url($image_style,$bg_uri);
+                $extra_basic_column_class = " three-column__image-wrap--no-vid";
             }
             break;
         default:
@@ -189,7 +191,7 @@ if (isset($content['field_summary']['#items'][0]['safe_value'])) {
         <div class="<?php print $column_style; ?> col-xs-12">
 			<div class="spotlight">
                 <?php if (isset($bg_image)) :?>
-                    <div class="three-column__image-wrap">
+                    <div class="three-column__image-wrap<?php print $extra_basic_column_class; ?>">
                         <?php print $bg_image;?>
                     </div>
                 <?php endif; ?>
