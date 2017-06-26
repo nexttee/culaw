@@ -246,3 +246,44 @@ function culaw_paragraphs_paragraphs_info() {
   );
   return $items;
 }
+
+/**
+ * Implements hook_themekey_features_rule_chain().
+ */
+function culaw_paragraphs_themekey_features_rule_chain() {
+if (!defined('THEMEKEY_PAGECACHE_UNSUPPORTED')) {
+    define('THEMEKEY_PAGECACHE_UNSUPPORTED', 0);
+    define('THEMEKEY_PAGECACHE_SUPPORTED', 1);
+    define('THEMEKEY_PAGECACHE_TIMEBASED', 2);
+  }
+$rules = array(
+  0 => array(
+    'rule' => array(
+      'property' => 'node:type',
+      'operator' => '=',
+      'value' => 'landing_page',
+      'theme' => 'culaw',
+      'enabled' => 1,
+      'wildcards' => 'a:0:{}',
+      'module' => 'culaw_paragraphs',
+    ),
+    'string' => '"node:type = landing_page >>> culaw"',
+    'childs' => array(),
+  ),
+  1 => array(
+    'rule' => array(
+      'property' => 'node:type',
+      'operator' => '=',
+      'value' => 'enhanced_page',
+      'theme' => 'culaw',
+      'enabled' => 1,
+      'wildcards' => 'a:0:{}',
+      'module' => 'culaw_paragraphs',
+    ),
+    'string' => '"node:type = enhanced_page >>> culaw"',
+    'childs' => array(),
+  ),
+);
+
+return $rules;
+}
