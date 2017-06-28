@@ -127,20 +127,18 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
         <?php break; ?>
 
 <?php case 'cta': ?>
-        <div class="faculty-text-area">
+        <div class="call-action">
             <div class="container">
-                <div class="faculty-text">
-                    <?php
-                    if (isset($summary)) {
-                        print "<p>" . $summary . "</p>";
-                    }
-                    ?>
-                    <?php if(isset($cta_url)) : ?>
-                        <a href="<?php print $cta_url; ?>" target="<?php print $cta_target; ?>" class="faculty-text__more"><span class="hidden"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
-                    <?php endif; ?>
-                </div>
+                <?php
+                if (isset($summary)) {
+                    print "<p>" . $summary . "</p>";
+                }
+                ?>
+                <?php if(isset($cta_url)) : ?>
+                    <a href="<?php print $cta_url; ?>" target="<?php print $cta_target; ?>" class="btn btn-default"><span class="btn__text"><?php print $cta_title; ?></span><i class="icon-keyboard_arrow_right"></i></a>
+                <?php endif; ?>
             </div>
-        </div>
+          </div>
 
         <?php break; ?>
 
@@ -152,11 +150,7 @@ if (isset($content['field_media_link']['#items'][0]['url'])) {
                     print "<h2>".$headline."</h2>";
                 }
                 if (isset($summary)) {
-                  // print $summary;
-                    $summary_array = explode("\n", $summary);
-                    foreach ($summary_array AS $key => $row) {
-                        print "<p>" . $row . "</p>";
-                    }
+                  print $summary;
                 }
                 ?>
             </div>
