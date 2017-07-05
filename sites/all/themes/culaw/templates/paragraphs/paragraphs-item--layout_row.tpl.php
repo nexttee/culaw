@@ -53,6 +53,22 @@ if (isset($content['field_backgrounds'])) {
             background-size: cover;
         }
     </style>
+<?php
+}
+
+
+if (isset($content['field_background_color'])) {
+    $row_id = $content['row_id']['#value'];
+    $bkg_color = $content['field_background_color']['#items'][0]['rgb'];
+	$content_classes[] = "content-background-".$row_id;
+    ?>
+
+    <style>
+        .content-background-<?php print $row_id; ?> {
+            background: <?php print $bkg_color; ?>;
+            
+        }
+    </style>
 
     <?php
 }

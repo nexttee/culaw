@@ -40,42 +40,8 @@ function culaw_paragraphs_default_fe_block_settings() {
         'weight' => 0,
       ),
     ),
-    'title' => '',
-    'visibility' => 0,
-  );
-
-  $export['menu_block-1'] = array(
-    'cache' => -1,
-    'custom' => 0,
-    'delta' => 1,
-    'module' => 'menu_block',
-    'node_types' => array(
-      0 => 'enhanced_page',
-    ),
-    'pages' => '',
-    'roles' => array(),
-    'themes' => array(
-      'bartik' => array(
-        'region' => '',
-        'status' => 0,
-        'theme' => 'bartik',
-        'weight' => 0,
-      ),
-      'culaw' => array(
-        'region' => '',
-        'status' => 0,
-        'theme' => 'culaw',
-        'weight' => -64,
-      ),
-      'seven' => array(
-        'region' => '',
-        'status' => 0,
-        'theme' => 'seven',
-        'weight' => 0,
-      ),
-    ),
-    'title' => '',
-    'visibility' => 0,
+    'title' => 'News Archive ',
+    'visibility' => 1,
   );
 
   return $export;

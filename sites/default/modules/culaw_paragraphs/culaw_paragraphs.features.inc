@@ -36,22 +36,7 @@ function culaw_paragraphs_image_default_styles() {
   $styles['banner_desktop_style'] = array(
     'label' => 'Banner Desktop Style',
     'effects' => array(
-      5 => array(
-        'name' => 'epsacrop_crop',
-        'data' => array(
-          'width' => 1600,
-          'height' => 630,
-          'anchor' => 'center-center',
-          'disable_scale' => 0,
-          'jcrop_settings' => array(
-            'aspect_ratio' => '',
-            'bgcolor' => 'black',
-            'bgopacity' => 0.6,
-            'fallback' => 0,
-          ),
-        ),
-        'weight' => 1,
-      ),
+      5 => NULL,
     ),
   );
 
@@ -59,22 +44,7 @@ function culaw_paragraphs_image_default_styles() {
   $styles['banner_mobile_style'] = array(
     'label' => 'Banner Mobile Style',
     'effects' => array(
-      6 => array(
-        'name' => 'epsacrop_crop',
-        'data' => array(
-          'width' => 800,
-          'height' => 900,
-          'anchor' => 'center-center',
-          'disable_scale' => 0,
-          'jcrop_settings' => array(
-            'aspect_ratio' => '',
-            'bgcolor' => 'black',
-            'bgopacity' => 0.6,
-            'fallback' => 0,
-          ),
-        ),
-        'weight' => 1,
-      ),
+      6 => NULL,
     ),
   );
 
@@ -82,22 +52,7 @@ function culaw_paragraphs_image_default_styles() {
   $styles['banner_tablet_style'] = array(
     'label' => 'Banner Tablet Style',
     'effects' => array(
-      7 => array(
-        'name' => 'epsacrop_crop',
-        'data' => array(
-          'width' => 1550,
-          'height' => 800,
-          'anchor' => 'center-center',
-          'disable_scale' => 0,
-          'jcrop_settings' => array(
-            'aspect_ratio' => '',
-            'bgcolor' => 'black',
-            'bgopacity' => 0.6,
-            'fallback' => 0,
-          ),
-        ),
-        'weight' => 1,
-      ),
+      7 => NULL,
     ),
   );
 
@@ -256,34 +211,7 @@ if (!defined('THEMEKEY_PAGECACHE_UNSUPPORTED')) {
     define('THEMEKEY_PAGECACHE_SUPPORTED', 1);
     define('THEMEKEY_PAGECACHE_TIMEBASED', 2);
   }
-$rules = array(
-  0 => array(
-    'rule' => array(
-      'property' => 'node:type',
-      'operator' => '=',
-      'value' => 'landing_page',
-      'theme' => 'culaw',
-      'enabled' => 1,
-      'wildcards' => 'a:0:{}',
-      'module' => 'culaw_paragraphs',
-    ),
-    'string' => '"node:type = landing_page >>> culaw"',
-    'childs' => array(),
-  ),
-  1 => array(
-    'rule' => array(
-      'property' => 'node:type',
-      'operator' => '=',
-      'value' => 'enhanced_page',
-      'theme' => 'culaw',
-      'enabled' => 1,
-      'wildcards' => 'a:0:{}',
-      'module' => 'culaw_paragraphs',
-    ),
-    'string' => '"node:type = enhanced_page >>> culaw"',
-    'childs' => array(),
-  ),
-);
+$rules = array();
 
 return $rules;
 }

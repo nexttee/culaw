@@ -60,6 +60,32 @@ function culaw_paragraphs_field_default_field_bases() {
     'type' => 'text',
   );
 
+  // Exported field_base: 'field_background_color'.
+  $field_bases['field_background_color'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_background_color',
+    'indexes' => array(
+      'rgb' => array(
+        0 => 'rgb',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'color_field',
+    'settings' => array(
+      'allow_empty' => 1,
+      'palette' => '',
+      'show_buttons' => 1,
+      'show_input' => 1,
+      'show_palette' => 0,
+      'show_palette_only' => 0,
+    ),
+    'translatable' => 0,
+    'type' => 'color_field_rgb',
+  );
+
   // Exported field_base: 'field_backgrounds'.
   $field_bases['field_backgrounds'] = array(
     'active' => 1,
@@ -67,9 +93,6 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_backgrounds',
-    'field_permissions' => array(
-      'type' => 0,
-    ),
     'indexes' => array(
       'tid' => array(
         0 => 'tid',
@@ -150,7 +173,9 @@ function culaw_paragraphs_field_default_field_bases() {
         'basic-column' => 'Basic Column',
         'circular-images' => 'Circular Images',
         'flexible-grid' => 'Flexible Grid',
-        'banner' => 'Banner with Overlapping Text',
+        'Basic Column' => 'Basic Column Old',
+        'Circular Images' => 'Circular Images Old',
+        'Flexible Grid' => 'Flexible Grid Old',
       ),
       'allowed_values_function' => '',
     ),
@@ -245,6 +270,8 @@ function culaw_paragraphs_field_default_field_bases() {
       'allowed_values' => array(
         'cls_mcl_event' => 'Events',
         'news_article' => 'News',
+        'News' => 'Old News',
+        'Events' => 'Old Events',
       ),
       'allowed_values_function' => '',
     ),
@@ -424,6 +451,35 @@ function culaw_paragraphs_field_default_field_bases() {
     'type' => 'file',
   );
 
+  // Exported field_base: 'field_media_layout_options'.
+  $field_bases['field_media_layout_options'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_media_layout_options',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        'media-card' => 'Media Card',
+        'banner' => 'Banner Graphic with Overlapping Text',
+        'Media Card' => 'Media Card Old',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'list_text',
+  );
+
   // Exported field_base: 'field_media_link'.
   $field_bases['field_media_link'] = array(
     'active' => 1,
@@ -530,7 +586,7 @@ function culaw_paragraphs_field_default_field_bases() {
   // Exported field_base: 'field_summary'.
   $field_bases['field_summary'] = array(
     'active' => 1,
-    'cardinality' => 2,
+    'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_summary',
@@ -573,40 +629,15 @@ function culaw_paragraphs_field_default_field_bases() {
       'allowed_values' => array(
         'callout-text' => 'Callout Text',
         'testimonial' => 'Testimonial',
-        'rich-text' => 'Paragraphs',
-        'two-column-lists' => 'Two Column Lists',
-        'cta' => 'Call to Action',
-        'image' => 'Image with Optional Caption',
+        'rich-text' => 'Rich Text',
+        'Callout Text' => 'Callout Text Old',
+        'Testimonial' => 'Testimonial Old',
+        'Rich Text' => 'Rich Text Old',
       ),
       'allowed_values_function' => '',
     ),
     'translatable' => 0,
     'type' => 'list_text',
-  );
-
-  // Exported field_base: 'field_thumbnail_image'.
-  $field_bases['field_thumbnail_image'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_thumbnail_image',
-    'field_permissions' => array(
-      'type' => 0,
-    ),
-    'indexes' => array(
-      'fid' => array(
-        0 => 'fid',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'image',
-    'settings' => array(
-      'default_image' => 0,
-      'uri_scheme' => 'public',
-    ),
-    'translatable' => 0,
-    'type' => 'image',
   );
 
   // Exported field_base: 'field_twitter_key'.
