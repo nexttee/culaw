@@ -43,13 +43,6 @@ $field_facebook_token = isset($content['field_facebook_token']['#items'][0]['val
 $field_facebook_limit = isset($content['field_facebook_limit']['#items'][0]['value']) ? $content['field_facebook_limit']['#items'][0]['value'] : "";
 
 ?>
-<style>
-    .media_card_wrapper {
-        float:left;
-    }
-	.social-block { background: white; }
-</style>
-
     <!-- social area -->
     <div class="social-area">
         <div class="container">
@@ -85,7 +78,7 @@ $field_facebook_limit = isset($content['field_facebook_limit']['#items'][0]['val
 
 
 	<?php
-	drupal_add_css("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+	drupal_add_css("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", 'external');
 	drupal_add_js(drupal_get_path('theme', 'culaw') . '/js/jquery.socialfeed/codebird.js', array(
 	  'type' => 'file',
 	  'group' => JS_THEME,

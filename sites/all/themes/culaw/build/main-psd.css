@@ -9821,6 +9821,7 @@ blockquote cite a:hover {
 .social-block {
 	position: relative;
 	overflow: hidden;
+	background: white;
 }
 
 .social-block__body {
