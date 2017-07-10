@@ -34,6 +34,7 @@ function culaw_paragraphs_field_default_field_bases() {
           'parent' => 0,
         ),
       ),
+      'entity_translation_sync' => FALSE,
     ),
     'translatable' => 0,
     'type' => 'taxonomy_term_reference',
@@ -54,6 +55,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
     'translatable' => 0,
@@ -67,6 +69,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_background_color',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'rgb' => array(
         0 => 'rgb',
@@ -74,14 +79,7 @@ function culaw_paragraphs_field_default_field_bases() {
     ),
     'locked' => 0,
     'module' => 'color_field',
-    'settings' => array(
-      'allow_empty' => 1,
-      'palette' => '',
-      'show_buttons' => 1,
-      'show_input' => 1,
-      'show_palette' => 0,
-      'show_palette_only' => 0,
-    ),
+    'settings' => array(),
     'translatable' => 0,
     'type' => 'color_field_rgb',
   );
@@ -93,6 +91,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_backgrounds',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'tid' => array(
         0 => 'tid',
@@ -107,6 +108,7 @@ function culaw_paragraphs_field_default_field_bases() {
           'parent' => 0,
         ),
       ),
+      'entity_translation_sync' => FALSE,
     ),
     'translatable' => 0,
     'type' => 'taxonomy_term_reference',
@@ -125,7 +127,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'indexes' => array(),
     'locked' => 0,
     'module' => 'paragraphs',
-    'settings' => array(),
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+    ),
     'translatable' => 0,
     'type' => 'paragraphs',
   );
@@ -171,16 +175,54 @@ function culaw_paragraphs_field_default_field_bases() {
     'settings' => array(
       'allowed_values' => array(
         'basic-column' => 'Basic Column',
+        'text' => 'Text Wrapper',
+        'news-text' => 'News Text Wrapper',
         'circular-images' => 'Circular Images',
         'flexible-grid' => 'Flexible Grid',
-        'Basic Column' => 'Basic Column Old',
-        'Circular Images' => 'Circular Images Old',
-        'Flexible Grid' => 'Flexible Grid Old',
+        'banner' => 'Banner with Overlapping Text',
+        'manual-news-and-scholarship' => 'Manual Version of News & Scholarship',
       ),
       'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
+      'profile2_private' => FALSE,
     ),
     'translatable' => 0,
     'type' => 'list_text',
+  );
+
+  // Exported field_base: 'field_date_of_publication'.
+  $field_bases['field_date_of_publication'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_date_of_publication',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'date',
+    'settings' => array(
+      'cache_count' => 4,
+      'cache_enabled' => 0,
+      'entity_translation_sync' => FALSE,
+      'granularity' => array(
+        'day' => 'day',
+        'hour' => 0,
+        'minute' => 0,
+        'month' => 'month',
+        'second' => 0,
+        'year' => 'year',
+      ),
+      'profile2_private' => FALSE,
+      'repeat' => 0,
+      'timezone_db' => '',
+      'todate' => '',
+      'tz_handling' => 'none',
+    ),
+    'translatable' => 0,
+    'type' => 'datestamp',
   );
 
   // Exported field_base: 'field_facebook_limit'.
@@ -196,7 +238,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
-    'settings' => array(),
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+    ),
     'translatable' => 0,
     'type' => 'number_integer',
   );
@@ -219,6 +263,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
     'translatable' => 0,
@@ -243,6 +288,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
     'translatable' => 0,
@@ -270,10 +316,9 @@ function culaw_paragraphs_field_default_field_bases() {
       'allowed_values' => array(
         'cls_mcl_event' => 'Events',
         'news_article' => 'News',
-        'News' => 'Old News',
-        'Events' => 'Old Events',
       ),
       'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
     ),
     'translatable' => 0,
     'type' => 'list_text',
@@ -323,6 +368,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
     'translatable' => 0,
@@ -342,7 +388,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
-    'settings' => array(),
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+    ),
     'translatable' => 0,
     'type' => 'number_integer',
   );
@@ -365,6 +413,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
     'translatable' => 0,
@@ -389,6 +438,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
     'translatable' => 0,
@@ -416,6 +466,7 @@ function culaw_paragraphs_field_default_field_bases() {
           'parent' => 0,
         ),
       ),
+      'entity_translation_sync' => FALSE,
     ),
     'translatable' => 0,
     'type' => 'taxonomy_term_reference',
@@ -449,35 +500,6 @@ function culaw_paragraphs_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'file',
-  );
-
-  // Exported field_base: 'field_media_layout_options'.
-  $field_bases['field_media_layout_options'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_media_layout_options',
-    'field_permissions' => array(
-      'type' => 0,
-    ),
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(
-        'media-card' => 'Media Card',
-        'banner' => 'Banner Graphic with Overlapping Text',
-        'Media Card' => 'Media Card Old',
-      ),
-      'allowed_values_function' => '',
-    ),
-    'translatable' => 0,
-    'type' => 'list_text',
   );
 
   // Exported field_base: 'field_media_link'.
@@ -521,6 +543,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_menu_option',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -530,10 +555,11 @@ function culaw_paragraphs_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        'Main Navigation' => 'Main Navigation',
         'main-menu' => 'Main Navigation',
       ),
       'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
+      'profile2_private' => FALSE,
     ),
     'translatable' => 0,
     'type' => 'list_text',
@@ -559,6 +585,7 @@ function culaw_paragraphs_field_default_field_bases() {
         'url_cutoff' => 80,
       ),
       'enable_tokens' => 1,
+      'entity_translation_sync' => FALSE,
       'title' => 'optional',
       'title_maxlength' => 128,
       'title_value' => '',
@@ -578,7 +605,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'indexes' => array(),
     'locked' => 0,
     'module' => 'paragraphs',
-    'settings' => array(),
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+    ),
     'translatable' => 0,
     'type' => 'paragraphs',
   );
@@ -586,7 +615,7 @@ function culaw_paragraphs_field_default_field_bases() {
   // Exported field_base: 'field_summary'.
   $field_bases['field_summary'] = array(
     'active' => 1,
-    'cardinality' => 1,
+    'cardinality' => 2,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_summary',
@@ -629,15 +658,46 @@ function culaw_paragraphs_field_default_field_bases() {
       'allowed_values' => array(
         'callout-text' => 'Callout Text',
         'testimonial' => 'Testimonial',
-        'rich-text' => 'Rich Text',
-        'Callout Text' => 'Callout Text Old',
-        'Testimonial' => 'Testimonial Old',
-        'Rich Text' => 'Rich Text Old',
+        'rich-text' => 'Paragraphs',
+        'two-column-lists' => 'Two Column Lists',
+        'cta' => 'Call to Action',
+        'image' => 'Image with Optional Caption',
+        'manual-news-and-scholarships' => 'Manual News and Scholarships',
       ),
       'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
+      'profile2_private' => FALSE,
     ),
     'translatable' => 0,
     'type' => 'list_text',
+  );
+
+  // Exported field_base: 'field_thumbnail_image'.
+  $field_bases['field_thumbnail_image'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_thumbnail_image',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(
+      'fid' => array(
+        0 => 'fid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'image',
+    'settings' => array(
+      'default_image' => 0,
+      'entity_translation_sync' => array(
+        0 => 'fid',
+      ),
+      'uri_scheme' => 'public',
+    ),
+    'translatable' => 0,
+    'type' => 'image',
   );
 
   // Exported field_base: 'field_twitter_key'.
@@ -658,6 +718,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
     'translatable' => 0,
@@ -677,7 +738,9 @@ function culaw_paragraphs_field_default_field_bases() {
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
-    'settings' => array(),
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+    ),
     'translatable' => 0,
     'type' => 'number_integer',
   );
@@ -700,6 +763,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
     'translatable' => 0,
@@ -724,6 +788,7 @@ function culaw_paragraphs_field_default_field_bases() {
     'locked' => 0,
     'module' => 'text',
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'max_length' => 255,
     ),
     'translatable' => 0,

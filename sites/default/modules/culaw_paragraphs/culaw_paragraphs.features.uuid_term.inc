@@ -26,6 +26,7 @@ function culaw_paragraphs_uuid_features_default_terms() {
     'uuid' => '192a7c94-ec1e-4640-ac5d-3c0db7b89c0a',
     'vocabulary_machine_name' => 'backgrounds',
     'field_media_file' => array(),
+    'field_background_color' => array(),
   );
   $terms[] = array(
     'name' => 'Beastie Boy',
@@ -35,6 +36,7 @@ function culaw_paragraphs_uuid_features_default_terms() {
     'uuid' => '346341a5-0b25-4ec7-b7a4-c457c1926aa9',
     'vocabulary_machine_name' => 'backgrounds',
     'field_media_file' => array(),
+    'field_background_color' => array(),
   );
   $terms[] = array(
     'name' => 'Orange',
@@ -44,6 +46,7 @@ function culaw_paragraphs_uuid_features_default_terms() {
     'uuid' => '36945ef4-3fac-4473-8f3a-daf4bc054c01',
     'vocabulary_machine_name' => 'backgrounds',
     'field_media_file' => array(),
+    'field_background_color' => array(),
   );
   $terms[] = array(
     'name' => 'Retro Light Background',
@@ -53,15 +56,17 @@ function culaw_paragraphs_uuid_features_default_terms() {
     'uuid' => '42f2dcd5-b262-44b7-9d6f-b1dd47f6447c',
     'vocabulary_machine_name' => 'backgrounds',
     'field_media_file' => array(),
+    'field_background_color' => array(),
   );
   $terms[] = array(
-    'name' => 'Blue/Gray with Diamonds',
+    'name' => 'Student Voices White 1',
     'description' => '',
     'format' => 'full_html',
     'weight' => 0,
     'uuid' => '5293a236-9ca0-469e-b68d-cd523d6a9db8',
     'vocabulary_machine_name' => 'backgrounds',
     'field_media_file' => array(),
+    'field_background_color' => array(),
   );
   $terms[] = array(
     'name' => 'Gray with Diamonds',
@@ -71,6 +76,7 @@ function culaw_paragraphs_uuid_features_default_terms() {
     'uuid' => '679a14c2-ddf9-4d1f-a5a1-b0176bb08851',
     'vocabulary_machine_name' => 'backgrounds',
     'field_media_file' => array(),
+    'field_background_color' => array(),
   );
   $terms[] = array(
     'name' => 'Yellow',
@@ -80,6 +86,7 @@ function culaw_paragraphs_uuid_features_default_terms() {
     'uuid' => '99a566e1-6ba1-406e-861e-84e1dc8bff6d',
     'vocabulary_machine_name' => 'backgrounds',
     'field_media_file' => array(),
+    'field_background_color' => array(),
   );
   $terms[] = array(
     'name' => 'LinkedIn',
@@ -105,6 +112,7 @@ function culaw_paragraphs_uuid_features_default_terms() {
     'uuid' => 'f92b0bf0-e735-40c7-93d2-53effebc02c0',
     'vocabulary_machine_name' => 'backgrounds',
     'field_media_file' => array(),
+    'field_background_color' => array(),
   );
   return $terms;
 }

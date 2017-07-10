@@ -10,6 +10,77 @@
 function culaw_paragraphs_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'node-enhanced_page-field_content_rows'.
+  $field_instances['node-enhanced_page-field_content_rows'] = array(
+    'bundle' => 'enhanced_page',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'paragraphs',
+        'settings' => array(
+          'view_mode' => 'full',
+        ),
+        'type' => 'paragraphs_view',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_content_rows',
+    'label' => 'Content Rows',
+    'required' => 0,
+    'settings' => array(
+      'add_mode' => 'button',
+      'allowed_bundles' => array(
+        'faculty_profile_elements' => -1,
+        'feed_card' => -1,
+        'layout_row' => 'layout_row',
+        'media_card' => -1,
+        'navigation_row' => 'navigation_row',
+        'news_article_blocks' => -1,
+        'quick_links_card' => -1,
+        'section_navigation_card' => -1,
+        'social_media_card' => -1,
+        'sticky_navigation_card' => -1,
+        'text_card' => -1,
+      ),
+      'bundle_weights' => array(
+        'faculty_profile_elements' => 2,
+        'feed_card' => 3,
+        'layout_row' => 4,
+        'media_card' => 5,
+        'navigation_row' => 6,
+        'news_article_blocks' => 7,
+        'quick_links_card' => 8,
+        'section_navigation_card' => 9,
+        'social_media_card' => 10,
+        'sticky_navigation_card' => 11,
+        'text_card' => 12,
+      ),
+      'default_edit_mode' => 'open',
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
+      'title' => 'Row',
+      'title_multiple' => 'Rows',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'paragraphs',
+      'settings' => array(),
+      'type' => 'paragraphs_embed',
+      'weight' => 2,
+    ),
+  );
+
   // Exported field_instance: 'node-landing_page-field_content_rows'.
   $field_instances['node-landing_page-field_content_rows'] = array(
     'bundle' => 'landing_page',
@@ -67,6 +138,8 @@ function culaw_paragraphs_field_default_field_instances() {
         'text_card' => 14,
       ),
       'default_edit_mode' => 'closed',
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'title' => 'Row',
       'title_multiple' => 'Rows',
       'user_register_form' => FALSE,
@@ -112,6 +185,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Area of Study',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -119,7 +194,7 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 6,
+      'weight' => 2,
     ),
   );
 
@@ -159,6 +234,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Feed Type',
     'required' => 1,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -166,7 +243,7 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 5,
+      'weight' => 1,
     ),
   );
 
@@ -202,6 +279,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Headline',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -212,27 +291,24 @@ function culaw_paragraphs_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 2,
+      'weight' => 0,
     ),
   );
 
   // Exported field_instance:
-  // 'paragraphs_item-layout_row-field_background_color'.
-  $field_instances['paragraphs_item-layout_row-field_background_color'] = array(
-    'bundle' => 'layout_row',
+  // 'paragraphs_item-feed_card-field_lawcal_categories'.
+  $field_instances['paragraphs_item-feed_card-field_lawcal_categories'] = array(
+    'bundle' => 'feed_card',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'hidden',
-        'module' => 'color_field',
-        'settings' => array(
-          'height' => 50,
-          'width' => 50,
-        ),
-        'type' => 'color_field_swatch',
-        'weight' => 4,
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 5,
       ),
       'faculty_detail_items' => array(
         'label' => 'above',
@@ -248,17 +324,69 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_background_color',
-    'label' => 'Background Color',
-    'required' => FALSE,
+    'field_name' => 'field_lawcal_categories',
+    'label' => 'LawCal Categories',
+    'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'module' => 'color_field',
+      'active' => 0,
+      'module' => 'multiple_selects',
       'settings' => array(),
-      'type' => 'color_field_spectrum_widget',
+      'type' => 'multiple_selects',
       'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'paragraphs_item-feed_card-field_microsite_calendar_tags'.
+  $field_instances['paragraphs_item-feed_card-field_microsite_calendar_tags'] = array(
+    'bundle' => 'feed_card',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 6,
+      ),
+      'faculty_detail_items' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_microsite_calendar_tags',
+    'label' => 'Microsite Calendar Tags',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'taxonomy',
+      'settings' => array(
+        'autocomplete_path' => 'taxonomy/autocomplete',
+        'size' => 60,
+      ),
+      'type' => 'taxonomy_autocomplete',
+      'weight' => 5,
     ),
   );
 
@@ -271,11 +399,9 @@ function culaw_paragraphs_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'taxonomy_field_formatter',
-        'settings' => array(
-          'view_mode' => 'entity',
-        ),
-        'type' => 'taxonomy_term_entity',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
         'weight' => 2,
       ),
       'faculty_detail_items' => array(
@@ -296,6 +422,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Background',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -303,7 +431,7 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -371,6 +499,8 @@ function culaw_paragraphs_field_default_field_instances() {
         'text_card' => 12,
       ),
       'default_edit_mode' => 'closed',
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'title' => 'Card',
       'title_multiple' => 'Cards',
       'user_register_form' => FALSE,
@@ -416,10 +546,13 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'paragraphs_item',
+    'exclude_cv' => 0,
     'field_name' => 'field_cta_options',
     'label' => 'Layout Options',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -463,6 +596,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Headline',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -474,6 +609,51 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
       'type' => 'text_textfield',
       'weight' => 0,
+    ),
+  );
+
+  // Exported field_instance: 'paragraphs_item-media_card-field_backgrounds'.
+  $field_instances['paragraphs_item-media_card-field_backgrounds'] = array(
+    'bundle' => 'media_card',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 7,
+      ),
+      'faculty_detail_items' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_backgrounds',
+    'label' => 'Placeholder Backgrounds',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 3,
     ),
   );
 
@@ -522,7 +702,7 @@ function culaw_paragraphs_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 2,
+      'weight' => 4,
     ),
   );
 
@@ -558,6 +738,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Media Category',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -565,7 +747,7 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 3,
+      'weight' => 5,
     ),
   );
 
@@ -605,6 +787,13 @@ function culaw_paragraphs_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
+      'epsacrop' => array(
+        'styles' => array(
+          'banner_desktop_style' => 'banner_desktop_style',
+          'banner_mobile_style' => 'banner_mobile_style',
+          'banner_tablet_style' => 'banner_tablet_style',
+        ),
+      ),
       'exclude_cv' => FALSE,
       'file_directory' => 'media_browser',
       'file_extensions' => 'jpg png jpeg gif',
@@ -616,7 +805,6 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'media',
       'settings' => array(
         'allowed_schemes' => array(
-          'private' => 0,
           'public' => 'public',
           'vimeo' => 'vimeo',
           'youtube' => 'youtube',
@@ -636,54 +824,6 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
       'type' => 'media_generic',
       'weight' => 1,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'paragraphs_item-media_card-field_media_layout_options'.
-  $field_instances['paragraphs_item-media_card-field_media_layout_options'] = array(
-    'bundle' => 'media_card',
-    'default_value' => array(
-      0 => array(
-        'value' => 'media-card',
-      ),
-    ),
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 5,
-      ),
-      'faculty_detail_items' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_media_layout_options',
-    'label' => 'Media Layout Options',
-    'required' => 1,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 0,
     ),
   );
 
@@ -748,7 +888,7 @@ function culaw_paragraphs_field_default_field_instances() {
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 5,
+      'weight' => 7,
     ),
   );
 
@@ -797,7 +937,88 @@ function culaw_paragraphs_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 4,
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'paragraphs_item-media_card-field_thumbnail_image'.
+  $field_instances['paragraphs_item-media_card-field_thumbnail_image'] = array(
+    'bundle' => 'media_card',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '',
+        ),
+        'type' => 'image',
+        'weight' => 8,
+      ),
+      'faculty_detail_items' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_thumbnail_image',
+    'label' => 'Thumbnail Image',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'entity_translation_sync' => FALSE,
+      'epsacrop' => array(
+        'styles' => array(
+          'banner_desktop_style' => 0,
+          'banner_mobile_style' => 0,
+          'banner_tablet_style' => 0,
+        ),
+      ),
+      'exclude_cv' => FALSE,
+      'file_directory' => 'media_thumbs',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'media',
+      'settings' => array(
+        'allowed_schemes' => array(
+          'public' => 'public',
+          'vimeo' => 0,
+          'youtube' => 0,
+        ),
+        'allowed_types' => array(
+          'audio' => 0,
+          'document' => 0,
+          'image' => 'image',
+          'video' => 0,
+        ),
+        'browser_plugins' => array(
+          'media_default--media_browser_1' => 'media_default--media_browser_1',
+          'media_default--media_browser_my_files' => 'media_default--media_browser_my_files',
+          'media_internet' => 'media_internet',
+          'upload' => 'upload',
+        ),
+      ),
+      'type' => 'media_generic',
+      'weight' => 2,
     ),
   );
 
@@ -832,6 +1053,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Headline',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -906,6 +1129,8 @@ function culaw_paragraphs_field_default_field_instances() {
         'text_card' => 11,
       ),
       'default_edit_mode' => 'closed',
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'title' => 'Navigation Option',
       'title_multiple' => 'Navigation Options',
       'user_register_form' => FALSE,
@@ -965,6 +1190,8 @@ function culaw_paragraphs_field_default_field_instances() {
         'url_cutoff' => 80,
       ),
       'enable_tokens' => 1,
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'rel_remove' => 'default',
       'title' => 'required',
       'title_label_use_field_label' => 0,
@@ -980,116 +1207,6 @@ function culaw_paragraphs_field_default_field_instances() {
       'settings' => array(),
       'type' => 'link_field',
       'weight' => 1,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'paragraphs_item-section_navigation_card-field_backgrounds'.
-  $field_instances['paragraphs_item-section_navigation_card-field_backgrounds'] = array(
-    'bundle' => 'section_navigation_card',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'taxonomy_field_formatter',
-        'settings' => array(
-          'view_mode' => 'entity',
-        ),
-        'type' => 'taxonomy_term_entity',
-        'weight' => 0,
-      ),
-      'faculty_detail_items' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_backgrounds',
-    'label' => 'Backgrounds',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 1,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'paragraphs_item-section_navigation_card-field_media_link'.
-  $field_instances['paragraphs_item-section_navigation_card-field_media_link'] = array(
-    'bundle' => 'section_navigation_card',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'link',
-        'settings' => array(),
-        'type' => 'link_default',
-        'weight' => 2,
-      ),
-      'faculty_detail_items' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_media_link',
-    'label' => 'Call to Action',
-    'required' => 0,
-    'settings' => array(
-      'absolute_url' => 1,
-      'attributes' => array(
-        'class' => '',
-        'configurable_class' => 0,
-        'configurable_title' => 0,
-        'rel' => '',
-        'target' => 'default',
-        'title' => '',
-      ),
-      'display' => array(
-        'url_cutoff' => 80,
-      ),
-      'enable_tokens' => 1,
-      'rel_remove' => 'default',
-      'title' => 'required',
-      'title_label_use_field_label' => 0,
-      'title_maxlength' => 128,
-      'title_value' => '',
-      'url' => 0,
-      'user_register_form' => FALSE,
-      'validate_url' => 1,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'link',
-      'settings' => array(),
-      'type' => 'link_field',
-      'weight' => 2,
     ),
   );
 
@@ -1122,10 +1239,13 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'paragraphs_item',
+    'exclude_cv' => 0,
     'field_name' => 'field_menu_option',
     'label' => 'Menu Option',
     'required' => 1,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1175,6 +1295,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Facebook Limit',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'max' => '',
       'min' => '',
       'prefix' => '',
@@ -1223,6 +1345,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Facebook Query',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1270,6 +1394,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Facebook Token',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1317,6 +1443,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Instagram Client ID',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1369,6 +1497,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Instagram Limit',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'max' => '',
       'min' => '',
       'prefix' => '',
@@ -1417,6 +1547,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Instagram Query',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1464,6 +1596,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Instagram Token',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1511,6 +1645,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Twitter Key',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1563,6 +1699,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Twitter Limit',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'max' => '',
       'min' => '',
       'prefix' => '',
@@ -1611,6 +1749,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Twitter Query',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1658,6 +1798,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Twitter Secret',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1703,6 +1845,7 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'paragraphs_item',
+    'exclude_cv' => 0,
     'field_name' => 'field_content_rows',
     'label' => 'Content Rows',
     'required' => 0,
@@ -1713,7 +1856,7 @@ function culaw_paragraphs_field_default_field_instances() {
         'feed_card' => -1,
         'layout_row' => 'layout_row',
         'media_card' => -1,
-        'navigation_row' => -1,
+        'navigation_row' => 'navigation_row',
         'news_article_blocks' => -1,
         'quick_links_card' => -1,
         'section_navigation_card' => -1,
@@ -1735,8 +1878,10 @@ function culaw_paragraphs_field_default_field_instances() {
         'text_card' => 12,
       ),
       'default_edit_mode' => 'open',
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'title' => 'Row',
-      'title_multiple' => 'Rowss',
+      'title_multiple' => 'Rows',
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -1745,69 +1890,6 @@ function culaw_paragraphs_field_default_field_instances() {
       'settings' => array(),
       'type' => 'paragraphs_embed',
       'weight' => 2,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'paragraphs_item-sticky_navigation_card-field_navigation_links'.
-  $field_instances['paragraphs_item-sticky_navigation_card-field_navigation_links'] = array(
-    'bundle' => 'sticky_navigation_card',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 1,
-      ),
-      'faculty_detail_items' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_navigation_links',
-    'label' => 'Links',
-    'required' => 0,
-    'settings' => array(
-      'absolute_url' => 0,
-      'attributes' => array(
-        'class' => '',
-        'configurable_class' => 0,
-        'configurable_title' => 0,
-        'rel' => '',
-        'target' => 'default',
-        'title' => '',
-      ),
-      'display' => array(
-        'url_cutoff' => 80,
-      ),
-      'enable_tokens' => 1,
-      'rel_remove' => 'default',
-      'title' => 'required',
-      'title_label_use_field_label' => 0,
-      'title_maxlength' => 128,
-      'title_value' => '',
-      'url' => 0,
-      'user_register_form' => FALSE,
-      'validate_url' => 1,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'link',
-      'settings' => array(),
-      'type' => 'link_field',
-      'weight' => 0,
     ),
   );
 
@@ -1843,6 +1925,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Attribution',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1854,6 +1938,73 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
       'type' => 'text_textfield',
       'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'paragraphs_item-text_card-field_date_of_publication'.
+  $field_instances['paragraphs_item-text_card-field_date_of_publication'] = array(
+    'bundle' => 'text_card',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'long',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+          'show_remaining_days' => FALSE,
+          'show_repeat_rule' => 'show',
+        ),
+        'type' => 'date_default',
+        'weight' => 6,
+      ),
+      'faculty_detail_items' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'exclude_cv' => 0,
+    'field_name' => 'field_date_of_publication',
+    'label' => 'Date of Publication',
+    'required' => 0,
+    'settings' => array(
+      'default_value' => 'now',
+      'default_value2' => 'same',
+      'default_value_code' => '',
+      'default_value_code2' => '',
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'date',
+      'settings' => array(
+        'display_all_day' => 0,
+        'increment' => 15,
+        'input_format' => 'm/d/Y - H:i:s',
+        'input_format_custom' => '',
+        'label_position' => 'above',
+        'repeat_collapsed' => 0,
+        'text_parts' => array(),
+        'year_range' => '-5:+5',
+      ),
+      'type' => 'date_popup',
+      'weight' => 11,
     ),
   );
 
@@ -1889,6 +2040,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'label' => 'Headline',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -1935,6 +2088,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 0,
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'file_directory' => '',
       'file_extensions' => 'png jpg jpeg gif',
       'max_filesize' => '',
@@ -1967,6 +2122,71 @@ function culaw_paragraphs_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'paragraphs_item-text_card-field_media_link'.
+  $field_instances['paragraphs_item-text_card-field_media_link'] = array(
+    'bundle' => 'text_card',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'link',
+        'settings' => array(),
+        'type' => 'link_default',
+        'weight' => 5,
+      ),
+      'faculty_detail_items' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_media_link',
+    'label' => 'Call to Action',
+    'required' => 0,
+    'settings' => array(
+      'absolute_url' => 1,
+      'attributes' => array(
+        'class' => '',
+        'configurable_class' => 0,
+        'configurable_title' => 0,
+        'rel' => '',
+        'target' => 'user',
+        'title' => '',
+      ),
+      'display' => array(
+        'url_cutoff' => 80,
+      ),
+      'enable_tokens' => 1,
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
+      'rel_remove' => 'default',
+      'title' => 'optional',
+      'title_label_use_field_label' => 0,
+      'title_maxlength' => 128,
+      'title_value' => '',
+      'url' => 0,
+      'user_register_form' => FALSE,
+      'validate_url' => 1,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'link',
+      'settings' => array(),
+      'type' => 'link_field',
+      'weight' => 5,
+    ),
+  );
+
   // Exported field_instance: 'paragraphs_item-text_card-field_summary'.
   $field_instances['paragraphs_item-text_card-field_summary'] = array(
     'bundle' => 'text_card',
@@ -1996,10 +2216,10 @@ function culaw_paragraphs_field_default_field_instances() {
     ),
     'entity_type' => 'paragraphs_item',
     'field_name' => 'field_summary',
-    'label' => 'Copy',
+    'label' => 'Text Copy',
     'required' => 0,
     'settings' => array(
-      'text_processing' => 0,
+      'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -2045,10 +2265,13 @@ function culaw_paragraphs_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'paragraphs_item',
+    'exclude_cv' => 0,
     'field_name' => 'field_text_formatting',
     'label' => 'Text Formatting',
     'required' => 1,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -2057,6 +2280,44 @@ function culaw_paragraphs_field_default_field_instances() {
       'settings' => array(),
       'type' => 'options_select',
       'weight' => 0,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'taxonomy_term-backgrounds-field_background_color'.
+  $field_instances['taxonomy_term-backgrounds-field_background_color'] = array(
+    'bundle' => 'backgrounds',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'color_field',
+        'settings' => array(),
+        'type' => 'color_field_default_formatter',
+        'weight' => 3,
+      ),
+      'entity' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'taxonomy_term',
+    'field_name' => 'field_background_color',
+    'label' => 'Background Color',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'color_field',
+      'settings' => array(),
+      'type' => 'color_field_plain_text',
+      'weight' => 3,
     ),
   );
 
@@ -2088,6 +2349,8 @@ function culaw_paragraphs_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'description_field' => 0,
+      'entity_translation_sync' => FALSE,
+      'exclude_cv' => FALSE,
       'file_directory' => 'backgrounds',
       'file_extensions' => 'jpg png jpeg gif',
       'max_filesize' => '',
@@ -2127,11 +2390,10 @@ function culaw_paragraphs_field_default_field_instances() {
   t('Background');
   t('Background Color');
   t('Background Image');
-  t('Backgrounds');
   t('Call to Action');
   t('Card Options');
   t('Content Rows');
-  t('Copy');
+  t('Date of Publication');
   t('Facebook Limit');
   t('Facebook Query');
   t('Facebook Token');
@@ -2143,18 +2405,22 @@ function culaw_paragraphs_field_default_field_instances() {
   t('Instagram Limit');
   t('Instagram Query');
   t('Instagram Token');
+  t('LawCal Categories');
   t('Layout Options');
   t('Link');
   t('Links');
   t('Make sure to have your twitter app read-only');
   t('Media Category');
   t('Media File');
-  t('Media Layout Options');
   t('Menu Option');
+  t('Microsite Calendar Tags');
   t('Number of posts to limit');
+  t('Placeholder Backgrounds');
   t('Style Card');
   t('Summary');
+  t('Text Copy');
   t('Text Formatting');
+  t('Thumbnail Image');
   t('Twitter Key');
   t('Twitter Limit');
   t('Twitter Query');

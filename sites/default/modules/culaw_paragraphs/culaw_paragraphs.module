@@ -27,18 +27,6 @@ function culaw_paragraphs_block_view($delta='') {
     return $block;
 }
 
-
-function culaw_paragraphs_preprocess_node(&$variables) {
-    $node = $variables['node'];
-    switch($node->type) {
-        case 'landing_page':
-            break;
-        default:
-            break;
-    }
-
-}
-
 function culaw_paragraphs_preprocess_entity(&$variables) {
     if ($variables['entity_type'] == 'paragraphs_item') {
         $bundle_type = $variables['paragraphs_item']->bundle;
@@ -53,30 +41,79 @@ function culaw_paragraphs_preprocess_entity(&$variables) {
             case 'section_navigation_card':
                 //get parent headline
                 $parent_bundle = $variables['paragraphs_item']->hostEntity();
-                $headline = $parent_bundle->field_headline['und'][0]['value'];
-                $variables['content']['field_headline'] = $headline;
+                if(isset($parent_bundle->field_headline['und'][0])) {
+                    $headline = $parent_bundle->field_headline['und'][0]['value'];
+                    $variables['content']['field_headline'] = $headline;
+                }
                 break;
             case 'media_card':
             case 'cta_card':
                 $parent_bundle = $variables['paragraphs_item']->hostEntity();
+                if ($parent_bundle->field_cta_options['und'][0]['value'] == 'banner') {
+                    //set variable to tell the banner that this row is a nav or text
+                    //load next bundle in node to see what it is ... navigation or not
+                    $parent_node = $parent_bundle->hostEntity();
+                    foreach($parent_node->field_content_rows['und'] AS $key => $value) {
+                        if (isset($banner_element)) {
+                            $entities = entity_load('paragraphs_item', array($value['value']));
+                            if (count($entities)) {
+                                $entity = array_pop($entities);
+                                if ($entity) {
+                                    if ($entity->bundle == 'layout_row') {
+                                        $variables['content']['background_color'] = 'cta';
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                        if ($value['value'] == $parent_bundle->item_id) {
+                            $banner_element = true;
+                        }
+                    }
+                }
                 switch (count($parent_bundle->field_card_options['und'])) {
                     //add style option for single so the media card knows how many are in the row
                     case 1:
                         $variables['content']['single_item'] = TRUE;
                         break;
+                    case 2:
+                        break;
                 }
 
                 $variables['content']['style_option'] = culaw_paragraphs_format_class($parent_bundle->field_cta_options['und'][0]['value']);
-            break;
+                break;
+            case 'social_media_card':
+
+                drupal_add_css("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", 'external');
+                drupal_add_js(drupal_get_path('module', 'culaw_paragraphs') . '/js/jquery.socialfeed/codebird.js', array('type' => 'file', 'group' => JS_THEME));
+                drupal_add_js(drupal_get_path('module', 'culaw_paragraphs') . '/js/jquery.socialfeed/doT.min.js', array('type' => 'file', 'group' => JS_THEME));
+                drupal_add_js(drupal_get_path('module', 'culaw_paragraphs') . '/js/jquery.socialfeed/moment.min.js', array('type' => 'file', 'group' => JS_THEME));
+                drupal_add_js(drupal_get_path('module', 'culaw_paragraphs') . '/js/jquery.socialfeed/jquery.socialfeed.js', array('type' => 'file', 'group' => JS_THEME));
+                drupal_add_js(drupal_get_path('module', 'culaw_paragraphs') . '/js/jquery.socialfeed/init.js', array('type' => 'file', 'group' => JS_THEME));
+
+                $content_array = array();
+
+                $content_array['field_twitter_query'] = isset($variables['content']['field_twitter_query']['#items'][0]['value']) ? $variables['content']['field_twitter_query']['#items'][0]['value'] : "";
+                $content_array['field_twitter_key'] = isset($variables['content']['field_twitter_key']['#items'][0]['value']) ? $variables['content']['field_twitter_key']['#items'][0]['value'] : "";
+                $content_array['field_twitter_secret'] = isset($variables['content']['field_twitter_secret']['#items'][0]['value']) ? $variables['content']['field_twitter_secret']['#items'][0]['value'] : "";
+                $content_array['field_twitter_limit'] = isset($variables['content']['field_twitter_limit']['#items'][0]['value']) ? $variables['content']['field_twitter_limit']['#items'][0]['value'] : "";
+
+                $content_array['field_instagram_query'] = isset($variables['content']['field_instagram_query']['#items'][0]['value']) ? $variables['content']['field_instagram_query']['#items'][0]['value'] : "";
+                $content_array['field_instagram_client_id'] = isset($variables['content']['field_instagram_client_id']['#items'][0]['value']) ? $variables['content']['field_instagram_client_id']['#items'][0]['value'] : "";
+                $content_array['field_instagram_token'] = isset($variables['content']['field_instagram_token']['#items'][0]['value']) ? $variables['content']['field_instagram_token']['#items'][0]['value'] : "";
+                $content_array['field_instagram_limit'] = isset($variables['content']['field_instagram_limit']['#items'][0]['value']) ? $variables['content']['field_instagram_limit']['#items'][0]['value'] : "";
+
+                $content_array['field_facebook_query'] = isset($variables['content']['field_facebook_query']['#items'][0]['value']) ? $variables['content']['field_facebook_query']['#items'][0]['value'] : "";
+                $content_array['field_facebook_token'] = isset($variables['content']['field_facebook_token']['#items'][0]['value']) ? $variables['content']['field_facebook_token']['#items'][0]['value'] : "";
+                $content_array['field_facebook_limit'] = isset($variables['content']['field_facebook_limit']['#items'][0]['value']) ? $variables['content']['field_facebook_limit']['#items'][0]['value'] : "";
+
+                $variables['content'] = $content_array;
+                break;
             default;
                 //print $variables['paragraphs_item']->bundle ;
                 break;
         }
     }
-}
-
-function culaw_paragraphs_menu_block_tree_alter(&$tree, &$config) {
-    //dpm($tree);
 }
 
 function culaw_paragraphs_render_menu($menu, $style = null) {
@@ -158,8 +195,8 @@ function _culaw_paragraphs_format_content($id, $format) {
             break;
     }
     $summary = "";
-    if (isset($node->body)) {
-        $summary = $node->body['und'][0]['safe_summary'] != "" ? $node->body['und'][0]['safe_summary'] : strip_tags($node->body['und'][0]['safe_value']);
+    if (isset($node->field_event_description['und'])) {
+        $summary = $node->field_event_description['und'][0]['safe_summary'] != "" ? $node->field_event_description['und'][0]['safe_summary'] : strip_tags($node->field_event_description['und'][0]['safe_value']);
     }
     $date_array = array(
         'month' => date("M",$date),

@@ -425,7 +425,11 @@ function culaw_paragraphs_strongarm() {
       ),
     ),
     'extra_fields' => array(
-      'form' => array(),
+      'form' => array(
+        'metatags' => array(
+          'weight' => '10',
+        ),
+      ),
       'display' => array(),
     ),
   );
@@ -450,10 +454,13 @@ function culaw_paragraphs_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'name' => array(
-          'weight' => '-5',
+          'weight' => '0',
         ),
         'description' => array(
-          'weight' => '0',
+          'weight' => '1',
+        ),
+        'metatags' => array(
+          'weight' => '4',
         ),
       ),
       'display' => array(
@@ -621,97 +628,6 @@ function culaw_paragraphs_strongarm() {
   $strongarm->name = 'node_submitted_landing_page';
   $strongarm->value = 0;
   $export['node_submitted_landing_page'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_align';
-  $strongarm->value = 'none';
-  $export['twitter_align'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_api';
-  $strongarm->value = 'https://api.twitter.com';
-  $export['twitter_api'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_consumer_key';
-  $strongarm->value = '27YNFOGkPzKFzgQljyBP5S0Ju';
-  $export['twitter_consumer_key'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_consumer_secret';
-  $strongarm->value = 'FnB444MTxuxmhpKEMwKDmJQ6srmvGpyJzuPV8HnWBsoqy3gMgD';
-  $export['twitter_consumer_secret'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_conversation';
-  $strongarm->value = 0;
-  $export['twitter_conversation'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_expire';
-  $strongarm->value = '0';
-  $export['twitter_expire'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_host';
-  $strongarm->value = 'https://twitter.com';
-  $export['twitter_host'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_import';
-  $strongarm->value = 1;
-  $export['twitter_import'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_media';
-  $strongarm->value = 1;
-  $export['twitter_media'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_oauth_callback_url';
-  $strongarm->value = 'twitter/oauth';
-  $export['twitter_oauth_callback_url'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_search';
-  $strongarm->value = 'https://twitter.com';
-  $export['twitter_search'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_tinyurl';
-  $strongarm->value = 'http://tinyurl.com';
-  $export['twitter_tinyurl'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'twitter_use_default_views';
-  $strongarm->value = 1;
-  $export['twitter_use_default_views'] = $strongarm;
 
   return $export;
 }

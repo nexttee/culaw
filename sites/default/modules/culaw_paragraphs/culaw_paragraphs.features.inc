@@ -60,18 +60,7 @@ function culaw_paragraphs_image_default_styles() {
   $styles['flexible_grid'] = array(
     'label' => 'flexible_grid',
     'effects' => array(
-      4 => array(
-        'name' => 'focal_point_scale_and_crop',
-        'data' => array(
-          'width' => 250,
-          'height' => 250,
-          'focal_point_advanced' => array(
-            'shift_x' => '',
-            'shift_y' => '',
-          ),
-        ),
-        'weight' => 1,
-      ),
+      4 => NULL,
     ),
   );
 
@@ -88,18 +77,7 @@ function culaw_paragraphs_image_default_styles() {
         ),
         'weight' => 1,
       ),
-      2 => array(
-        'name' => 'focal_point_crop',
-        'data' => array(
-          'width' => 1200,
-          'height' => 350,
-          'focal_point_advanced' => array(
-            'shift_x' => '',
-            'shift_y' => '',
-          ),
-        ),
-        'weight' => 2,
-      ),
+      2 => NULL,
     ),
   );
 
@@ -211,7 +189,73 @@ if (!defined('THEMEKEY_PAGECACHE_UNSUPPORTED')) {
     define('THEMEKEY_PAGECACHE_SUPPORTED', 1);
     define('THEMEKEY_PAGECACHE_TIMEBASED', 2);
   }
-$rules = array();
+$rules = array(
+  0 => array(
+    'rule' => array(
+      'property' => 'node:type',
+      'operator' => '=',
+      'value' => 'landing_page',
+      'theme' => 'culaw',
+      'enabled' => 1,
+      'wildcards' => 'a:0:{}',
+      'module' => 'culaw_paragraphs',
+    ),
+    'string' => '"node:type = landing_page >>> culaw"',
+    'childs' => array(),
+  ),
+  1 => array(
+    'rule' => array(
+      'property' => 'node:type',
+      'operator' => '=',
+      'value' => 'enhanced_page',
+      'theme' => 'culaw',
+      'enabled' => 1,
+      'wildcards' => 'a:0:{}',
+      'module' => 'culaw_paragraphs',
+    ),
+    'string' => '"node:type = enhanced_page >>> culaw"',
+    'childs' => array(),
+  ),
+  2 => array(
+    'rule' => array(
+      'property' => 'drupal:path',
+      'operator' => '=',
+      'value' => 'news-listing',
+      'theme' => 'culaw',
+      'enabled' => 1,
+      'wildcards' => array(),
+      'module' => 'culaw_paragraphs',
+    ),
+    'string' => '"drupal:path = news-listing >>> culaw"',
+    'childs' => array(),
+  ),
+  3 => array(
+    'rule' => array(
+      'property' => 'drupal:path',
+      'operator' => '=',
+      'value' => 'news-listing/%',
+      'theme' => 'culaw',
+      'enabled' => 1,
+      'wildcards' => array(),
+      'module' => 'culaw_paragraphs',
+    ),
+    'string' => '"drupal:path = news-listing/% >>> culaw"',
+    'childs' => array(),
+  ),
+  4 => array(
+    'rule' => array(
+      'property' => 'node:type',
+      'operator' => '=',
+      'value' => 'news_article',
+      'theme' => 'culaw',
+      'enabled' => 1,
+      'wildcards' => 'a:0:{}',
+      'module' => 'culaw_paragraphs',
+    ),
+    'string' => '"node:type = news_article >>> culaw"',
+    'childs' => array(),
+  ),
+);
 
 return $rules;
 }
